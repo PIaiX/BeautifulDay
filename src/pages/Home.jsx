@@ -1,6 +1,8 @@
 
 import React from "react";
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import {
   HiOutlineArrowLeftCircle,
   HiOutlineArrowRightCircle,
@@ -10,9 +12,11 @@ import AppStore from "../assets/imgs/appstore-black.svg";
 import GooglePlay from "../assets/imgs/googleplay-black.svg";
 import Phone from "../assets/imgs/phone.png";
 import Offer from "../components/Offer";
-// import ProductCardMini from "../components/ProductCardMini";
-import Catalog from "../components/Catalog";
-// import StoriesSection from "../components/StoriesSection";
+import ProductCardMini from "../components/ProductCardMini";
+import CategoryCard from "../components/CategoryCard";
+import StoriesSection from "../components/StoriesSection";
+import Callback from '../components/modals/Callback';
+import ArticleCard from '../components/ArticleCard';
 import { useSelector } from "react-redux";
 import { Navigation, Pagination } from "swiper";
 import "swiper/css";
