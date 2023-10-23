@@ -12,7 +12,7 @@ import { IoLogoWhatsapp } from "react-icons/io";
 import { IoCall, IoCloseOutline, IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getCount } from "../helpers/all";
+import { getCount, getImageURL } from "../helpers/all";
 import { editDeliveryCheckout } from "../store/reducers/checkoutSlice";
 import Select from "./utils/Select";
 import ScrollToTop from "./ScrollToTop";
@@ -20,6 +20,7 @@ import AppDownload from "./svgs/AppDownload";
 import Phone from "../assets/imgs/phone.png";
 import AppStore from "../assets/imgs/appstore-black.svg";
 import GooglePlay from "../assets/imgs/googleplay-black.svg";
+import { useGetBannersQuery } from "../services/home";
 
 import Logo from '../assets/imgs/LogoBeautifulDay.svg';
 // icons
@@ -44,6 +45,7 @@ const Header = memo(() => {
   const delivery = useSelector((state) => state.checkout.delivery);
   const affiliate = useSelector((state) => state.affiliate.items);
   const options = useSelector((state) => state.settings.options);
+  const banners = useGetBannersQuery();
 
   const dispatch = useDispatch();
 
@@ -66,6 +68,7 @@ const Header = memo(() => {
                 alt={options?.title ?? "YOOAPP"}
                 className="logo"
               />
+
             </Link>
 
             <ul className="d-none d-lg-flex">
@@ -218,18 +221,19 @@ const Header = memo(() => {
                 <nav>
                   <ul>
                     <li>
-                      <button type="button" onClick={() => setIsContacts(true)}>
+                      <Link to="/contact" onClick={() => setShowMenu(false)}>
                         <MenuPhone />
                         <span>Контакты</span>
-                      </button>
+                      </Link>
                     </li>
                     <li>
-                      <Link to="/">
+                      <Link to="/delivery" onClick={() => setShowMenu(false)}>
                         <MenuDelivery />
                         <span>Оплата и доставка</span>
                       </Link>
                     </li>
-                    <li>
+                   <li>
+
                     <Link to='/'>
                       <MenuBlog/>
                       <span>Новости</span>
@@ -255,26 +259,28 @@ const Header = memo(() => {
                     </li>
                   </ul>
                 </nav>
-
-                <p className="gray text-center mt-4 mt-md-5">
-                  Разработано на платформе
-                </p>
-                <p className="text-center mt-2">
-                  <YooApp />
-                </p>
+                <a href="https://yooapp.ru/" target="_blank">
+                  <p className="gray text-center mt-4 mt-md-5">
+                    Разработано на платформе
+                  </p>
+                  <p className="text-center mt-2">
+                    <YooApp />
+                  </p>
+                </a>
               </>
             )}
           </Container>
         </Offcanvas.Body>
       </Offcanvas>
-
-      <button
-        type="button"
-        className="appOffer"
-        onClick={() => setShowApp(true)}
-      >
-        <AppDownload />
-      </button>
+      {options?.appYes && (
+        <button
+          type="button"
+          className="appOffer"
+          onClick={() => setShowApp(true)}
+        >
+          <AppDownload />
+        </button>
+      )}
 
       <Offcanvas
         className="offcanvas-app"

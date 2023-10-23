@@ -384,7 +384,7 @@ const Checkout = () => {
                   <div className="mb-4">
                     <Input
                       label="Имя"
-                      name="firstName"
+                      name="name"
                       placeholder="Введите имя"
                       errors={errors}
                       register={register}
@@ -486,22 +486,27 @@ const Checkout = () => {
                   ))}
                 </ul>
               </div>
-
-              <div className="mb-4 d-flex">
-                <Input
-                  className="w-100"
-                  type="number"
-                  name="point"
-                  placeholder="Введите сумму баллов"
-                  errors={errors}
-                  defaultValue={data?.point}
-                  register={register}
-                />
-                <button type="button" className="btn-10 ms-2 ms-sm-4 rounded-3">
-                  Применить
-                </button>
-              </div>
-
+              {options.promoVisible && (
+                <>
+                  <div className="fs-11 mb-1">Списание баллов</div>
+                  <div className="mb-4 d-flex">
+                    <Input
+                      className="w-100"
+                      type="number"
+                      name="point"
+                      placeholder="Введите сумму баллов"
+                      errors={errors}
+                      register={register}
+                    />
+                    <button
+                      type="button"
+                      className="btn-10 ms-2 ms-sm-4 rounded-3"
+                    >
+                      Применить
+                    </button>
+                  </div>
+                </>
+              )}
               <div className="d-flex justify-content-between my-2">
                 <span>Стоимость товаров</span>
                 <span>{customPrice(price)}</span>

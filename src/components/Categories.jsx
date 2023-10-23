@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { Navigation, FreeMode, Mousewheel } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -12,7 +12,6 @@ import {
   HiOutlineAdjustmentsHorizontal,
   HiOutlineBars3,
 } from "react-icons/hi2";
-import { memo } from "react";
 
 const Categories = memo(({ className, data }) => {
   const [isFull, setIsFull] = useState(false);
@@ -33,7 +32,7 @@ const Categories = memo(({ className, data }) => {
   };
 
   return data?.length > 0 ? (
-    <div className={"categories " + className}>
+    <div className={"categories" + (className ? " " + className : "")}>
       <div className="categories-wrap">
         <Swiper
           loop={false}
@@ -84,72 +83,6 @@ const Categories = memo(({ className, data }) => {
               </Link>
             </SwiperSlide>
           ))}
-          {/* <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodSets className="fs-15" />
-              <span className="ms-2">Сеты</span>
-            </button>
-          </SwiperSlide>
-          <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodPizza />
-              <span className="ms-2">Пицца</span>
-            </button>
-          </SwiperSlide>
-          <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodCombo />
-              <span className="ms-2">Комбо</span>
-            </button>
-          </SwiperSlide>
-          <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodDesserts />
-              <span className="ms-2">Десерты</span>
-            </button>
-          </SwiperSlide>
-          <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodPoke />
-              <span className="ms-2">Поке</span>
-            </button>
-          </SwiperSlide>
-          <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodRolls className="fs-15" />
-              <span className="ms-2">Роллы</span>
-            </button>
-          </SwiperSlide>
-          <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodSets className="fs-15" />
-              <span className="ms-2">Сеты</span>
-            </button>
-          </SwiperSlide>
-          <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodPizza />
-              <span className="ms-2">Пицца</span>
-            </button>
-          </SwiperSlide>
-          <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodCombo />
-              <span className="ms-2">Комбо</span>
-            </button>
-          </SwiperSlide>
-          <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodDesserts />
-              <span className="ms-2">Десерты</span>
-            </button>
-          </SwiperSlide>
-          <SwiperSlide>
-            <button type="button" className="btn-8">
-              <FoodPoke />
-              <span className="ms-2">Поке</span>
-            </button>
-          </SwiperSlide> */}
           <div className="swiper-button-prev">
             <HiOutlineArrowLeftCircle />
           </div>
@@ -162,21 +95,25 @@ const Categories = memo(({ className, data }) => {
         <button
           type="button"
           onClick={handleСollapse}
-          className="categories-btn"
+          className="categories-btn ms-auto"
         >
           <HiArrowUturnUp className="fs-15 main-color" />
         </button>
       ) : (
-        <button type="button" onClick={handleExpand} className="categories-btn">
+        <button
+          type="button"
+          onClick={handleExpand}
+          className="categories-btn ms-auto"
+        >
           <HiOutlineArrowUturnDown className="fs-15 main-color rotateY-180" />
         </button>
       )}
-      <button type="button" className="categories-btn">
+      {/* <button type="button" className="categories-btn ms-4">
         <HiOutlineAdjustmentsHorizontal className="fs-15 main-color" />
       </button>
       <button type="button" className="d-lg-none categories-btn">
         <HiOutlineBars3 className="fs-15 main-color" />
-      </button>
+      </button> */}
     </div>
   ) : null;
 });

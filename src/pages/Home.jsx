@@ -1,26 +1,30 @@
-import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import {Link} from 'react-router-dom';
-import StoriesSection from '../components/StoriesSection';
-import CategoryCard from '../components/CategoryCard';
-import ProductCardMini from '../components/ProductCardMini';
-import Offer from '../components/Offer';
-import ArticleCard from '../components/ArticleCard';
-import Callback from '../components/modals/Callback';
+
+import React from "react";
+import Container from "react-bootstrap/Container";
+import {
+  HiOutlineArrowLeftCircle,
+  HiOutlineArrowRightCircle,
+} from "react-icons/hi2";
+import { Link } from "react-router-dom";
+import AppStore from "../assets/imgs/appstore-black.svg";
+import GooglePlay from "../assets/imgs/googleplay-black.svg";
+import Phone from "../assets/imgs/phone.png";
+import Offer from "../components/Offer";
+// import ProductCardMini from "../components/ProductCardMini";
+import Catalog from "../components/Catalog";
+// import StoriesSection from "../components/StoriesSection";
+import { useSelector } from "react-redux";
+import { Navigation, Pagination } from "swiper";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperButtonNext from '../components/utils/SwiperButtonNext';
+import SwiperButtonPrev from '../components/utils/SwiperButtonPrev';
 
 import ArticlesMore from '../assets/imgs/articlesMore.jpg';
 import ArticlesCover from '../assets/imgs/articlesCover.jpg';
 import jsonData from "../data/categories";
 import jsonArticles from "../data/articles";
 import useIsMobile from '../hooks/isMobile';
-
-import { Pagination } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import SwiperButtonNext from '../components/utils/SwiperButtonNext';
-import SwiperButtonPrev from '../components/utils/SwiperButtonPrev';
 
 import Empty from "../components/Empty";
 import Meta from "../components/Meta";
@@ -36,6 +40,7 @@ const Home = () => {
   const banners = useGetBannersQuery();
   const sales = useGetSalesQuery();
   const categories = useGetCategoriesQuery();
+  const options = useSelector((state) => state.settings.options);
 
   if (categories.isLoading || sales.isLoading || banners.isLoading) {
     return <Loader full />;
@@ -84,7 +89,7 @@ const Home = () => {
                 >
                   {banners.data.items.map((e) => (
                     <SwiperSlide>
-                      <Link to={"/promo/" + e.id}>
+                      <Link>
                         <img
                           src={getImageURL({
                             path: e?.medias,
@@ -125,6 +130,7 @@ const Home = () => {
           <button type='button' className='btn-primary mx-auto mt-4'>показать все</button>
         </Container>
       </section>
+
 
       <section className='sec-3 mb-6'>
         <Container>
@@ -264,8 +270,10 @@ const Home = () => {
                 </SwiperSlide>
               ))}
             </Swiper>
+
             <Link to="/promo" className="btn-primary mt-4 mt-sm-5 mx-auto">
             смотреть все акции
+
             </Link>
           </Container>
         </section>

@@ -1,9 +1,16 @@
-import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import OfferProduct from '../components/OfferProduct';
-import Offer from '../components/Offer';
+
+import React, { useLayoutEffect, useState } from "react";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { useParams } from "react-router-dom";
+import Empty from "../components/Empty";
+import EmptyCatalog from "../components/empty/catalog";
+import Loader from "../components/utils/Loader";
+import { getImageURL } from "../helpers/all";
+import { getSale } from "../services/sales";
+
 
 const OfferPage = () => {
   const { saleId } = useParams();
@@ -23,7 +30,7 @@ const OfferPage = () => {
     return <Loader full />;
   }
 
-  if (!sale.data) {
+  if (!sale?.data?.id) {
     return (
       <Empty
         text="Такой акции не существует"

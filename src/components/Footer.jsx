@@ -6,8 +6,12 @@ import { Link, NavLink } from "react-router-dom";
 import AppStore from "../assets/imgs/appstore.svg";
 import GooglePlay from "../assets/imgs/googleplay.svg";
 import LogoTextWhite from "../assets/imgs/logo-text-white.svg";
+
+import { getCount } from "../helpers/all";
+
 import LogoWhite from '../assets/imgs/LogoBeautifulDayWhite.svg';
 import BellIcon from "./svgs/BellIcon";
+
 import CartIcon from "./svgs/CartIcon";
 import FlameIcon from "./svgs/FlameIcon";
 import UserIcon from "./svgs/UserIcon";
@@ -17,7 +21,9 @@ import CatalogIcon from './svgs/CatalogIcon';
 const Footer = memo(() => {
   const isMobileLG = useIsMobile('991px');
   const isAuth = useSelector((state) => state.auth.isAuth);
+  const cart = useSelector((state) => state.cart.items);
   const options = useSelector((state) => state.settings.options);
+  const count = getCount(cart);
 
   return (
     <footer>

@@ -43,7 +43,7 @@ const AccountMenu = () => {
         </li>
       </ul>
       <div className="gradient-block mb-3"></div>
-      <nav className="mb-3">
+      {/* <nav className="mb-3">
         <ul>
           <li>
             <NavLink to="favorites">
@@ -76,11 +76,13 @@ const AccountMenu = () => {
             </NavLink>
           </li>
         </ul>
-      </nav>
-      <Link to="support" className='btn-orange fs-12 w-100 rounded-3'>
-        <HiOutlineLifebuoy className='fs-15 me-2'/>
+
+      </nav> */}
+      {/* <Link to="support" className="btn-orange fs-12 w-100 rounded-3">
+        <HiOutlineLifebuoy className="fs-15 me-2" />
+
         <div>Тех. подержка</div>
-      </Link>
+      </Link> */}
     </div>
   );
 };

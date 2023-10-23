@@ -12,12 +12,13 @@ import Input from "../../components/utils/Input";
 import NavBreadcrumbs from "../../components/utils/NavBreadcrumbs";
 import { editAccount } from "../../services/account";
 import { setUser } from "../../store/reducers/authSlice";
+import moment from "moment";
 
 const Settings = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  
   useLayoutEffect(() => {
     if (user?.status === 0) {
       return navigate("/activate");
@@ -25,28 +26,31 @@ const Settings = () => {
   }, [user]);
 
   const {
-    control,
     register,
     formState: { errors, isValid },
     handleSubmit,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onSubmit",
-    defaultValues: user,
+    defaultValues: {
+      ...user,
+      birthday: user?.birthday
+        ? moment(user?.birthday).format("YYYY-MM-DD")
+        : null,
+    },
   });
-
-  const form = useWatch({ control });
 
   const onSubmit = useCallback(
     async (data) => {
       await editAccount(data)
-        .then(() => {
-          dispatch(setUser({ ...user, about: data.about }));
+        .then((res) => {
+          res?.user && dispatch(setUser(res.user));
 
           if (data.email != user.email || !user.email) {
             navigate("email", { state: { email: data.email } });
           } else {
             NotificationManager.success("Данные успешно обновлены");
+            navigate(-1);
           }
         })
         .catch((err) => {
@@ -130,7 +134,6 @@ const Settings = () => {
                           label="Имя"
                           name="firstName"
                           errors={errors}
-                          defaultValue={form?.firstName}
                           register={register}
                         />
                       </Col>
@@ -139,7 +142,6 @@ const Settings = () => {
                           label="Фамилия"
                           name="lastName"
                           errors={errors}
-                          defaultValue={form?.lastName}
                           register={register}
                         />
                       </Col>
@@ -148,9 +150,8 @@ const Settings = () => {
                           type="date"
                           label="День рождения"
                           name="birthday"
-                          readOnly={!!form?.birthday}
+                          readOnly={!!user?.birthday}
                           errors={errors}
-                          defaultValue={form?.birthday}
                           register={register}
                         />
                       </Col>
@@ -160,7 +161,6 @@ const Settings = () => {
                           label="Номер телефона"
                           name="phone"
                           errors={errors}
-                          defaultValue={form?.phone}
                           register={register}
                           validation={{ required: "Обязательное поле" }}
                         />
@@ -170,7 +170,6 @@ const Settings = () => {
                           label="Email"
                           name="email"
                           errors={errors}
-                          defaultValue={form?.email}
                           register={register}
                         />
                       </Col>
@@ -179,7 +178,7 @@ const Settings = () => {
                       type="submit"
                       disabled={!isValid}
                       onClick={handleSubmit(onSubmit)}
-                      className="btn-green mt-4"
+                      className="btn-green mt-4 d-block d-md-flex w-xs-100"
                     >
                       Сохранить изменения
                     </button>
