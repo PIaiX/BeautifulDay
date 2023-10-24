@@ -6,19 +6,25 @@ import { getImageURL } from "../helpers/all";
 const Offer = ({ data }) => {
   return (
     <figure className="offer">
-      {data?.medias && (
+      <LazyLoadImage
+        src="/imgs/img2.jpg"
+        alt="offer"
+        loading="lazy"
+      />
+      {/* {data?.medias && (
         <LazyLoadImage
           src={getImageURL({
             path: data.medias,
             type: "sale",
             size: "full",
           })}
+          // src="/imgs/img.jpg"
           alt={data?.title}
           loading="lazy"
         />
-      )}
+      )} */}
       <figcaption>
-        <Link
+        {/* <Link
           to={
             data?.options?.link
               ? data.options.link
@@ -26,6 +32,12 @@ const Offer = ({ data }) => {
               ? "/promo/" + data.id
               : ""
           }
+          className="btn-light"
+        >
+          Заказать
+        </Link> */}
+        <Link
+          to="/promo/1"
           className="btn-light"
         >
           Заказать

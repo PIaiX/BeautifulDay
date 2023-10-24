@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -7,7 +7,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import NavTop from '../components/utils/NavTop';
 import jsonData from "../data/categories";
 import CategoryCard from '../components/CategoryCard';
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import SwiperButtonNext from '../components/utils/SwiperButtonNext';
@@ -16,12 +16,23 @@ import ProductCard from '../components/ProductCard';
 import MultyRangeCustom from "../components/utils/MultyRangeCustom";
 import Filter from '../components/svgs/Filter';
 import PrevIcon from '../components/svgs/PrevIcon';
+import { getCategory } from "../services/category";
+import Loader from "../components/utils/Loader";
+import { useGetCategoriesQuery } from "../services/home";
 
 const Catalog = () => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const categories = useGetCategoriesQuery();
+
+
+  if (categories.isLoading) {
+    return <Loader full />;
+  }
+
 
   return (
     <main>
@@ -265,42 +276,11 @@ const Catalog = () => {
                 </div>
               </div>
               <Row xs={2} sm={3} xxl={4} className='gx-4 gy-5'>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
-                <Col>
-                  <ProductCard/>
-                </Col>
+                {categories.data[0].products.map((e) => (
+                  <Col>
+                    <ProductCard data={e} />
+                  </Col>
+                ))}
               </Row>
             </Col>
           </Row>

@@ -15,7 +15,6 @@ import { Link } from "react-router-dom";
 import { getCount, getImageURL } from "../helpers/all";
 import { editDeliveryCheckout } from "../store/reducers/checkoutSlice";
 import Select from "./utils/Select";
-import ScrollToTop from "./ScrollToTop";
 import AppDownload from "./svgs/AppDownload";
 import Phone from "../assets/imgs/phone.png";
 import AppStore from "../assets/imgs/appstore-black.svg";
@@ -338,7 +337,6 @@ const Header = memo(() => {
           </Container>
         </Offcanvas.Body>
       </Offcanvas>
-      <ScrollToTop count={count} />
     </>
   );
 });

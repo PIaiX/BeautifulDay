@@ -4,14 +4,15 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import ProductCard from "../components/ProductCard";
 import Ingredient from "../components/utils/Ingredient";
-// swiper
-import { Navigation } from "swiper";
-import "swiper/css";
-import { Swiper, SwiperSlide } from "swiper/react";
+import BtnFav from '../components/utils/BtnFav';
+
 // icons & images
+import Corner from '../components/svgs/Corner';
 import {
   HiOutlineInformationCircle,
   HiOutlineShoppingBag,
+  HiPlus, 
+  HiMinusб
 } from "react-icons/hi2";
 import { Link, useParams } from "react-router-dom";
 import ButtonCart from "../components/ButtonCart";
@@ -23,9 +24,18 @@ import NavTop from "../components/utils/NavTop";
 import { customPrice, customWeight, getImageURL } from "../helpers/all";
 import { getProduct, getProducts } from "../services/product";
 
+// swiper
+import { Navigation, Thumbs, FreeMode } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import SwiperButtonNext from '../components/utils/SwiperButtonNext';
+import SwiperButtonPrev from '../components/utils/SwiperButtonPrev';
+
 const Product = () => {
   const [featuresShow, setFeaturesShow] = useState(false);
   const [isRemove, setIsRemove] = useState(false);
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
   const { productId } = useParams();
 
   const [product, setProduct] = useState({
@@ -114,237 +124,182 @@ const Product = () => {
           ]}
         />
 
-        <form className="productPage mb-5">
-          <Row className="gx-4 gx-xxl-5">
-            <Col xs={12} lg={3}>
-              <img
-                src={getImageURL({ path: product.item.medias, size: "full" })}
-                alt={product.item.title}
-                className="productPage-img"
-              />
-            </Col>
-            <Col xs={12} md={6} lg={5}>
-              <div className="d-flex align-items-center justify-content-between justify-content-md-start mb-4">
-                <h1 className="mb-0">{product.item.title}</h1>
-                {product.item.energy.weight > 0 && (
-                  <>
-                    <h6 className="gray mb-0 ms-3">
-                      {customWeight(product.item.energy.weight)}
-                    </h6>
-                    <HiOutlineInformationCircle className="dark-gray fs-15 ms-2" />
-                  </>
-                )}
-              </div>
-              {product.item.description && (
-                <div className="mb-4">
-                  <p className="mb-2">Состав:</p>
-                  <p>{product.item.description}</p>
-                </div>
-              )}
-              {product?.item?.modifiers?.length > 0 && (
-                <>
-                  {/* <h6 className="mt-4">Тесто</h6> */}
-                  <div className="d-xxl-flex mb-4">
-                    <ul className="inputGroup">
-                      {product.item.modifiers
-                        .slice()
-                        .sort((a, b) => a.price - b.price)
-                        .map((e, index) => (
-                          <li>
-                            <label>
-                              <input
-                                type="radio"
-                                name="modifiers"
-                                defaultChecked={index === 0}
-                                onChange={() => {
-                                  let newData = { ...data };
-
-                                  newData.cart.data.modifiers = e;
-
-                                  setData(newData);
-                                }}
-                              />
-                              <div className="text">{e.title}</div>
-                            </label>
-                          </li>
-                        ))}
-                    </ul>
-                    {/* <ul className="inputGroup mt-2 mt-xxl-0 ms-xxl-5">
-                  <li>
-                    <label>
-                      <input type="radio" name="param2" defaultChecked={true} />
-                      <div className="text">25см</div>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="radio" name="param2" />
-                      <div className="text">30см</div>
-                    </label>
-                  </li>
-                  <li>
-                    <label>
-                      <input type="radio" name="param2" />
-                      <div className="text">36см</div>
-                    </label>
-                  </li>
-                </ul> */}
+        <form className="productPage mb-4 mb-md-5">
+          <Row className="gx-4 gx-xl-5">
+            <Col xs={12} lg={9}>
+              <Row md={2} className='h-100'>
+                <Col>
+                  <div className="productPage-photo">
+                    <Swiper
+                      className="thumbSlider"
+                      modules={[Thumbs, FreeMode]}
+                      watchSlidesProgress
+                      onSwiper={setThumbsSwiper}
+                      direction="vertical"
+                      loop={true}
+                      spaceBetween={20}
+                      slidesPerView={'auto'}
+                      freeMode={true}
+                    >
+                      <SwiperSlide>
+                        <img
+                          src={getImageURL({ path: product.item.medias, size: "full" })}
+                          alt={product.item.title}
+                          className="productPage-img"
+                        />
+                      </SwiperSlide>
+                    </Swiper>
+                    <Swiper 
+                      className="mainSlider"
+                      modules={[Thumbs]} 
+                      loop={true}
+                      spaceBetween={20}
+                      thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+                    >
+                      <SwiperSlide>
+                        <img
+                          src={getImageURL({ path: product.item.medias, size: "full" })}
+                          alt={product.item.title}
+                          className="productPage-img"
+                        />
+                      </SwiperSlide>
+                    </Swiper>
+                    <BtnFav/>
                   </div>
-                </>
-              )}
-
-              {/* <SelectImitation
-                boxClass={"main-color w-fit mb-4"}
-                btnClass={"rounded-pill"}
-                optionsArr={[
-                  {
-                    value: 1,
-                    label: "Сливочный соус",
-                    defaultChecked: true,
-                  },
-                  {
-                    value: 2,
-                    label: "Красный соус",
-                    defaultChecked: false,
-                  },
-                ]}
-              /> */}
-
-              <div className="productPage-price">
-                <div className="me-3">
-                  <div className="fs-12">{customPrice(price)}</div>
-                  {discount > 0 && (
-                    <div className="gray fs-09 text-decoration-line-through">
-                      {customPrice(discount)}
-                    </div>
-                  )}
-                </div>
-                <ButtonCart
-                  full
-                  product={product.item}
-                  data={data}
-                  className="btn-secondary fs-12 rounded-pill"
-                >
-                  <span className="fw-4">В корзину</span>
-                  <HiOutlineShoppingBag className="fs-15 ms-2" />
-                </ButtonCart>
-              </div>
-            </Col>
-            <Col xs={12} md={6} lg={4} className="mt-3 mt-sm-4 mt-md-0">
-              {product?.item?.additions?.length > 0 && (
-                <>
-                  <h6>Изменить по вкусу</h6>
-                  <div className="productPage-edit mb-3">
-                    {/* <div className="top">
-                      <button
-                        type="button"
-                        className={isRemove ? "" : "active"}
-                        onClick={() => setIsRemove(false)}
-                      >
-                        <HiPlus />
-                        <span>Добавить</span>
-                        <Corner className="corner-right" />
-                      </button>
-                      <button
-                        type="button"
-                        className={isRemove ? "active" : ""}
-                        onClick={() => setIsRemove(true)}
-                      >
-                        <HiMinus />
-                        <span>Убрать</span>
-                        <Corner className="corner-left" />
-                        <Corner className="corner-right" />
-                      </button>
-                    </div> */}
-                    {isRemove ? (
-                      <div className="box">
-                        {/* <ul>
-                      <li>
-                        <Ingredient />
-                      </li>
-                      <li>
-                        <Ingredient />
-                      </li>
-                      <li>
-                        <Ingredient />
-                      </li>
-                    </ul> */}
-                      </div>
-                    ) : (
-                      <div className="box">
-                        <ul>
-                          {product.item.additions.map((e) => {
-                            const isAddition = () =>
-                              !!data?.cart?.data?.additions.find(
-                                (addition) => addition.id === e.addition.id
-                              );
-                            const onPressAddition = () => {
-                              if (isAddition()) {
-                                let newAdditions =
-                                  data.cart.data.additions.filter(
-                                    (addition) => addition.id != e.addition.id
-                                  );
-                                let newData = { ...data };
-                                newData.cart.data.additions = newAdditions;
-                                setData(newData);
-                              } else {
-                                let newData = { ...data };
-                                newData.cart.data.additions.push(e.addition);
-                                setData(newData);
-                              }
-                            };
-                            return (
-                              <li>
-                                <Ingredient
-                                  data={e}
-                                  active={isAddition()}
-                                  onChange={onPressAddition}
-                                />
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
+                  {/* <img
+                    src={getImageURL({ path: product.item.medias, size: "full" })}
+                    alt={product.item.title}
+                    className="productPage-img"
+                  /> */}
+                </Col>
+                <Col className='d-flex flex-column justify-content-between'>
+                  <div>
+                    <h1>{product.item.title}</h1>
+                    {product.item.description && (
+                      <p>{product.item.description}</p>
                     )}
                   </div>
-                </>
-              )}
+
+                  {/* <div className='productPage-price'>
+                    <div>
+                      <div className='fs-12'>650 ₽</div>
+                      <div className='gray fs-09 text-decoration-line-through'> 650 </div>
+                    </div>
+                    <button type='button' className='btn-primary ms-2 ms-xl-3'>Заказать</button>
+                    <CountInput className="ms-2 ms-xl-4"/>
+                  </div> */}
+                  
+                  <div className="productPage-price">
+                    <div className="me-2 me-xl-3">
+                      <div className="fs-12">{customPrice(price)}</div>
+                      {discount > 0 && (
+                        <div className="gray fs-09 text-decoration-line-through">
+                          {customPrice(discount)}
+                        </div>
+                      )}
+                    </div>
+                    <ButtonCart
+                      full
+                      product={product.item}
+                      data={data}
+                      className="btn-primary ms-2 ms-xl-3"
+                    >Заказать</ButtonCart>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+            <Col xs={12} lg={3} className='d-none d-lg-block mt-3mt-sm-4 mt-md-0'>
+              <div className="box">
+                <h6 className='secondary'>Доставка:</h6>
+                <p className='fs-09 dark-gray'>По Казани осуществляется по договорённости с курьером. Минимальная сумма заказа 400 ₽</p>
+                <p className='fs-09 dark-gray'>По России через компанию CDEK или почтой России</p>
+                <h6 className="mt-4 secondary">Самовывоз:</h6>
+                <p className='fs-09 dark-gray'>Магазин по адресу: Татарстан, Казань, Рашида Вагопова 3</p>
+                <h6 className="mt-4 secondary">Оплата:</h6>
+                <p className='fs-09 dark-gray'>Наличными или онлайн банковской картой</p>
+              </div>
             </Col>
           </Row>
         </form>
+
+        <section className='mb-4 mb-md-5'>
+          <ul className="tabs">
+            <li>
+              <button 
+                type='button'
+                onClick={()=>setFeaturesShow(false)}
+                className={(featuresShow)?'':'active'}
+              >Описание</button>
+            </li>
+            <li>
+              <button 
+                type='button'
+                onClick={()=>setFeaturesShow(true)}
+                className={(featuresShow)?'active':''}
+              >Характеристики
+              </button>
+            </li>
+          </ul>
+          {
+            (featuresShow)
+            ? <ul className='features px-2 py-3 p-sm-4'>
+              <li>
+                <div>Тип</div>
+                <div>Печать</div>
+              </li>
+              <li>
+                <div>Формат</div>
+                <div>Ручная</div>
+              </li>
+              <li>
+                <div>Особенности</div>
+                <div>Подушка в комплекте</div>
+              </li>
+            </ul>
+            : <div className="p-2 p-sm-4 lh-15">
+              <p>Печать для организации на ручной пластиковой оснастке с закручивающейся крышкой — доступный и простой вариант, для получения чёткого оттиска. Оснастка выполнена из пластика чёрного цвета. В стоимость изделия входит клише из резины изготовленное путём лазерной гравировки. Для использования печати потребуется настольная штемпельная подушка.</p>
+              <p>Вы так же можете рассмотреть варианты готовых печатей на автоматической оснастке или оснастке карманного типа со встроенной штемпельной подушкой в разделе «Вас может заинтересовать».</p>
+            </div>
+          }
+        </section>
+
         {recommends?.data?.length > 0 && (
-          <section className="d-none d-md-block mb-5">
-            <h2>Товары из этой категории</h2>
-            <Swiper
-              className=""
-              modules={[Navigation]}
-              spaceBetween={15}
-              slidesPerView={2}
-              navigation={{
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-              }}
-              breakpoints={{
-                576: {
-                  slidesPerView: 3,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 3,
-                  spaceBetween: 30,
-                },
-                992: {
-                  slidesPerView: 4,
-                  spaceBetween: 30,
-                },
-              }}
-            >
-              {recommends.data.map((e) => (
-                <SwiperSlide>
-                  <ProductCard data={e} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+          <section className="mb-6">
+            <h2>Вам пригодится</h2>
+            <div className="position-relative">
+              <Swiper
+                className="position-static"
+                modules={[Navigation]}
+                spaceBetween={15}
+                slidesPerView={2}
+                breakpoints={{
+                  576: {
+                    slidesPerView: 3,
+                    spaceBetween: 20,
+                  },
+                  768: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                  },
+                  992: {
+                    slidesPerView: 4,
+                    spaceBetween: 30,
+                  },
+                  1200: {
+                    slidesPerView: 5,
+                    spaceBetween: 30,
+                  },
+                }}
+              >
+                {recommends.data.map((e) => (
+                  <SwiperSlide>
+                    <ProductCard data={e} />
+                  </SwiperSlide>
+                ))}
+                <SwiperButtonPrev/>
+                <SwiperButtonNext/>
+              </Swiper>
+            </div>
           </section>
         )}
       </Container>

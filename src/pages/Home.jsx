@@ -245,6 +245,41 @@ const Home = () => {
           }
         </Container>
       </section> 
+      <section className='sec-6 mb-5'>
+        <Container>
+          <Swiper
+            className='sw-offers'
+            spaceBetween={5}
+            slidesPerView={'auto'}
+            speed={750}
+            breakpoints={{
+              576: {
+                slidesPerView: 'auto',
+                spaceBetween: 7,
+              },
+              768: {
+                slidesPerView: 'auto',
+                spaceBetween: 10,
+              },
+              992: {
+                slidesPerView: 3,
+                spaceBetween: 10,
+              },
+            }}
+          >
+            <SwiperSlide>
+              <Offer blackText={false} img={"/imgs/img.jpg"} title={'Весна пришла'} subtitle={'А с ней новые вкусы роллов!'}/>
+            </SwiperSlide>
+            <SwiperSlide>
+              <Offer blackText={false} img={"/imgs/img.jpg"} title={'Пицца «Гаваи»'} subtitle={'Улётный микс из курицы и ананаса'}/>
+            </SwiperSlide>
+            <SwiperSlide>
+              <Offer blackText={true} img={"/imgs/img.jpg"} title={'Свежих ягод много бывает'} subtitle={'Попробуйте наш фирменный тарт — мы добавили в него ещё больше клубники!'}/>
+            </SwiperSlide>
+          </Swiper>
+          <Link to='/promo' className='btn-primary mt-4 mt-sm-5 mx-auto'>смотреть все акции</Link>
+        </Container>
+      </section>
       {sales?.data?.items?.length > 0 && (
         <section className="sec-6 mb-5">
           <Container>

@@ -71,13 +71,13 @@ const Footer = memo(() => {
           : <div className='desktop'>
             <img src={LogoWhite} alt={options?.title ?? "YOOAPP"} className='logo'/>
 
-            <nav>
+            <nav class="ms-5 me-auto">
               <ul className="list-unstyled d-flex">
                 <li>
-                  <Link to='/'>Меню</Link>
+                  <Link to='/menu'>Каталог</Link>
                 </li>
                 <li className='ms-4'>
-                  <Link to='/'>Вакансии</Link>
+                  <Link to='/delivery'>Оплата и доставка</Link>
                 </li>
                 <li className='ms-4'>
                   <Link to='/contacts'>Контакты</Link>

@@ -46,16 +46,16 @@ const StoriesSection = () => {
         }}
       >
         <SwiperSlide>
-          <Story onClick={() => showStory(0)} img={"imgs/img1.png"} title={"Пицца «Больше мяса»и"}/>
+          <Story onClick={() => showStory(0)} img={"/imgs/img2.jpg"} title={"Подзаголовок сторис"}/>
         </SwiperSlide>
         <SwiperSlide>
-          <Story onClick={() => showStory(1)} img={"imgs/img4.png"} title={"Попробуйте новые сезонные напитки"}/>
+          <Story onClick={() => showStory(1)} img={"/imgs/img2.jpg"} title={"Подзаголовок сторис"}/>
         </SwiperSlide>
         <SwiperSlide>
-          <Story onClick={() => showStory(2)} img={"imgs/img1.png"} title={"Пицца «Больше мяса»и"}/>
+          <Story onClick={() => showStory(2)} img={"/imgs/img2.jpg"} title={"Подзаголовок сторис"}/>
         </SwiperSlide>
         <SwiperSlide>
-          <Story onClick={() => showStory(3)} img={"imgs/img4.png"} title={"Попробуйте новые сезонные напитки"}/>
+          <Story onClick={() => showStory(3)} img={"/imgs/img2.jpg"} title={"Подзаголовок сторис"}/>
         </SwiperSlide>
         
         <SwiperButtonPrev/>
@@ -76,16 +76,16 @@ const StoriesSection = () => {
             onSwiper={(swiper) => swiper.slideTo(activeSlide, 50)}
           >
             <SwiperSlide>
-              <StoryBig img={"imgs/img1.png"} title={"Пицца «Больше мяса»"}/>
+              <StoryBig img={"/imgs/img2.jpg"} title={"Подзаголовок сторис"}/>
             </SwiperSlide>
             <SwiperSlide>
-              <StoryBig img={"imgs/img4.png"} title={"Попробуйте новые сезонные напитки"}/>
+              <StoryBig img={"/imgs/img2.jpg"} title={"Подзаголовок сторис"}/>
             </SwiperSlide>
             <SwiperSlide>
-              <StoryBig img={"imgs/img1.png"} title={"Пицца «Больше мяса»"}/>
+              <StoryBig img={"/imgs/img2.jpg"} title={"Подзаголовок сторис"}/>
             </SwiperSlide>
             <SwiperSlide>
-              <StoryBig img={"imgs/img4.png"} title={"Попробуйте новые сезонные напитки"}/>
+              <StoryBig img={"/imgs/img2.jpg"} title={"Подзаголовок сторис"}/>
             </SwiperSlide>
             <SwiperButtonPrev/>
             <SwiperButtonNext/>
