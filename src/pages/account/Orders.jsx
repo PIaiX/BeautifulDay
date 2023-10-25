@@ -11,6 +11,7 @@ import Meta from "../../components/Meta";
 import Loader from "../../components/utils/Loader";
 import { customPrice, deliveryData, paymentData } from "../../helpers/all";
 import { getOrders } from "../../services/order";
+import AccountTitleReturn from '../../components/AccountTitleReturn';
 
 const Orders = () => {
   const [orders, setOrders] = useState({
@@ -28,7 +29,7 @@ const Orders = () => {
     {
       name: "Статус",
       selector: "status",
-      cell: (row) => <Badge bg="success">Принят</Badge>,
+      cell: (row) => <div className="bg-success success rounded-3 px-1">Принят</div>,
     },
     {
       name: "Способ",
@@ -87,13 +88,7 @@ const Orders = () => {
   return (
     <section className="sec-orders">
       <Meta title="Заказы" />
-      <div className="d-flex d-lg-none align-items-center mb-4">
-        <Link to="/account" className="link-return">
-          <HiOutlineArrowLeftCircle />
-          <span>Назад</span>
-        </Link>
-        <h6 className="fs-12 mb-0">Заказы</h6>
-      </div>
+      <AccountTitleReturn link={'/account'} title={'Заказы'}/>
 
       <DataTable
         columns={orderColumns}

@@ -2,7 +2,6 @@ import moment from "moment";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { HiOutlineArrowLeftCircle } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import Empty from "../../components/Empty";
@@ -11,6 +10,8 @@ import OrderItem from "../../components/OrderItem";
 import socket from "../../config/socket";
 import { customPrice, deliveryData, paymentData } from "../../helpers/all";
 import { getOrder } from "../../services/order";
+import AccountTitleReturn from '../../components/AccountTitleReturn';
+import { RxDotFilled } from "react-icons/rx";
 
 const Order = () => {
   const { orderId } = useParams();
@@ -71,13 +72,7 @@ const Order = () => {
   console.log(status);
   return (
     <section>
-      <div className="d-flex align-items-center mb-4">
-        <Link to="/account/orders" className="link-return">
-          <HiOutlineArrowLeftCircle />
-          <span>Назад</span>
-        </Link>
-        <h5 className="fw-6 mb-0">Заказ #{order.item.id}</h5>
-      </div>
+      <AccountTitleReturn link={'/account/orders'} title={'Заказ № '+order.item.id}/>
 
       <Row>
         <Col lg={8} className="mb-4 mb-lg-0">
@@ -93,8 +88,8 @@ const Order = () => {
           <div className="box">
             <div className="p-2 p-xl-3">
               <p className="fs-09 d-flex align-items-center mb-3">
-                <span>Время заказа</span>
-                <span className="ms-3">
+                <span>Оформлен</span>
+                <span className="dark-gray ms-3">
                   {moment(order.item.createdAt).format("DD.MM.YYYY HH:mm")}
                 </span>
               </p>
@@ -106,11 +101,11 @@ const Order = () => {
                   </span>
                 </p>
               )}
-              <div className="btn-green fs-09 rounded-3 mb-3">
+              <div className="w-fit bg-success success rounded-2 px-2 mb-3">
                 {status?.name ?? "Принят"}
               </div>
               <div className="order-card-delivery">
-                {deliveryText} <span className="dark-gray ms-1">•</span>
+                {deliveryText} <RxDotFilled className="primary ms-1"/>
               </div>
               {order.item.delivery == "delivery" ? (
                 <address className="d-block fs-09 dark-gray">
@@ -132,7 +127,7 @@ const Order = () => {
               )}
               {order.item.description && (
                 <>
-                  <div className="main-color mt-4 mt-xxl-5 mb-1">
+                  <div className="primary mt-4 mt-xxl-5 mb-1">
                     Комментарий
                   </div>
                   <textarea
@@ -142,31 +137,33 @@ const Order = () => {
                   />
                 </>
               )}
-              <div className="d-flex justify-content-between align-items-center mt-3">
+              {/* <div className="d-flex justify-content-between align-items-center mt-3">
                 <p>Количество персон</p>
                 <div className="input w-50p py-1 px-2 rounded-4 w-fit text-center">
                   {order.item.person}
                 </div>
-              </div>
+              </div> */}
 
               {/* <div className="d-flex justify-content-between mt-3">
                 <p>Доставка</p>
-                <p className="main-color">бесплатно</p>
+                <p className="secondary">бесплатно</p>
               </div> */}
 
-              <div className="d-flex justify-content-between fw-6 mt-4">
-                <p className="fs-11">Итоговая сумма</p>
-                <p>{customPrice(order.item.total)}</p>
-              </div>
+              
+            </div>
+            <hr className='my-0'/>
+            <div className="fw-6 p-2 px-xl-3 d-flex justify-content-between">
+              <p>Итоговая сумма</p>
+              <p>{customPrice(order.item.total)}</p>
             </div>
             {/* <div className="btn-green rounded-0 w-100 justify-content-start">
               Списано 33 бонуса
             </div> */}
-            <div className="p-2 p-xl-3">
-              {/* <p className="fs-09 main-color">
+            <div className="p-2 px-xl-3">
+              {/* <p className="fs-09 secondary">
                 34 бонуса будут начислены за этот заказ
               </p> */}
-              <button type="submit" disabled className="btn-red w-100 mt-3">
+              <button type="submit" disabled className="btn-secondary w-100 mt-2">
                 Отменить заказ
               </button>
             </div>

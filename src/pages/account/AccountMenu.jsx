@@ -43,23 +43,6 @@ const AccountMenu = (props) => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="favorites">
-            <HiOutlineHeart />
-            <div>Избранное</div>
-          </NavLink>
-        </li>
-        <li>
-          <a
-            onClick={() => {
-              dispatch(logout());
-              navigaion("/login");
-            }}
-          >
-            <HiOutlineArrowRightOnRectangle />
-            <div>Выйти</div>
-          </a>
-        </li>
-        {/* <li>
           <NavLink to="bonus">
             <Star/>
             <div>Бонусы</div>
@@ -89,7 +72,18 @@ const AccountMenu = (props) => {
             <Promo/>
             <div>Акции</div>
           </NavLink>
-        </li> */}
+        </li>
+        <li>
+          <a
+            onClick={() => {
+              dispatch(logout());
+              navigaion("/login");
+            }}
+          >
+            <HiOutlineArrowRightOnRectangle />
+            <div>Выйти</div>
+          </a>
+        </li>
       </ul>
     </nav>
   );
