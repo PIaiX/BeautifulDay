@@ -55,10 +55,10 @@ const Article = () => {
 
             <section className='sec-5 mb-5'>
                 <Container>
-                <h2>Вам может понравиться</h2>
+                <h2>Обратите внимание</h2>
                 <div className="position-relative">
                     <Swiper
-                    className='product-slider'
+                    className='product-slider position-static'
                     modules={[Navigation, FreeMode]}
                     spaceBetween={20}
                     slidesPerView={'auto'}

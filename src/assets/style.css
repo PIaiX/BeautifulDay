@@ -363,6 +363,34 @@ label span {
   margin-left: 0.25em;
 }
 
+.password {
+  position: relative;
+}
+.password input {
+  font-size: inherit;
+  font-weight: inherit;
+  position: relative;
+  z-index: 1;
+}
+.password button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 5;
+  color: #637381;
+  height: 100%;
+  width: 2em;
+  font-size: 1.6em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.password button svg path {
+  stroke-width: 1.25px;
+}
+
 .inputGroup {
   list-style: none;
   padding-left: 0px;
@@ -2881,7 +2909,6 @@ main {
 .sec-6 .offer {
   width: 100%;
   position: relative;
-  filter: drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.06));
   transition: transform 200ms linear;
 }
 @media (max-width: 575.98px) {
@@ -2919,7 +2946,8 @@ main {
   }
 }
 .sec-6 .sw-offers {
-  overflow: visible;
+  overflow: hidden;
+  padding: 1em 0.5em;
 }
 .sec-6 .sw-offers:hover .offer {
   transform: rotate(0deg) !important;
@@ -3071,8 +3099,12 @@ main {
   display: none;
 }
 .sec-7 ul li {
-  border-bottom: 1px solid #F4F6F8;
-  padding: 1.5em 0px;
+  border: 1px solid #F3F7FF;
+  padding: 1em;
+  border-radius: 1em;
+}
+.sec-7 ul li:not(:first-child) {
+  margin-top: 1em;
 }
 .sec-7 .map {
   border-radius: 1em;

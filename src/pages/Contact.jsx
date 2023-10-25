@@ -59,8 +59,8 @@ const Contact = () => {
                         href={"tel:" + mainAffiliate.phone[0]}
                         className="d-flex"
                       >
-                        <HiOutlineDevicePhoneMobile className="fs-15 main-color" />
-                        <span className="fs-11 ms-2 main-color">
+                        <HiOutlineDevicePhoneMobile className="fs-15 secondary" />
+                        <span className="fs-11 ms-2 secondary">
                           Горячая линия
                         </span>
                         <span className="fs-11 ms-2">
@@ -68,28 +68,29 @@ const Contact = () => {
                         </span>
                       </a>
                     </p>
-                    <a
+                    {/* <a
                       href={"tel:" + mainAffiliate.phone[0]}
                       type="button"
                       className="btn-primary"
                     >
                       Позвонить
-                    </a>
+                    </a> */}
                   </>
                 )}
+                <button type='button' className='btn-primary'>Заказать звонок</button>
 
-                <ul className="list-unstyled mt-4">
+                <ul className="list-unstyled mt-2 mt-md-4">
                   {affiliate.map((e) => (
                     <li>
                       <a onClick={() => setMainAffiliate(e)}>
-                        <h6 className="mb-2">{e.full}</h6>
-                        <p className="main-color mt-2 mb-1">
+                        <address className='mb-2 mb-sm-3'><span className='secondary'>•</span> {e.full}</address>
+                        <p className="secondary mt-2 mb-1">
                           Доставка и самовывоз
                         </p>
                         <p>{e.desc}</p>
                         {e.phone[0] && (
                           <>
-                            <p className="main-color mt-2 mb-1">
+                            <p className="secondary mt-2 mb-1">
                               Номер телефона
                             </p>
                             <p>{e.phone[0]}</p>

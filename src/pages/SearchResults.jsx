@@ -8,7 +8,18 @@ import SelectImitation from '../components/utils/SelectImitation';
 import ProductCard from '../components/ProductCard';
 import NavPagination from '../components/NavPagination';
 
+import {
+  useGetCategoriesQuery,
+} from "../services/home";
+import Loader from "../components/utils/Loader";
+
+
 const SearchResults = () => {
+  const categories = useGetCategoriesQuery();
+
+  if (categories.isLoading) {
+    return <Loader full />;
+  }
   return (
     <main className="inner">
       <Container>
@@ -23,51 +34,11 @@ const SearchResults = () => {
           </div>
 
           <Row xs={2} sm={3} md={3} lg={4} xxl={5} className='gx-3 gx-md-5 gy-4 gy-sm-5 mb-4 mb-md-5'>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
-            <Col>
-              <ProductCard/>
-            </Col>
+            {categories.data[0].products.map((e) => (
+              <Col>
+                <ProductCard data={e} />
+              </Col>
+            ))}
           </Row>
 
           <NavPagination/>

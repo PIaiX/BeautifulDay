@@ -368,6 +368,31 @@ label {
     margin-left: .25em;
   }
 }
+.password {
+  position: relative;
+  input {
+    font-size: inherit;
+    font-weight: inherit;
+    position: relative;
+    z-index: 1;
+  }
+  button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 5;
+    color: $black-gray;
+    height: 100%;
+    width: 2em;
+    font-size: 1.6em;
+    @include flex();
+    svg {
+      path {
+        stroke-width: 1.25px;
+      }
+    }
+  }
+}
 .inputGroup {
   @include list();
   @include flex(row, flex-start, center, nowrap);
@@ -2734,7 +2759,7 @@ main {
   .offer {
     width: 100%;
     position: relative;
-    @include shadowF();
+    // @include shadowF();
     transition: transform 200ms linear;
     @media (max-width: $bp-sm) {
       font-size: 11px;
@@ -2758,7 +2783,8 @@ main {
     }
   }
   .sw-offers {
-    overflow: visible;
+    overflow: hidden;
+    padding: 1em 0.5em;
     &:hover {
       .offer {
         transform: rotate(0deg) !important;
@@ -2870,8 +2896,12 @@ main {
     overflow: auto;
     @include scrollCustomized();
     li {
-      border-bottom: 1px solid $light-gray;
-      padding: 1.5em 0px;
+      border: 1px solid $light;
+      padding: 1em;
+      border-radius: 1em;
+      &:not(:first-child){
+        margin-top: 1em;
+      }
     }
   }
   .map {

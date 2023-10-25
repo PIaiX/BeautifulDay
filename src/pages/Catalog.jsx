@@ -16,7 +16,6 @@ import ProductCard from '../components/ProductCard';
 import MultyRangeCustom from "../components/utils/MultyRangeCustom";
 import Filter from '../components/svgs/Filter';
 import PrevIcon from '../components/svgs/PrevIcon';
-import { getCategory } from "../services/category";
 import Loader from "../components/utils/Loader";
 import { useGetCategoriesQuery } from "../services/home";
 

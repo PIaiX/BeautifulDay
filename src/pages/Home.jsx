@@ -1,26 +1,20 @@
-
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import {
-  HiOutlineArrowLeftCircle,
-  HiOutlineArrowRightCircle,
-} from "react-icons/hi2";
 import { Link } from "react-router-dom";
-import AppStore from "../assets/imgs/appstore-black.svg";
-import GooglePlay from "../assets/imgs/googleplay-black.svg";
-import Phone from "../assets/imgs/phone.png";
+import { useSelector } from "react-redux";
+
 import Offer from "../components/Offer";
 import ProductCardMini from "../components/ProductCardMini";
 import CategoryCard from "../components/CategoryCard";
 import StoriesSection from "../components/StoriesSection";
 import Callback from '../components/modals/Callback';
 import ArticleCard from '../components/ArticleCard';
-import { useSelector } from "react-redux";
-import { Navigation, Pagination } from "swiper";
-import "swiper/css";
+
+import { Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 import SwiperButtonNext from '../components/utils/SwiperButtonNext';
 import SwiperButtonPrev from '../components/utils/SwiperButtonPrev';
 
@@ -245,61 +239,24 @@ const Home = () => {
           }
         </Container>
       </section> 
-      <section className='sec-6 mb-5'>
-        <Container>
-          <Swiper
-            className='sw-offers'
-            spaceBetween={5}
-            slidesPerView={'auto'}
-            speed={750}
-            breakpoints={{
-              576: {
-                slidesPerView: 'auto',
-                spaceBetween: 7,
-              },
-              768: {
-                slidesPerView: 'auto',
-                spaceBetween: 10,
-              },
-              992: {
-                slidesPerView: 3,
-                spaceBetween: 10,
-              },
-            }}
-          >
-            <SwiperSlide>
-              <Offer blackText={false} img={"/imgs/img.jpg"} title={'Весна пришла'} subtitle={'А с ней новые вкусы роллов!'}/>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Offer blackText={false} img={"/imgs/img.jpg"} title={'Пицца «Гаваи»'} subtitle={'Улётный микс из курицы и ананаса'}/>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Offer blackText={true} img={"/imgs/img.jpg"} title={'Свежих ягод много бывает'} subtitle={'Попробуйте наш фирменный тарт — мы добавили в него ещё больше клубники!'}/>
-            </SwiperSlide>
-          </Swiper>
-          <Link to='/promo' className='btn-primary mt-4 mt-sm-5 mx-auto'>смотреть все акции</Link>
-        </Container>
-      </section>
+
       {sales?.data?.items?.length > 0 && (
         <section className="sec-6 mb-5">
           <Container>
             <Swiper
               className='sw-offers'
-              spaceBetween={5}
+              spaceBetween={20}
               slidesPerView={'auto'}
               speed={750}
               breakpoints={{
                 576: {
                   slidesPerView: 'auto',
-                  spaceBetween: 7,
                 },
                 768: {
                   slidesPerView: 'auto',
-                  spaceBetween: 10,
                 },
                 992: {
                   slidesPerView: 3,
-                  spaceBetween: 10,
                 },
               }}
             >

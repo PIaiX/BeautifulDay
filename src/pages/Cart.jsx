@@ -3,7 +3,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import NavTop from "../components/utils/NavTop";
-// import Gifts from "../components/utils/Gifts";
+import Gifts from "../components/utils/Gifts";
 import { useForm, useWatch } from "react-hook-form";
 import { HiOutlineTrash, HiXMark } from "react-icons/hi2";
 import { NotificationManager } from "react-notifications";
@@ -160,8 +160,12 @@ const Cart = () => {
               </ul>
             </Col>
             <Col xs={12} lg={4}>
+            <div className="cart-box">
+              <div className='fs-11 mb-1'>Комментарий</div>
+              <textarea rows="3" defaultValue={'Уберите, пожалуйста, лук'} className='fs-09 mb-4'></textarea>
+
               <div className="fs-11 mb-1">Промокод</div>
-              <div className="mb-3 d-flex">
+              <div className="promoCode mb-4">
                 <Input
                   className="w-100"
                   type="text"
@@ -175,9 +179,12 @@ const Cart = () => {
                   type="button"
                   disabled={!isValid}
                   onClick={handleSubmit(onPromo)}
-                  className="btn-10 ms-2 ms-sm-4 rounded-3"
+                  className="btn-secondary"
                 >
                   Применить
+                </button>
+                <button type='button' className='clear'>
+                  <HiXMark/>
                 </button>
               </div>
 
@@ -234,10 +241,12 @@ const Cart = () => {
                   {user?.id
                     ? address?.length === 0 && stateDelivery == "delivery"
                       ? "Добавить адрес"
-                      : "Далее"
+                      : "Перейти к оформлению"
                     : "Войти в профиль"}
                 </span>
               </Link>
+              <div className='fs-09 bg-secondary secondary p-2 fw-5 text-center w-100 rounded-2 mt-3'>34 бонуса будут начислены за этот заказ</div>
+            </div>
             </Col>
           </Row>
         </div>
