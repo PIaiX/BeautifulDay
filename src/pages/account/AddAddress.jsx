@@ -298,7 +298,7 @@ const CreateAddress = () => {
           <button
             disabled={!isValid}
             onClick={handleSubmit(onSubmit)}
-            className="btn-deepgreen w-xs-100 mb-3"
+            className="btn-light w-xs-100 mb-3"
           >
             Сохранить адрес
           </button>

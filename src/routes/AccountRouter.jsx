@@ -14,14 +14,17 @@ import Offers from "../pages/account/Offers";
 import Notifications from "../pages/account/Notifications";
 import Payment from "../pages/account/Payment";
 import Support from "../pages/account/Support";
-import { isMobile } from "react-device-detect";
+// import { isMobile } from "react-device-detect";
+import useIsMobile from '../hooks/isMobile';
 import Favorites from "../pages/account/Favorites";
 
 const AccountRouter = () => {
+  const isMobileLG = useIsMobile('991px');
+
   return (
     <Routes>
-      <Route path="/" element={<AccountLayout isMobile={isMobile} />}>
-        {isMobile ? (
+      <Route path="/" element={<AccountLayout isMobile={isMobileLG} />}>
+        {isMobileLG ? (
           <Route index element={<AccountMenuMobile />} />
         ) : (
           <Route index element={<Navigate to="orders" replace={true} />} />

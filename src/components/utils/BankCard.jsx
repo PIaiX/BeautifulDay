@@ -17,7 +17,7 @@ const BankCard = () => {
           onClick={() => setShowDelConfirmation(true)}
           className="d-flex"
         >
-          <HiOutlineTrash />
+          <Trash />
         </button>
       </div>
       <div className="d-flex justify-content-between align-items-center">

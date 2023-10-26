@@ -28,6 +28,7 @@ import Categories from '../pages/Categories'
 import SearchResults from '../pages/SearchResults'
 import Blog from '../pages/Blog'
 import Article from '../pages/Article'
+import MobileContacts from "../pages/MobileContacts";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -44,7 +45,7 @@ const router = createBrowserRouter(
       <Route path="promo/:saleId" element={<OfferPage />} />
       <Route path="contacts" element={<Contact />} />
       <Route path="delivery" element={<Delivery />} />
-
+      <Route path="mobile-contacts" element={<MobileContacts/>} />
       <Route path="policy" element={<Policy />} />
 
       <Route path="search" element={<SearchResults/>} />

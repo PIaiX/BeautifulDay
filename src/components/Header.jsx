@@ -22,6 +22,7 @@ import GooglePlay from "../assets/imgs/googleplay-black.svg";
 import { useGetBannersQuery } from "../services/home";
 
 import Logo from '../assets/imgs/LogoBeautifulDay.svg';
+import LogoMini from '../assets/imgs/LogoBeautifulDayMini.svg';
 // icons
 import YooApp from './svgs/YooApp';
 import Loupe from './svgs/Loupe';
@@ -65,9 +66,13 @@ const Header = memo(() => {
               <img
                 src={Logo}
                 alt={options?.title ?? "YOOAPP"}
-                className="logo"
+                className="logo d-none d-sm-block"
               />
-
+              <img
+                src={LogoMini}
+                alt={options?.title ?? "YOOAPP"}
+                className="logo d-sm-none"
+              />
             </Link>
 
             <ul className="d-none d-lg-flex">
@@ -231,23 +236,16 @@ const Header = memo(() => {
                         <span>Оплата и доставка</span>
                       </Link>
                     </li>
-                   <li>
-
-                    <Link to='/'>
-                      <MenuBlog/>
-                      <span>Новости</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to='/promo'>
-                      <MenuOffers/>
-                      <span>Акции</span>
-                    </Link>
-                  </li>
-                  <li>
-                      <Link to="/">
-                        <MenuVacancies />
-                        <span>Вакансии</span>
+                    <li>
+                      <Link to='/'>
+                        <MenuBlog/>
+                        <span>Новости</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to='/promo'>
+                        <MenuOffers/>
+                        <span>Акции</span>
                       </Link>
                     </li>
                     <li>

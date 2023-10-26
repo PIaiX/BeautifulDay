@@ -325,7 +325,7 @@ const EditAddress = () => {
           <button
             disabled={!isValid}
             onClick={handleSubmit(onSubmit)}
-            className="btn-deepgreen w-xs-100"
+            className="btn-light w-xs-100"
           >
             Сохранить адрес
           </button>

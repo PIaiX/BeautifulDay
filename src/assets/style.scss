@@ -20,6 +20,7 @@ $radius: 1em;
 
 $red: #E01E00;
 $orange: #FF9D17;
+$aqua: #47BACD;
 
 $primary: #FE545E;
 $secondary: #5C5DEF;
@@ -31,6 +32,7 @@ $white: #fff;
 $light-gray: #F4F6F8;
 $gray: #DFE2E5;
 $black-gray: #637381;
+$dark: #434343;
 $black: #1C1C1C;
 
 $transition: 300ms ease-in;
@@ -597,6 +599,24 @@ button {
     border-radius: 2em;
     @include flex();
   }
+  &-dark {
+    background-color: $dark;
+    color: $white;
+    transition: $transition;
+    transition-property: background-color;
+    padding: .5em;
+    border-radius: .5em;
+    @include flex();
+    &:hover, &:focus, &:active {
+      background-color: $black;
+      color: $white;
+    }
+  }
+  &-aqua {
+    @extend .btn;
+    background-color: $aqua;
+    color: $white;
+  }
   &[disabled]{
     background-color: $light-gray;
     border: 1px solid $light-gray;
@@ -887,7 +907,7 @@ select {
       width: .5em;
       height: .5em;
       border-radius: .25em;
-      margin: 0 .75em !important;
+      margin: 0 .5em !important;
       background-color: rgba($color: $white, $alpha: .7);
       transition: background-color $transition;
       &-active {
@@ -1267,7 +1287,7 @@ header {
       width: 200px;
     }
     @media (max-width: $bp-sm) {
-      width: 160px;
+      width: 35px;
     }
   }
   .phone {
@@ -1343,6 +1363,9 @@ header {
       object-fit: cover;
       border-radius: $radius;
       margin-bottom: 2em;
+      @media (max-width: $bp-md) {
+        height: 200px;
+      }
     }
     nav {
       @include lightShadow();
@@ -1393,6 +1416,41 @@ main {
   @media (max-width: $bp-lg) {
     min-height: 100vh;
     padding: var(--h-height) 0px var(--f-height);
+  }
+}
+
+
+.mobileOnly {
+  font-size: 16px;
+  &-img {
+    position: relative;
+    margin-bottom: 2em;
+    img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      border-radius: 0em 0em 2em 2em;
+    }
+    figcaption {
+      position: absolute;
+      bottom: 1em;
+      left: 0px;
+      width: 100%;
+      z-index: 10;
+      text-align: center;
+    }
+  }
+  ul {
+    @include list();
+    padding: 0.25em 1em;
+    border: 1px solid $gray;
+    border-radius: 1em;
+    li {
+      padding: 1em 0.5em;
+      &:not(:last-child){
+        border-bottom: 1px solid $gray;
+      }
+    }
   }
 }
 
@@ -3103,7 +3161,7 @@ footer {
         a {
           @include flex(row, flex-start, center, nowrap);
           padding: 0.5em;
-          border-radius: $radius*0.5;
+          border-radius: 2em;
           background-color: transparent;
           max-width: 2.6em;
           height: 2.6em;
@@ -3315,6 +3373,7 @@ ACCOUNT
               color: $secondary;
               width: 1.5em;
               height: 1.5em;
+              font-weight: 400;
               padding: 0em;
               @include flex();
             }

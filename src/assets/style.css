@@ -552,7 +552,7 @@ button {
   color: inherit;
 }
 
-.btn, .btn-info, .btn-light, .btn-secondary, .btn-primary {
+.btn, .btn-aqua, .btn-info, .btn-light, .btn-secondary, .btn-primary {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -567,7 +567,7 @@ button {
   border-radius: 1.5em;
 }
 @media (max-width: 1199.98px) {
-  .btn, .btn-info, .btn-light, .btn-secondary, .btn-primary {
+  .btn, .btn-aqua, .btn-info, .btn-light, .btn-secondary, .btn-primary {
     padding: 0.5em 1.2em;
   }
 }
@@ -629,7 +629,28 @@ button {
   align-items: center;
   flex-wrap: nowrap;
 }
-.btn[disabled], [disabled].btn-primary, [disabled].btn-secondary, [disabled].btn-light, [disabled].btn-info {
+.btn-dark {
+  background-color: #434343;
+  color: #fff;
+  transition: 300ms ease-in;
+  transition-property: background-color;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.btn-dark:hover, .btn-dark:focus, .btn-dark:active {
+  background-color: #1C1C1C;
+  color: #fff;
+}
+.btn-aqua {
+  background-color: #47BACD;
+  color: #fff;
+}
+.btn[disabled], [disabled].btn-primary, [disabled].btn-secondary, [disabled].btn-light, [disabled].btn-info, [disabled].btn-aqua {
   background-color: #F4F6F8;
   border: 1px solid #F4F6F8;
   color: #637381;
@@ -976,7 +997,7 @@ select {
   width: 0.5em;
   height: 0.5em;
   border-radius: 0.25em;
-  margin: 0 0.75em !important;
+  margin: 0 0.5em !important;
   background-color: rgba(255, 255, 255, 0.7);
   transition: background-color 300ms ease-in;
 }
@@ -1430,7 +1451,7 @@ header .logo {
 }
 @media (max-width: 575.98px) {
   header .logo {
-    width: 160px;
+    width: 35px;
   }
 }
 header .phone {
@@ -1528,6 +1549,11 @@ header .btn-menu:hover, header .btn-menu:focus, header .btn-menu:active {
   border-radius: 1em;
   margin-bottom: 2em;
 }
+@media (max-width: 767.98px) {
+  .offcanvas-menu .offcanvas-body .menu-offer {
+    height: 200px;
+  }
+}
 .offcanvas-menu .offcanvas-body nav {
   box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.04);
   border-radius: 1em;
@@ -1589,6 +1615,41 @@ main {
     min-height: 100vh;
     padding: var(--h-height) 0px var(--f-height);
   }
+}
+
+.mobileOnly {
+  font-size: 16px;
+}
+.mobileOnly-img {
+  position: relative;
+  margin-bottom: 2em;
+}
+.mobileOnly-img img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  border-radius: 0em 0em 2em 2em;
+}
+.mobileOnly-img figcaption {
+  position: absolute;
+  bottom: 1em;
+  left: 0px;
+  width: 100%;
+  z-index: 10;
+  text-align: center;
+}
+.mobileOnly ul {
+  list-style: none;
+  padding-left: 0px;
+  padding: 0.25em 1em;
+  border: 1px solid #DFE2E5;
+  border-radius: 1em;
+}
+.mobileOnly ul li {
+  padding: 1em 0.5em;
+}
+.mobileOnly ul li:not(:last-child) {
+  border-bottom: 1px solid #DFE2E5;
 }
 
 .sec-1 {
@@ -3383,7 +3444,7 @@ footer .mobile ul li a {
   align-items: center;
   flex-wrap: nowrap;
   padding: 0.5em;
-  border-radius: 0.5em;
+  border-radius: 2em;
   background-color: transparent;
   max-width: 2.6em;
   height: 2.6em;
@@ -3632,6 +3693,7 @@ ACCOUNT
   color: #5C5DEF;
   width: 1.5em;
   height: 1.5em;
+  font-weight: 400;
   padding: 0em;
   display: flex;
   flex-direction: row;
