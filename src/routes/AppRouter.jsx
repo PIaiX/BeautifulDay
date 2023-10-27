@@ -45,7 +45,7 @@ const router = createBrowserRouter(
       <Route path="promo/:saleId" element={<OfferPage />} />
       <Route path="contacts" element={<Contact />} />
       <Route path="delivery" element={<Delivery />} />
-      <Route path="mobile-contacts" element={<MobileContacts/>} />
+      <Route path="mobile" element={<MobileContacts/>} />
       <Route path="policy" element={<Policy />} />
 
       <Route path="search" element={<SearchResults/>} />
