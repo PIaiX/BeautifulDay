@@ -552,7 +552,7 @@ button {
   color: inherit;
 }
 
-.btn, .btn-aqua, .btn-info, .btn-light, .btn-secondary, .btn-primary {
+.btn, .btn-aqua, .btn-info, .btn-light, .btn-success, .btn-secondary, .btn-primary {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -567,7 +567,7 @@ button {
   border-radius: 1.5em;
 }
 @media (max-width: 1199.98px) {
-  .btn, .btn-aqua, .btn-info, .btn-light, .btn-secondary, .btn-primary {
+  .btn, .btn-aqua, .btn-info, .btn-light, .btn-success, .btn-secondary, .btn-primary {
     padding: 0.5em 1.2em;
   }
 }
@@ -590,6 +590,16 @@ button {
   color: #fff;
   background-color: #2e2fea;
   border: 1px solid #2e2fea;
+}
+.btn-success {
+  color: #fff;
+  background-color: #54C878;
+  border: 1px solid #54C878;
+}
+.btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active {
+  color: #fff;
+  background-color: #39b05e;
+  border: 1px solid #39b05e;
 }
 .btn-light {
   color: #5C5DEF;
@@ -650,7 +660,7 @@ button {
   background-color: #47BACD;
   color: #fff;
 }
-.btn[disabled], [disabled].btn-primary, [disabled].btn-secondary, [disabled].btn-light, [disabled].btn-info, [disabled].btn-aqua {
+.btn[disabled], [disabled].btn-primary, [disabled].btn-secondary, [disabled].btn-success, [disabled].btn-light, [disabled].btn-info, [disabled].btn-aqua {
   background-color: #F4F6F8;
   border: 1px solid #F4F6F8;
   color: #637381;

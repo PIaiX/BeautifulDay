@@ -71,7 +71,7 @@ const Footer = memo(() => {
           : <div className='desktop'>
             <img src={LogoWhite} alt={options?.title ?? "YOOAPP"} className='logo'/>
 
-            <nav class="ms-5 me-auto">
+            <nav className="ms-5 me-auto">
               <ul className="list-unstyled d-flex">
                 <li>
                   <Link to='/menu'>Каталог</Link>

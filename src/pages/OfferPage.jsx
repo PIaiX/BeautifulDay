@@ -39,7 +39,7 @@ const OfferPage = () => {
         button={
           <a
             className="btn-primary"
-            onclick={() => {
+            onClick={() => {
               location.reload();
               return false;
             }}

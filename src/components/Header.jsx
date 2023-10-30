@@ -1,25 +1,16 @@
 import React, { memo, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import {
-  HiOutlineArrowLeftCircle,
-  HiOutlineDevicePhoneMobile,
-  HiOutlineHeart,
-  HiOutlineShoppingBag,
-  HiOutlineUserCircle,
-} from "react-icons/hi2";
-import { IoLogoWhatsapp } from "react-icons/io";
-import { IoCall, IoCloseOutline, IoClose } from "react-icons/io5";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getCount, getImageURL } from "../helpers/all";
-import { editDeliveryCheckout } from "../store/reducers/checkoutSlice";
-import Select from "./utils/Select";
+import { getCount } from "../helpers/all";
+import { useGetBannersQuery } from "../services/home";
 import AppDownload from "./svgs/AppDownload";
+
 import Phone from "../assets/imgs/phone.png";
 import AppStore from "../assets/imgs/appstore-black.svg";
 import GooglePlay from "../assets/imgs/googleplay-black.svg";
-import { useGetBannersQuery } from "../services/home";
 
 import Logo from '../assets/imgs/LogoBeautifulDay.svg';
 import LogoMini from '../assets/imgs/LogoBeautifulDayMini.svg';
@@ -32,10 +23,14 @@ import CrossIcon from './svgs/CrossIcon';
 import MenuIcon from './svgs/MenuIcon';
 import MenuPhone from './svgs/MenuPhone';
 import MenuDelivery from './svgs/MenuDelivery';
-import MenuVacancies from './svgs/MenuVacancies';
 import MenuDocs from './svgs/MenuDocs';
 import MenuBlog from './svgs/MenuBlog';
 import MenuOffers from './svgs/MenuOffers';
+import {
+  HiOutlineArrowLeftCircle,
+} from "react-icons/hi2";
+import { IoLogoWhatsapp } from "react-icons/io";
+import { IoCall, IoClose, IoCloseOutline } from "react-icons/io5";
 
 const Header = memo(() => {
   const isAuth = useSelector((state) => state.auth.isAuth);

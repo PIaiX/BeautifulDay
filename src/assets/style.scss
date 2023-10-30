@@ -563,6 +563,17 @@ button {
       border: 1px solid darken($color: $secondary, $amount: 10%);
     }
   }
+  &-success {
+    @extend .btn;
+    color: $white;
+    background-color: $success;
+    border: 1px solid $success;
+    &:hover, &:focus, &:active, &.active {
+      color: $white;
+      background-color: darken($color: $success, $amount: 10%);
+      border: 1px solid darken($color: $success, $amount: 10%);
+    }
+  }
   &-light {
     @extend .btn;
     color: $secondary;

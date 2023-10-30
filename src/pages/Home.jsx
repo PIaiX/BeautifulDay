@@ -85,8 +85,8 @@ const Home = () => {
                   speed={750}
                   pagination={{ clickable: true }}
                 >
-                  {banners.data.items.map((e) => (
-                    <SwiperSlide>
+                  {banners.data.items.map((e, index) => (
+                    <SwiperSlide key={index}>
                       <Link>
                         <img
                           src={getImageURL({
@@ -260,8 +260,8 @@ const Home = () => {
                 },
               }}
             >
-              {sales.data.items.map((e) => (
-                <SwiperSlide>
+              {sales.data.items.map((e, index) => (
+                <SwiperSlide key={index}>
                   <Offer data={e} />
                 </SwiperSlide>
               ))}

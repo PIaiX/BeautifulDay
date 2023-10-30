@@ -9,16 +9,15 @@ import AppRouter from "./routes/AppRouter";
 import { checkAuth, logout } from "./services/auth";
 import { getOptions } from "./services/option";
 import { updateAddresses } from "./store/reducers/addressSlice";
-import { updateAffiliate } from "./store/reducers/affiliateSlice";
-import { updateCartAll } from "./store/reducers/cartSlice";
-import { updateOptions } from "./store/reducers/settingsSlice";
+import { updateAffiliate, updateZone } from "./store/reducers/affiliateSlice";
+import { updateIp, updateOptions } from "./store/reducers/settingsSlice";
 import { getFavorites } from "./services/favorite";
+import axios from "axios";
 
 function App() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const options = useSelector((state) => state.settings.options);
-  const cart = useSelector((state) => state.cart.items);
   const favorite = useSelector((state) => state.favorite.items);
 
   const updateColor = useCallback(
@@ -41,6 +40,9 @@ function App() {
   useLayoutEffect(() => {
     (async () => {
       updateColor(options);
+      await axios
+        .get("https://ip.yooapp.ru")
+        .then(({ data }) => data?.ip && dispatch(updateIp(data.ip)));
       await getOptions()
         .then(async (res) => {
           if (res?.options) {
@@ -49,6 +51,7 @@ function App() {
           }
 
           dispatch(updateAffiliate(res.affiliates));
+          dispatch(updateZone(res.zones));
 
           if (localStorage.getItem("token")) {
             await checkAuth()
