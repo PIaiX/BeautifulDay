@@ -11,6 +11,7 @@ import CategoryCard from "../components/CategoryCard";
 import StoriesSection from "../components/StoriesSection";
 import Callback from '../components/modals/Callback';
 import ArticleCard from '../components/ArticleCard';
+import EmptyCatalog from "../components/empty/catalog";
 
 import { Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -44,26 +45,26 @@ const Home = () => {
     return <Loader full />;
   }
 
-  if (!Array.isArray(categories.data) || categories.data.length <= 0) {
-    return (
-      <Empty
-        text="Нет товаров"
-        desc="Временно товары отсуствуют"
-        image={() => <EmptyCatalog />}
-        button={
-          <a
-            className="btn-primary"
-            onclick={() => {
-              location.reload();
-              return false;
-            }}
-          >
-            Обновить страницу
-          </a>
-        }
-      />
-    );
-  }
+  // if (!Array.isArray(categories.data) || categories.data.length <= 0) {
+  //   return (
+  //     <Empty
+  //       text="Нет товаров"
+  //       desc="Временно товары отсуствуют"
+  //       image={() => <EmptyCatalog />}
+  //       button={
+  //         <a
+  //           className="btn-primary"
+  //           onclick={() => {
+  //             location.reload();
+  //             return false;
+  //           }}
+  //         >
+  //           Обновить страницу
+  //         </a>
+  //       }
+  //     />
+  //   );
+  // }
   const isMobileLG = useIsMobile('991px');
 
   return (
@@ -73,7 +74,7 @@ const Home = () => {
         <section className="sec-1 mb-6">
           <div className="container">
             <div className="row justify-content-center">
-              <div className="col-12 col-lg-11 col-xl-9 col-xxl-8">
+              <div className="col-12 col-md-11 col-lg-9 col-xl-8">
                 <Swiper
                   className="main-slider paginated"
                   modules={[Pagination]}
@@ -129,7 +130,6 @@ const Home = () => {
         </Container>
       </section>
 
-
       <section className='sec-3 mb-6'>
         <Container>
           <Row className='justify-content-end'>
@@ -143,56 +143,59 @@ const Home = () => {
         </Container>
       </section>
 
-      <section className='sec-4 mb-6'>
-        <Container>
-          <h2 className='mb-0'>Часто заказывают</h2>
-          <div className="position-relative">
-            <Swiper
-              className='product-slider'
-              spaceBetween={15}
-              slidesPerView={'auto'}
-              speed={750}
-              breakpoints={{
-                576: {
-                  spaceBetween: 20,
-                  slidesPerView: 'auto',
-                },
-                992: {
-                  slidesPerView: 3,
-                  spaceBetween: 20,
-                },
-              }}
-            >
-              <SwiperSlide>
-                <ProductCardMini/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductCardMini/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductCardMini/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductCardMini/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductCardMini/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductCardMini/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductCardMini/>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductCardMini/>
-              </SwiperSlide>
-              <SwiperButtonPrev/>
-              <SwiperButtonNext/>
-            </Swiper>
-          </div>
-        </Container>
-      </section>
+      {
+        (Array.isArray(categories.data) && categories.data.length > 0)
+        && <section className='sec-4 mb-6'>
+          <Container>
+            <h2 className='mb-0'>Часто заказывают</h2>
+            <div className="position-relative">
+              <Swiper
+                className='product-slider'
+                spaceBetween={15}
+                slidesPerView={'auto'}
+                speed={750}
+                breakpoints={{
+                  576: {
+                    spaceBetween: 20,
+                    slidesPerView: 'auto',
+                  },
+                  992: {
+                    slidesPerView: 3,
+                    spaceBetween: 20,
+                  },
+                }}
+              >
+                <SwiperSlide>
+                  <ProductCardMini/>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini/>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini/>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini/>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini/>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini/>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini/>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini/>
+                </SwiperSlide>
+                <SwiperButtonPrev/>
+                <SwiperButtonNext/>
+              </Swiper>
+            </div>
+          </Container>
+        </section>
+      }
 
       <section className='sec-5 mb-6'>
         <Container>

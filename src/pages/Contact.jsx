@@ -19,26 +19,26 @@ const Contact = () => {
     affiliate?.length > 0 ? affiliate.find((e) => e.main) : false
   );
 
-  if (!mainAffiliate || !mainAffiliate?.phone?.length > 0) {
-    return (
-      <Empty
-        text="В данный момент контактов нет"
-        desc="Вернитесь на эту страницу чуть позже"
-        image={() => <EmptyWork />}
-        button={
-          <a
-            className="btn-primary"
-            onclick={() => {
-              location.reload();
-              return false;
-            }}
-          >
-            Обновить страницу
-          </a>
-        }
-      />
-    );
-  }
+  // if (!mainAffiliate || !mainAffiliate?.phone?.length > 0) {
+  //   return (
+  //     <Empty
+  //       text="В данный момент контактов нет"
+  //       desc="Вернитесь на эту страницу чуть позже"
+  //       image={() => <EmptyWork />}
+  //       button={
+  //         <a
+  //           className="btn-primary"
+  //           onclick={() => {
+  //             location.reload();
+  //             return false;
+  //           }}
+  //         >
+  //           Обновить страницу
+  //         </a>
+  //       }
+  //     />
+  //   );
+  // }
 
   return (
     <main>
@@ -49,10 +49,10 @@ const Contact = () => {
               <div className="box">
                 <div className="d-flex align-items-baseline mb-5">
                   <h1 className="mb-0">Контакты </h1>
-                  <h5 className="mb-0">
+                  {/* <h5 className="mb-0">
                     <span className="mx-3">•</span>
                     {mainAffiliate.options.city}
-                  </h5>
+                  </h5> */}
                 </div>
 
                 <h6 className="mb-3">{mainAffiliate.full}</h6>

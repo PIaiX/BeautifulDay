@@ -18,6 +18,8 @@ import Filter from '../components/svgs/Filter';
 import PrevIcon from '../components/svgs/PrevIcon';
 import Loader from "../components/utils/Loader";
 import { useGetCategoriesQuery } from "../services/home";
+import Empty from "../components/Empty";
+import EmptyCatalog from "../components/empty/catalog";
 
 const Catalog = () => {
   const [show, setShow] = useState(false);
@@ -30,6 +32,27 @@ const Catalog = () => {
 
   if (categories.isLoading) {
     return <Loader full />;
+  }
+
+  if (!Array.isArray(categories.data) || categories.data.length <= 0) {
+    return (
+      <Empty
+        text="Нет товаров"
+        desc="Временно товары отсуствуют"
+        image={() => <EmptyCatalog />}
+        button={
+          <a
+            className="btn-primary"
+            onclick={() => {
+              location.reload();
+              return false;
+            }}
+          >
+            Обновить страницу
+          </a>
+        }
+      />
+    );
   }
 
 
