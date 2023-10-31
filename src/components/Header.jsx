@@ -14,6 +14,7 @@ import GooglePlay from "../assets/imgs/googleplay-black.svg";
 
 import Logo from '../assets/imgs/LogoBeautifulDay.svg';
 import LogoMini from '../assets/imgs/LogoBeautifulDayMini.svg';
+import Happiness from '../assets/imgs/happiness.jpg';
 // icons
 import YooApp from './svgs/YooApp';
 import Loupe from './svgs/Loupe';
@@ -213,7 +214,7 @@ const Header = memo(() => {
             ) : (
               <>
                 <img
-                  src="/imgs/img.jpg"
+                  src={Happiness}
                   alt="Beautiful Day"
                   className="menu-offer"
                 />
