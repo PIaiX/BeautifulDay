@@ -379,7 +379,7 @@ const Registration = () => {
               <button
                 type="button"
                 onClick={handleClick}
-                className="btn-40 rounded-3 mx-auto mt-4"
+                className="btn-light mx-auto mt-4"
               >
                 {loginView ? <span>Регистрация</span> : <span>Войти</span>}
               </button>
