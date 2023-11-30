@@ -21,14 +21,15 @@ const isCart = (product) => {
 
 const useTotalCart = () => {
     const stateDelivery = useSelector(state => state.checkout.delivery)
-    const statePayment = useSelector(state => state.checkout.data.payment)
-    const pointSwitch = useSelector(state => state.checkout.data.pointSwitch)
+    const statePayment = useSelector(state => state.checkout.data?.payment)
+    const pointSwitch = useSelector(state => state.checkout.data?.pointSwitch)
     const stateCart = useSelector(state => state.cart.items)
     const statePromo = useSelector(state => state.cart.promo)
     const stateZone = useSelector(state => state.cart.zone.data)
     const pointOptions = useSelector(state => state.settings.options.point)
+    const userPoint = useSelector(state => state.auth.user.point)
 
-    var cashbackValue = 0
+    const affiliateActive = useSelector(state => state?.affiliate?.items?.length > 0 && state.affiliate.items.find(e => e.main))
 
     const [data, setData] = useState({
         total: 0,
@@ -96,7 +97,9 @@ const useTotalCart = () => {
             }
 
             let pointCheckout = pointOptions?.writing?.value > 0 ? (totalCalcul / 100) * Number(pointOptions.writing.value) : 0
-
+            if (pointCheckout > 0 && pointCheckout > userPoint) {
+                pointCheckout = userPoint
+            }
             if (pointCheckout > 0 && pointSwitch) {
                 let is = true
                 if (!pointOptions?.writing?.delivery && stateDelivery == 'delivery') {

@@ -103,7 +103,6 @@ const apiRoutes = {
 
 export {
   ADMIN_URL,
-  IO_URL,
   BASE_URL,
   SITE_URL,
   FILE_URL,
@@ -113,6 +112,5 @@ export {
   DADATA_URL_STREET,
   DADATA_URL_ADDRESS,
   DADATA_TOKEN,
-  DOMAIN,
   apiRoutes,
 };

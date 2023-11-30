@@ -64,6 +64,7 @@ function App() {
           }
 
           res?.affiliates && dispatch(updateAffiliate(res.affiliates));
+          res?.zones && dispatch(updateZone(res.zones));
           if (res?.statuses?.length > 0) {
             let statusesMain = res.statuses
               .filter((e) => e.main)
@@ -78,7 +79,7 @@ function App() {
 
           if (localStorage.getItem("token")) {
             await checkAuth()
-              .then(async ({ data }) => {
+              .then(async (data) => {
                 dispatch(setAuth(true));
                 dispatch(setUser(data));
 

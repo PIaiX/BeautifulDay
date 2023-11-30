@@ -29,18 +29,19 @@ import SearchResults from '../pages/SearchResults'
 import Blog from '../pages/Blog'
 import Article from '../pages/Article'
 import MobileContacts from "../pages/MobileContacts";
+import Error from "../components/Error";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<AppLayout />}>
-      <Route index element={<Home />} />
+      <Route index element={<Home />} errorElement={<Error />} />
       <Route path="menu" element={<Catalog/>} />
       <Route path="categories" element={<Categories/>} />
       <Route path="category/:categoryId" element={<Category />} />
       <Route path="menu/product" element={<Product />} />
       <Route path="product/:productId" element={<Product />} />
-      <Route path="cart" element={<Cart />} />
-      <Route path="checkout" element={<Checkout />} />
+      <Route path="cart" element={<Cart />} errorElement={<Error />}/>
+      <Route path="checkout" element={<Checkout />} errorElement={<Error />}/>
       <Route path="promo" element={<Promo />} />
       <Route path="promo/:saleId" element={<OfferPage />} />
       <Route path="contacts" element={<Contact />} />
