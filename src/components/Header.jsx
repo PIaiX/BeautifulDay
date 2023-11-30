@@ -32,6 +32,7 @@ import {
 } from "react-icons/hi2";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { IoCall, IoClose, IoCloseOutline } from "react-icons/io5";
+import DeliveryBar from "./DeliveryBar";
 
 const Header = memo(() => {
   const isAuth = useSelector((state) => state.auth.isAuth);
@@ -146,6 +147,8 @@ const Header = memo(() => {
           </nav>
         </Container>
       </header>
+
+      <DeliveryBar sum={2500}/>
 
       <Offcanvas
         className="offcanvas-menu"

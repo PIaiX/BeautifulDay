@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+
 :root {
   --h-height: 70px;
   --f-height: 112px;
@@ -298,6 +300,7 @@ input {
       background-color: $primary;
     }
     &[role="switch"]{
+      cursor: pointer;
       width: $radius*2.75;
       height: $radius*1.45;
       background-color: $gray;
@@ -4933,5 +4936,89 @@ ACCOUNT END
 
   100% {
     opacity: 1;
+  }
+}
+
+
+.freeDeliveryBar {
+  position: fixed;
+  z-index: 100;
+  bottom: 2em;
+  right: 1em;
+  width: 100px;
+  font-size: 12px;
+  text-align: center;
+  font-family: "Lobster", sans-serif;
+  @media (max-width: $bp-lg) {
+    bottom: calc(var(--f-height) - 2px);
+    width: 100%;
+    height: var(--f-height);
+    right: 0px;
+    background-color: #fff;
+    border-top: 1px solid #d9d9d9;
+    font-family: $main-font;
+  }
+  .box {
+    max-width: 330px;
+    height: 100%;
+    margin: 0px auto;
+    text-align: left;
+    @include flex(column, center, stretch, nowrap);
+    @media (max-width: $bp-sm) {
+      max-width: 300px;
+    }
+  }
+  .mobileBar {
+    height: 40px;
+    margin-top: -10px;
+    @include flex();
+    position: relative;
+    .bar {
+      height: 10px;
+      width: 100%;
+      border-radius: 5px;
+      background-color:#eeeeee;
+      position: relative;
+      z-index: 1;
+      &[data-state="half"] {
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          height: 100%;
+          width: 55%;
+          border-radius: 5px;
+          background: linear-gradient(to right, #038036 9%, #02B54C 90%);
+        }
+      }
+      &[data-state="full"] {
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          height: 100%;
+          width: 100%;
+          border-radius: 5px;
+          background: linear-gradient(to right, #038036 9%, #02B54C 90%);
+        }
+        & + img {
+          background-color:#02B54C;
+        }
+      }
+    }
+    img {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      z-index: 10;
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 50%;
+      background-color:#eeeeee;
+      padding: 4px;
+    }
   }
 }

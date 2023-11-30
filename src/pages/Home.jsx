@@ -81,8 +81,9 @@ const Home = () => {
                   loop={true}
                   spaceBetween={15}
                   slidesPerView={1}
-                  initialSlide={1}
-                  loopedSlides={2}
+                  initialSlide={0}
+                  loopedSlides={1}
+                  centeredSlides={true}
                   speed={750}
                   pagination={{ clickable: true }}
                 >
