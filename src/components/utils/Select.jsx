@@ -68,7 +68,7 @@ const Select = memo(
     });
 
     return (
-      <Dropdown className="select">
+      <Dropdown className="select w-100">
         <Dropdown.Toggle as={CustomToggle} />
         <Dropdown.Menu className="select-options">
           {data && search && (

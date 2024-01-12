@@ -3,7 +3,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import NavTop from "../components/utils/NavTop";
-import Gifts from "../components/utils/Gifts";
+// import Gifts from "../components/utils/Gifts";
 import { useForm } from "react-hook-form";
 import { NotificationManager } from "react-notifications";
 import { useDispatch, useSelector } from "react-redux";
@@ -62,10 +62,12 @@ const Cart = () => {
           delivery: checkout.delivery,
         })
           .then(({ data }) => data?.promo && dispatch(cartPromo(data.promo)))
-          .catch((err) => {
+          .catch((error) => {
             dispatch(cartDeletePromo());
             NotificationManager.error(
-              err?.response?.data?.error ?? "Такого промокода не существует"
+              typeof error?.response?.data?.error === "string"
+                ? err.response.data.error
+                : "Такого промокода не существует"
             );
           });
     },
@@ -141,12 +143,8 @@ const Cart = () => {
               </ul>
             </Col>
             <Col xs={12} lg={4}>
-            <div className="cart-box">
-              <div className='fs-11 mb-1'>Комментарий</div>
-              <textarea rows="3" defaultValue={'Уберите, пожалуйста, лук'} className='fs-09 mb-4'></textarea>
-
               <div className="fs-11 mb-1">Промокод</div>
-              <div className="promoCode mb-4">
+              <div className="mb-3 d-flex">
                 <Input
                   className="w-100"
                   type="text"
@@ -160,12 +158,9 @@ const Cart = () => {
                   type="button"
                   disabled={!isValid}
                   onClick={handleSubmit(onPromo)}
-                  className="btn-secondary"
+                  className="btn-10 ms-2 ms-sm-4 rounded-3"
                 >
                   Применить
-                </button>
-                <button type='button' className='clear'>
-                  <HiXMark/>
                 </button>
               </div>
 
@@ -174,21 +169,23 @@ const Cart = () => {
                 <span>{customPrice(price)}</span>
               </div>
 
-              {discount > 0 && (
-                <div className="d-flex justify-content-between my-2">
-                  <span>Скидка</span>
-                  <span>-{customPrice(discount)}</span>
-                </div>
-              )}
-              {address?.length > 0 && stateDelivery == "delivery" && (
+              {checkout.delivery == "delivery" && (
                 <div className="d-flex justify-content-between my-2">
                   <span>Доставка</span>
-                  <span className="main-color">
+                  <span className="text-success">
                     {delivery > 0 ? "+" + customPrice(delivery) : "Бесплатно"}
                   </span>
                 </div>
               )}
-              {pointCheckout > 0 && pointSwitch > 0 && (
+              {pickupDiscount > 0 && (
+                <div className="d-flex justify-content-between my-2">
+                  <span>Скидка за самовывоз</span>
+                  <span className="text-success">
+                    -{customPrice(pickupDiscount)}
+                  </span>
+                </div>
+              )}
+              {pointCheckout > 0 && pointSwitch && (
                 <div className="d-flex justify-content-between my-2">
                   <span>Списание баллов</span>
                   <span>-{customPrice(pointCheckout)}</span>
@@ -206,7 +203,7 @@ const Cart = () => {
                 <span className="fw-6">{customPrice(total)}</span>
               </div>
 
-              {options.giftVisible && <Gifts />}
+              {/* {options.giftVisible && <Gifts />} */}
 
               <Link
                 to={
@@ -222,12 +219,10 @@ const Cart = () => {
                   {user?.id
                     ? address?.length === 0 && checkout.delivery == "delivery"
                       ? "Добавить адрес"
-                      : "Перейти к оформлению"
+                      : "Далее"
                     : "Войти в профиль"}
                 </span>
               </Link>
-              <div className='fs-09 bg-secondary secondary p-2 fw-5 text-center w-100 rounded-2 mt-3'>34 бонуса будут начислены за этот заказ</div>
-            </div>
             </Col>
           </Row>
         </div>

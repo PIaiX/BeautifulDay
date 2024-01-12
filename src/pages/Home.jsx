@@ -9,21 +9,21 @@ import Offer from "../components/Offer";
 import ProductCardMini from "../components/ProductCardMini";
 import CategoryCard from "../components/CategoryCard";
 import StoriesSection from "../components/StoriesSection";
-import Callback from '../components/modals/Callback';
-import ArticleCard from '../components/ArticleCard';
+import Callback from "../components/modals/Callback";
+import ArticleCard from "../components/ArticleCard";
 import EmptyCatalog from "../components/empty/catalog";
 
 import { Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import SwiperButtonNext from '../components/utils/SwiperButtonNext';
-import SwiperButtonPrev from '../components/utils/SwiperButtonPrev';
+import SwiperButtonNext from "../components/utils/SwiperButtonNext";
+import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
 
-import ArticlesMore from '../assets/imgs/articlesMore.jpg';
-import ArticlesCover from '../assets/imgs/articlesCover.jpg';
+import ArticlesMore from "../assets/imgs/articlesMore.jpg";
+import ArticlesCover from "../assets/imgs/articlesCover.jpg";
 import jsonData from "../data/categories";
 import jsonArticles from "../data/articles";
-import useIsMobile from '../hooks/isMobile';
+import useIsMobile from "../hooks/isMobile";
 
 import Empty from "../components/Empty";
 import Meta from "../components/Meta";
@@ -33,15 +33,22 @@ import {
   useGetCategoriesQuery,
   useGetSalesQuery,
   useGetBannersQuery,
+  useGetStoriesQuery,
 } from "../services/home";
 
 const Home = () => {
   const banners = useGetBannersQuery();
   const sales = useGetSalesQuery();
+  const stories = useGetStoriesQuery();
   const categories = useGetCategoriesQuery();
   const options = useSelector((state) => state.settings.options);
 
-  if (categories.isLoading || sales.isLoading || banners.isLoading) {
+  if (
+    categories.isLoading ||
+    sales.isLoading ||
+    banners.isLoading ||
+    stories.isLoading
+  ) {
     return <Loader full />;
   }
 
@@ -65,8 +72,8 @@ const Home = () => {
   //     />
   //   );
   // }
-  const isMobileLG = useIsMobile('991px');
-
+  const isMobileLG = useIsMobile("991px");
+  console.log(sales);
   return (
     <main>
       <Meta title="Главная" />
@@ -108,57 +115,73 @@ const Home = () => {
           </div>
         </section>
       )}
+      {stories?.data?.items?.length > 0 && (
+        <section className="sec-2 mb-6">
+          <Container className="position-relative">
+            <StoriesSection data={stories.data.items} />
+          </Container>
+        </section>
+      )}
 
-      <section className='sec-2 mb-6'>
-        <Container className='position-relative'>
-          <StoriesSection/>
-        </Container>
-      </section>
-
-      <section className='sec-catalog mb-6'>
+      <section className="sec-catalog mb-6">
         <Container>
-          <h2 className='text-center'>Каталог подарков</h2>
-          <Row xs={2} md={3} lg={4} className='justify-content-center gx-2 gy-3 g-sm-4'>
-            {
-              (jsonData).map(obj => {
-                return <Col key={obj.id}>
-                  <CategoryCard data={obj}/>
-                </Col>
-              })
-            }
+          <h2 className="text-center">Каталог</h2>
+          <Row
+            xs={2}
+            md={3}
+            lg={4}
+            className="justify-content-center gx-2 gy-3 g-sm-4"
+          >
+            {categories.data.length > 0 &&
+              categories.data.map((obj) => {
+                return (
+                  <Col key={obj.id}>
+                    <CategoryCard data={obj} />
+                  </Col>
+                );
+              })}
           </Row>
-          <button type='button' className='btn-primary mx-auto mt-4'>показать все</button>
+          <Link to="/categories" className="btn-primary mx-auto mt-4">
+            показать все
+          </Link>
         </Container>
       </section>
 
-      <section className='sec-3 mb-6'>
+      <section className="sec-3 mb-6">
         <Container>
-          <Row className='justify-content-end'>
+          <Row className="justify-content-end">
             <Col xs={12} md={8} lg={6}>
-              <h2 className='text-center'>Сделайте праздник по‑настоящему ярким</h2>
-              <p className='text-center'>Скорее заказывайте воздушные шары, они понравятся как взрослым, так и малышам</p>
+              <h2 className="text-center">
+                Сделайте праздник по‑настоящему ярким
+              </h2>
+              <p className="text-center">
+                Скорее заказывайте воздушные шары, они понравятся как взрослым,
+                так и малышам
+              </p>
               {/* <button type='button' className='btn-info mx-auto mt-4'>Заказать</button> */}
-              <Callback btnText={'Заказать'} btnClass={'btn-info mx-auto mt-4'}/>
+              <Callback
+                btnText={"Заказать"}
+                btnClass={"btn-info mx-auto mt-4"}
+              />
             </Col>
           </Row>
         </Container>
       </section>
 
-      {
-        (Array.isArray(categories.data) && categories.data.length > 0)
-        && <section className='sec-4 mb-6'>
+      {/* {Array.isArray(categories.data) && categories.data.length > 0 && (
+        <section className="sec-4 mb-6">
           <Container>
-            <h2 className='mb-0'>Часто заказывают</h2>
+            <h2 className="mb-0">Часто заказывают</h2>
             <div className="position-relative">
               <Swiper
-                className='product-slider'
+                className="product-slider"
                 spaceBetween={15}
-                slidesPerView={'auto'}
+                slidesPerView={"auto"}
                 speed={750}
                 breakpoints={{
                   576: {
                     spaceBetween: 20,
-                    slidesPerView: 'auto',
+                    slidesPerView: "auto",
                   },
                   992: {
                     slidesPerView: 3,
@@ -167,97 +190,97 @@ const Home = () => {
                 }}
               >
                 <SwiperSlide>
-                  <ProductCardMini/>
+                  <ProductCardMini />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <ProductCardMini/>
+                  <ProductCardMini />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <ProductCardMini/>
+                  <ProductCardMini />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <ProductCardMini/>
+                  <ProductCardMini />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <ProductCardMini/>
+                  <ProductCardMini />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <ProductCardMini/>
+                  <ProductCardMini />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <ProductCardMini/>
+                  <ProductCardMini />
                 </SwiperSlide>
                 <SwiperSlide>
-                  <ProductCardMini/>
+                  <ProductCardMini />
                 </SwiperSlide>
-                <SwiperButtonPrev/>
-                <SwiperButtonNext/>
+                <SwiperButtonPrev />
+                <SwiperButtonNext />
               </Swiper>
             </div>
           </Container>
         </section>
-      }
+      )} */}
 
-      <section className='sec-5 mb-6'>
+      {/* <section className="sec-5 mb-6">
         <Container>
-          <Row className='gx-4 gy-5'>
+          <Row className="gx-4 gy-5">
             <Col xs={12} lg={8} xl={6}>
-              <img src={ArticlesCover} alt="Cover" className='cover'/>
+              <img src={ArticlesCover} alt="Cover" className="cover" />
             </Col>
-            {
-              (!isMobileLG) &&
+            {!isMobileLG && (
               <>
-                {
-                  jsonArticles.map(obj => {
-                    return <Col key={obj.id} md={4} xl={3}><ArticleCard data={obj} /></Col>
-                  })
-                }
+                {jsonArticles.map((obj) => {
+                  return (
+                    <Col key={obj.id} md={4} xl={3}>
+                      <ArticleCard data={obj} />
+                    </Col>
+                  );
+                })}
                 <Col md={4} xl={3}>
-                  <Link to='/articles' className="more">
-                    <img src={ArticlesMore} alt="more" className='img'/>
+                  <Link to="/articles" className="more">
+                    <img src={ArticlesMore} alt="more" className="img" />
                   </Link>
                 </Col>
               </>
-            }
+            )}
           </Row>
-          {
-            (isMobileLG) &&
+          {isMobileLG && (
             <Swiper
-              className='articles-slider'
+              className="articles-slider"
               spaceBetween={20}
-              slidesPerView={'auto'}
+              slidesPerView={"auto"}
             >
-              {
-                jsonArticles.map(obj => {
-                  return <SwiperSlide key={obj.id}>
+              {jsonArticles.map((obj) => {
+                return (
+                  <SwiperSlide key={obj.id}>
                     <ArticleCard data={obj} />
                   </SwiperSlide>
-                })
-              }
+                );
+              })}
               <SwiperSlide>
-                <Link to='/articles' className="more">
-                  <img src={ArticlesMore} alt="more" className='img'/>
-                  </Link>
+                <Link to="/articles" className="more">
+                  <img src={ArticlesMore} alt="more" className="img" />
+                </Link>
               </SwiperSlide>
             </Swiper>
-          }
+          )}
         </Container>
-      </section> 
+      </section> */}
 
       {sales?.data?.items?.length > 0 && (
         <section className="sec-6 mb-5">
           <Container>
             <Swiper
-              className='sw-offers'
+              className="sw-offers"
               spaceBetween={20}
-              slidesPerView={'auto'}
+              slidesPerView={"auto"}
               speed={750}
               breakpoints={{
                 576: {
-                  slidesPerView: 'auto',
+                  slidesPerView: "auto",
                 },
                 768: {
-                  slidesPerView: 'auto',
+                  slidesPerView: "auto",
                 },
                 992: {
                   slidesPerView: 3,
@@ -272,8 +295,7 @@ const Home = () => {
             </Swiper>
 
             <Link to="/promo" className="btn-primary mt-4 mt-sm-5 mx-auto">
-            смотреть все акции
-
+              смотреть все акции
             </Link>
           </Container>
         </section>

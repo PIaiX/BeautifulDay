@@ -88,9 +88,17 @@ const apiRoutes = {
   SALE_GET: '/sale/one',
   GIFTS_GET: '/sale/gifts',
 
-  // Banners
+  // Story
+  STORIES: '/story',
+  STORY: '/story/one',
+
+  // Banner
   BANNERS: '/banner',
   BANNER: '/banner/one',
+
+  // Story
+  STORIES: '/story',
+  STORY: '/story/one',
 
   // Favorite
   FAVORITES: SERVICE_FAVORITE,
@@ -99,18 +107,19 @@ const apiRoutes = {
   // Document
   DOCUMENTS: SERVICE_DOCUMENT,
   DOCUMENT: SERVICE_DOCUMENT + '/one',
-};
+}
 
 export {
   ADMIN_URL,
+  IO_URL,
   BASE_URL,
   SITE_URL,
   FILE_URL,
-  IO_URL,
-  DOMAIN,
   API_TOKEN,
   DADATA_URL_STREET,
   DADATA_URL_ADDRESS,
   DADATA_TOKEN,
+  DOMAIN,
   apiRoutes,
-};
+}
+

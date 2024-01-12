@@ -6,11 +6,13 @@ import socket from "../config/socket";
 import { setAuth, setLoadingLogin, setUser } from "../store/reducers/authSlice";
 import { resetCart } from "../store/reducers/cartSlice";
 import { resetCheckout } from "../store/reducers/checkoutSlice";
+import { NotificationManager } from "react-notifications";
 
 const login = createAsyncThunk("auth/login", async (payloads, thunkAPI) => {
   thunkAPI.dispatch(setLoadingLogin(true))
   try {
     const response = await $api.post(apiRoutes.AUTH_LOGIN, payloads);
+
     if (response?.data?.user && response?.data?.token) {
       localStorage.setItem('token', response.data.token)
       thunkAPI.dispatch(setUser(response.data.user))
@@ -25,9 +27,11 @@ const login = createAsyncThunk("auth/login", async (payloads, thunkAPI) => {
       thunkAPI.dispatch(getFavorites())
     }
     thunkAPI.dispatch(setLoadingLogin(false))
-
     return response?.data;
   } catch (error) {
+    error?.response?.data?.error && typeof error?.response?.data?.error === "string" && NotificationManager.error(
+      error.response.data.error
+    )
     thunkAPI.dispatch(setLoadingLogin(false))
   }
 });
@@ -44,6 +48,7 @@ const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
       // thunkAPI.dispatch(resetFavorite())
       thunkAPI.dispatch(resetCheckout())
     });
+
     return response?.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -53,8 +58,7 @@ const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
 const checkAuth = async () => {
   const response = await $authApi.post(apiRoutes.AUTH_CHECK)
   if (response && response.status === 200) {
-    socket.io.opts.query = { brandId: response.data.brandId ?? false, userId: response.data.id ?? false
-    }
+    socket.io.opts.query = { brandId: response.data.brandId ?? false, userId: response.data.id ?? false }
     socket.connect()
   }
   return response?.data
@@ -63,8 +67,15 @@ const checkAuth = async () => {
 const refreshAuth = createAsyncThunk("auth/refresh", async (_, thunkAPI) => {
   try {
     const response = await $authApi.post(apiRoutes.AUTH_REFRESH);
-    return response?.data;
+    if (response?.data && response.status === 200) {
+      localStorage.setItem('token', response.data.token)
+    }
+    return response.data
   } catch (error) {
+    thunkAPI.dispatch(setUser(false))
+    thunkAPI.dispatch(setAuth(false))
+    socket.disconnect()
+    localStorage.removeItem('token')
     return thunkAPI.rejectWithValue(error);
   }
 });

@@ -7,7 +7,7 @@ import { customPrice, customWeight, getImageURL } from "../helpers/all";
 import ButtonCart from "./ButtonCart";
 import BtnFav from "./utils/BtnFav";
 import { useSelector } from "react-redux";
-import CountInput from './utils/CountInput';
+import CountInput from "./utils/CountInput";
 
 const CartItem = memo(({ data }) => {
   const [open, setOpen] = useState(false);
@@ -21,7 +21,6 @@ const CartItem = memo(({ data }) => {
     ? data.cart.data.modifiers.energy.weight
     : data.weight;
 
-
   return (
     <div className="cart-item">
       <div className="left">
@@ -32,19 +31,24 @@ const CartItem = memo(({ data }) => {
             {data.title}
             {/* <span className="tag">Подарок</span> */}
           </h6>
-          {/* {weight > 0 && (
+          {weight > 0 && (
             <p className="text-muted fs-09">{customWeight(weight)}</p>
-          )} */}
-          {data?.description && (
-            <p className="consist">{data.description}</p>
           )}
-          {/* {data?.cart?.data?.modifiers && (
+          {data?.description && (
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip>{data.description}</Tooltip>}
+            >
+              <p className="consist">{data.description}</p>
+            </OverlayTrigger>
+          )}
+          {data?.cart?.data?.modifiers && (
             <p>{data.cart.data.modifiers.title}</p>
-          )} */}
+          )}
 
           {/* Кнопка с разворачивающимся блоком появляются только если есть дополнительные ингредиенты */}
 
-          {/* {data?.cart?.data?.additions?.length > 0 && (
+          {data?.cart?.data?.additions?.length > 0 && (
             <>
               <button
                 type="button"
@@ -65,14 +69,13 @@ const CartItem = memo(({ data }) => {
                 </ul>
               </Collapse>
             </>
-          )} */}
+          )}
         </div>
       </div>
       <div className="right">
-        <div>{customPrice(price)} ₽ </div>
-        <CountInput dis={false}/>
-        <BtnFav checked={false}/>
-
+        <div>{customPrice(price)}</div>
+        <ButtonCart cart product={data} />
+        {isAuth && <BtnFav product={data} checked={false} />}
       </div>
     </div>
   );

@@ -18,8 +18,11 @@ export const homeApi = createApi({
     getSales: build.query({
       query: () => apiRoutes.SALES_GET,
     }),
+    getStories: build.query({
+      query: () => apiRoutes.STORIES,
+    }),
   }),
 });
 
-export const { useGetCategoriesQuery, useGetSalesQuery, useGetBannersQuery } =
+export const { useGetCategoriesQuery, useGetSalesQuery, useGetBannersQuery, useGetStoriesQuery } =
   homeApi;

@@ -1,10 +1,12 @@
-import React from 'react';
+import React from "react";
+import { getImageURL } from "../helpers/all";
 
-const Story = (props) => {
+const Story = ({ data, ...props }) => {
+  const image = getImageURL({ path: data.medias, size: "mini", type: "story" });
   return (
     <figure className="story" onClick={props.onClick}>
-      <img src={props.img} alt={props.title} />
-      <figcaption>{props.title}</figcaption>
+      <img src={image} alt={data.title} />
+      <figcaption>{data.title}</figcaption>
     </figure>
   );
 };

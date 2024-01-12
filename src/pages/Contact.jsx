@@ -19,26 +19,26 @@ const Contact = () => {
     affiliate?.length > 0 ? affiliate.find((e) => e.main) : false
   );
 
-  // if (!mainAffiliate || !mainAffiliate?.phone?.length > 0) {
-  //   return (
-  //     <Empty
-  //       text="В данный момент контактов нет"
-  //       desc="Вернитесь на эту страницу чуть позже"
-  //       image={() => <EmptyWork />}
-  //       button={
-  //         <a
-  //           className="btn-primary"
-  //           onclick={() => {
-  //             location.reload();
-  //             return false;
-  //           }}
-  //         >
-  //           Обновить страницу
-  //         </a>
-  //       }
-  //     />
-  //   );
-  // }
+  if (!mainAffiliate || !mainAffiliate?.phone?.length > 0) {
+    return (
+      <Empty
+        text="В данный момент контактов нет"
+        desc="Вернитесь на эту страницу чуть позже"
+        image={() => <EmptyWork />}
+        button={
+          <a
+            className="btn-primary"
+            onclick={() => {
+              location.reload();
+              return false;
+            }}
+          >
+            Обновить страницу
+          </a>
+        }
+      />
+    );
+  }
 
   return (
     <main>
@@ -49,10 +49,10 @@ const Contact = () => {
               <div className="box">
                 <div className="d-flex align-items-baseline mb-5">
                   <h1 className="mb-0">Контакты </h1>
-                  {/* <h5 className="mb-0">
+                  <h5 className="mb-0">
                     <span className="mx-3">•</span>
                     {mainAffiliate.options.city}
-                  </h5> */}
+                  </h5>
                 </div>
 
                 <h6 className="mb-3">{mainAffiliate.full}</h6>
@@ -63,8 +63,8 @@ const Contact = () => {
                         href={"tel:" + mainAffiliate.phone[0]}
                         className="d-flex"
                       >
-                        <HiOutlineDevicePhoneMobile className="fs-15 secondary" />
-                        <span className="fs-11 ms-2 secondary">
+                        <HiOutlineDevicePhoneMobile className="fs-15 main-color" />
+                        <span className="fs-11 ms-2 main-color">
                           Горячая линия
                         </span>
                         <span className="fs-11 ms-2">
@@ -92,17 +92,15 @@ const Contact = () => {
                     </a>
                   </>
                 )}
-                <button type='button' className='btn-primary'>Заказать звонок</button>
 
-                <ul className="list-unstyled mt-2 mt-md-4">
+                <ul className="list-unstyled mt-4">
                   {affiliate.map((e) => (
                     <li>
                       <a onClick={() => setMainAffiliate(e)}>
-                        <address className='mb-2 mb-sm-3'><span className='secondary'>•</span> {e.full}</address>
-                        <p className="secondary mt-2 mb-1">
+                        <h6 className="mb-2">{e.full}</h6>
+                        <p className="main-color mt-2 mb-1">
                           Доставка и самовывоз
                         </p>
-                        <p>{e.desc}</p>
                         <p className="mb-3">
                           {e?.options?.work &&
                           e.options.work[moment().weekday()]?.start &&
@@ -114,7 +112,7 @@ const Contact = () => {
                         </p>
                         {e.phone[0] && (
                           <>
-                            <p className="secondary mt-2 mb-1">
+                            <p className="main-color mt-2 mb-1">
                               Номер телефона
                             </p>
                             <p>{e.phone[0]}</p>
@@ -146,28 +144,28 @@ const Contact = () => {
                       {affiliate?.length > 0 &&
                         affiliate.map((e) => (
                           <Placemark
-                          options={{
-                            iconLayout: "default#image",
-                            iconImageHref: "imgs/marker.png",
-                            iconImageSize: [38, 54],
-                          }}
-                          geometry={[
-                            e.options.coordinates.lat,
-                            e.options.coordinates.lon,
-                          ]}
-                          properties={{
-                            balloonContentBody: [
-                              "<address class='my-info'>",
-                              "<div class='my-info-body'>",
-                              `<h6 class='mb-0 fw-6'>${e.full}</h6>`,
-                              "</div>",
-                              "</address>",
-                            ].join(""),
-                          }}
-                        />
-                      ))}
+                            options={{
+                              iconLayout: "default#image",
+                              iconImageHref: "imgs/marker.png",
+                              iconImageSize: [38, 54],
+                            }}
+                            geometry={[
+                              e.options.coordinates.lat,
+                              e.options.coordinates.lon,
+                            ]}
+                            properties={{
+                              balloonContentBody: [
+                                "<address class='my-info'>",
+                                "<div class='my-info-body'>",
+                                `<h6 class='mb-0 fw-6'>${e.full}</h6>`,
+                                "</div>",
+                                "</address>",
+                              ].join(""),
+                            }}
+                          />
+                        ))}
 
-{zones?.length > 0 &&
+                      {zones?.length > 0 &&
                         zones.map((e) => {
                           const geodata =
                             e.data.length > 0

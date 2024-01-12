@@ -4,14 +4,12 @@ import Story from "./Story";
 import StoryBig from "./StoryBig";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Scrollbar } from "swiper";
-import {
-  HiXMark,
-} from "react-icons/hi2";
+import { HiXMark } from "react-icons/hi2";
 
-import SwiperButtonNext from './utils/SwiperButtonNext';
-import SwiperButtonPrev from './utils/SwiperButtonPrev';
+import SwiperButtonNext from "./utils/SwiperButtonNext";
+import SwiperButtonPrev from "./utils/SwiperButtonPrev";
 
-const StoriesSection = () => {
+const StoriesSection = ({ data }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [story, setStory] = useState(false);
 
@@ -47,37 +45,14 @@ const StoriesSection = () => {
           },
         }}
       >
-        <SwiperSlide>
-          <Story
-            onClick={() => showStory(0)}
-            img={"imgs/img2.jpg"}
-            title={"Подзаголовок сторис"}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Story
-            onClick={() => showStory(1)}
-            img={"imgs/img2.jpg"}
-            title={"Подзаголовок сторис"}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Story
-            onClick={() => showStory(2)}
-            img={"imgs/img2.jpg"}
-            title={"Подзаголовок сторис"}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <Story
-            onClick={() => showStory(3)}
-            img={"imgs/img2.jpg"}
-            title={"Подзаголовок сторис"}
-          />
-        </SwiperSlide>
-        
-        <SwiperButtonPrev/>
-        <SwiperButtonNext/>
+        {data.map((e, index) => (
+          <SwiperSlide>
+            <Story onClick={() => showStory(index)} data={e} />
+          </SwiperSlide>
+        ))}
+
+        <SwiperButtonPrev />
+        <SwiperButtonNext />
       </Swiper>
 
       <Modal show={story} onHide={closeStory} className="story-modal">
@@ -95,32 +70,14 @@ const StoriesSection = () => {
               activeSlide && swiper.slideTo(activeSlide, 50)
             }
           >
-            <SwiperSlide>
-              <StoryBig
-                img={"imgs/img2.jpg"}
-                title={"Подзаголовок сторис"}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-            <StoryBig
-                img={"imgs/img2.jpg"}
-                title={"Подзаголовок сторис"}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-            <StoryBig
-                img={"imgs/img2.jpg"}
-                title={"Подзаголовок сторис"}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-            <StoryBig
-                img={"imgs/img2.jpg"}
-                title={"Подзаголовок сторис"}
-              />
-            </SwiperSlide>
-            <SwiperButtonPrev/>
-            <SwiperButtonNext/>
+            {data.map((e, index) => (
+              <SwiperSlide>
+                <StoryBig onClick={() => showStory(index)} data={e} />
+              </SwiperSlide>
+            ))}
+
+            <SwiperButtonPrev />
+            <SwiperButtonNext />
           </Swiper>
           <button className="close" onClick={closeStory}>
             <HiXMark />

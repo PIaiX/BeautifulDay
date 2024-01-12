@@ -12,24 +12,22 @@ import Phone from "../assets/imgs/phone.png";
 import AppStore from "../assets/imgs/appstore-black.svg";
 import GooglePlay from "../assets/imgs/googleplay-black.svg";
 
-import Logo from '../assets/imgs/LogoBeautifulDay.svg';
-import LogoMini from '../assets/imgs/LogoBeautifulDayMini.svg';
-import Happiness from '../assets/imgs/happiness.jpg';
+import Logo from "../assets/imgs/LogoBeautifulDay.svg";
+import LogoMini from "../assets/imgs/LogoBeautifulDayMini.svg";
+import Happiness from "../assets/imgs/happiness.jpg";
 // icons
-import YooApp from './svgs/YooApp';
-import Loupe from './svgs/Loupe';
-import CartIcon from './svgs/CartIcon';
-import Heart from './svgs/Heart';
-import CrossIcon from './svgs/CrossIcon';
-import MenuIcon from './svgs/MenuIcon';
-import MenuPhone from './svgs/MenuPhone';
-import MenuDelivery from './svgs/MenuDelivery';
-import MenuDocs from './svgs/MenuDocs';
-import MenuBlog from './svgs/MenuBlog';
-import MenuOffers from './svgs/MenuOffers';
-import {
-  HiOutlineArrowLeftCircle,
-} from "react-icons/hi2";
+import YooApp from "./svgs/YooApp";
+import Loupe from "./svgs/Loupe";
+import CartIcon from "./svgs/CartIcon";
+import Heart from "./svgs/Heart";
+import CrossIcon from "./svgs/CrossIcon";
+import MenuIcon from "./svgs/MenuIcon";
+import MenuPhone from "./svgs/MenuPhone";
+import MenuDelivery from "./svgs/MenuDelivery";
+import MenuDocs from "./svgs/MenuDocs";
+import MenuBlog from "./svgs/MenuBlog";
+import MenuOffers from "./svgs/MenuOffers";
+import { HiOutlineArrowLeftCircle } from "react-icons/hi2";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { IoCall, IoClose, IoCloseOutline } from "react-icons/io5";
 import DeliveryBar from "./DeliveryBar";
@@ -74,19 +72,21 @@ const Header = memo(() => {
 
             <ul className="d-none d-lg-flex">
               <li>
-                <Link to='/categories' className='btn-primary'>Каталог</Link>
+                <Link to="/categories" className="btn-primary">
+                  Каталог
+                </Link>
               </li>
+              {/* <li>
+                <Link to="/">Новинки</Link>
+              </li> */}
               <li>
-                <Link to='/'>Новинки</Link>
-              </li>
-              <li>
-                <Link to='/promo'>Акции</Link>
+                <Link to="/promo">Акции</Link>
               </li>
             </ul>
-            <form action="" className='formSearch'>
+            <form action="" className="formSearch">
               <input type="search" />
-              <Link to='/search'>
-                <Loupe/>
+              <Link to="/search">
+                <Loupe />
               </Link>
               {/* <button type='submit'>
                 <Loupe/>
@@ -100,29 +100,24 @@ const Header = memo(() => {
 
             <ul>
               <li className="d-none d-lg-block">
-                <Link to="/cart" className='btn-icon'>
+                <Link to="/cart" className="btn-icon">
                   <CartIcon />
-                  {count > 0 && (
-                    <span className="badge">
-                      {count}
-                    </span>
-                  )}
+                  {count > 0 && <span className="badge">{count}</span>}
                 </Link>
               </li>
               {isAuth && (
                 <li className="d-none d-lg-block">
-                  <Link to="/account/favorites" className='btn-icon'>
+                  <Link to="/account/favorites" className="btn-icon">
                     <Heart />
                     {favorite?.length > 0 && (
-                      <span className="badge">
-                        {favorite?.length}
-                      </span>
+                      <span className="badge">{favorite?.length}</span>
                     )}
                   </Link>
                 </li>
               )}
-              <li className='btn-primary d-none d-lg-block'>
+              <li className="d-none d-lg-block">
                 <Link
+                  className="btn btn-primary"
                   to={
                     isAuth
                       ? user?.status === 0
@@ -131,7 +126,11 @@ const Header = memo(() => {
                       : "/login"
                   }
                 >
-                  Войти
+                  {isAuth
+                    ? user?.status === 0
+                      ? "Активировать"
+                      : "Профиль"
+                    : "Войти"}
                 </Link>
               </li>
               <li className="d-lg-none">
@@ -148,7 +147,7 @@ const Header = memo(() => {
         </Container>
       </header>
 
-      <DeliveryBar sum={2500}/>
+      <DeliveryBar sum={2500} />
 
       <Offcanvas
         className="offcanvas-menu"
@@ -236,14 +235,14 @@ const Header = memo(() => {
                       </Link>
                     </li>
                     <li>
-                      <Link to='/'>
-                        <MenuBlog/>
+                      <Link to="/">
+                        <MenuBlog />
                         <span>Новости</span>
                       </Link>
                     </li>
                     <li>
-                      <Link to='/promo'>
-                        <MenuOffers/>
+                      <Link to="/promo">
+                        <MenuOffers />
                         <span>Акции</span>
                       </Link>
                     </li>

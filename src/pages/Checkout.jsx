@@ -76,6 +76,7 @@ const Checkout = () => {
       main: false,
     },
   ];
+
   const profilePointVisible = useSelector(
     (state) => state.settings.options.profilePointVisible
   );
@@ -305,7 +306,9 @@ const Checkout = () => {
         })
         .catch((error) => {
           NotificationManager.error(
-            error?.response?.data?.error ?? "Неизвестная ошибка"
+            typeof error?.response?.data?.error === "string"
+              ? error.response.data.error
+              : "Неизвестная ошибка"
           );
         })
         .finally(() => setIsLoading(false));
@@ -375,7 +378,6 @@ const Checkout = () => {
       />
     );
   }
-
   if (
     selectedAffiliate?.options?.work &&
     selectedAffiliate.options.work[moment().weekday()].end &&
@@ -400,7 +402,6 @@ const Checkout = () => {
       />
     );
   }
-
   return (
     <main>
       <Meta title="Оформление заказа" />
@@ -470,6 +471,7 @@ const Checkout = () => {
                       affiliate?.length > 0 && (
                         <Select
                           label="Адрес"
+                          className="w-100"
                           value={data?.affiliateId}
                           data={affiliate.map((e) => ({
                             title: e?.title?.length > 0 ? e.title : e.full,
@@ -634,12 +636,20 @@ const Checkout = () => {
               {data.delivery == "delivery" && (
                 <div className="d-flex justify-content-between my-2">
                   <span>Доставка</span>
-                  <span className="main-color">
+                  <span className="text-success">
                     {delivery > 0 ? "+" + customPrice(delivery) : "Бесплатно"}
                   </span>
                 </div>
               )}
-              {pointCheckout > 0 && data.pointSwitch > 0 && (
+              {pickupDiscount > 0 && (
+                <div className="d-flex justify-content-between my-2">
+                  <span>Скидка за самовывоз</span>
+                  <span className="text-success">
+                    -{customPrice(pickupDiscount)}
+                  </span>
+                </div>
+              )}
+              {pointCheckout > 0 && data.pointSwitch && (
                 <div className="d-flex justify-content-between my-2">
                   <span>Списание баллов</span>
                   <span>-{customPrice(pointCheckout)}</span>

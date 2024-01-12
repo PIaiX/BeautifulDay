@@ -39,6 +39,7 @@ const useTotalCart = () => {
         point: 0,
         pointCheckout: 0
     })
+
     useEffect(() => {
         if (stateCart?.length) {
             let price = 0
@@ -88,7 +89,6 @@ const useTotalCart = () => {
                     totalCalcul = totalCalcul - statePromo.discount
                 }
             }
-
             let pickupDiscount = affiliateActive?.options?.discountPickup > 0 && stateDelivery == 'pickup' ? (totalCalcul / 100) * Number(affiliateActive.options.discountPickup) : 0
 
 
@@ -101,6 +101,7 @@ const useTotalCart = () => {
                 pointCheckout = userPoint
             }
             if (pointCheckout > 0 && pointSwitch) {
+
                 let is = true
                 if (!pointOptions?.writing?.delivery && stateDelivery == 'delivery') {
                     is = false

@@ -27,7 +27,7 @@ function App() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const options = useSelector((state) => state.settings.options);
-  const favorite = useSelector((state) => state.favorite.items);
+
   const cart = useSelector((state) => state.cart.items);
   const address = useSelector((state) => state.address.items);
   const delivery = useSelector((state) => state.checkout.delivery);
@@ -65,6 +65,7 @@ function App() {
 
           res?.affiliates && dispatch(updateAffiliate(res.affiliates));
           res?.zones && dispatch(updateZone(res.zones));
+
           if (res?.statuses?.length > 0) {
             let statusesMain = res.statuses
               .filter((e) => e.main)

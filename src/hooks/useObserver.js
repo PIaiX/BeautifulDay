@@ -10,9 +10,9 @@ const useObserver = (options) => {
   useEffect(
     () => {
       const observer = new IntersectionObserver(onEntry, options);
-      if(objRef.current) observer.observe(objRef.current)
+      if (objRef.current) observer.observe(objRef.current)
       return () => {
-        if(objRef.current) observer.unobserve(objRef.current)
+        if (objRef.current) observer.unobserve(objRef.current)
       }
     }, [objRef, options]
   );
