@@ -3,29 +3,29 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 import Offer from "../components/Offer";
-import ProductCardMini from "../components/ProductCardMini";
+// import ProductCardMini from "../components/ProductCardMini";
 import CategoryCard from "../components/CategoryCard";
 import StoriesSection from "../components/StoriesSection";
 import Callback from "../components/modals/Callback";
-import ArticleCard from "../components/ArticleCard";
-import EmptyCatalog from "../components/empty/catalog";
+// import ArticleCard from "../components/ArticleCard";
+// import EmptyCatalog from "../components/empty/catalog";
 
 import { Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import SwiperButtonNext from "../components/utils/SwiperButtonNext";
-import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
+// import SwiperButtonNext from "../components/utils/SwiperButtonNext";
+// import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
 
-import ArticlesMore from "../assets/imgs/articlesMore.jpg";
-import ArticlesCover from "../assets/imgs/articlesCover.jpg";
-import jsonData from "../data/categories";
-import jsonArticles from "../data/articles";
-import useIsMobile from "../hooks/isMobile";
+// import ArticlesMore from "../assets/imgs/articlesMore.jpg";
+// import ArticlesCover from "../assets/imgs/articlesCover.jpg";
+// import jsonData from "../data/categories";
+// import jsonArticles from "../data/articles";
+// import isMobile from "../hooks/isMobile";
 
-import Empty from "../components/Empty";
+// import Empty from "../components/Empty";
 import Meta from "../components/Meta";
 import Loader from "../components/utils/Loader";
 import { getImageURL } from "../helpers/all";
@@ -41,7 +41,6 @@ const Home = () => {
   const sales = useGetSalesQuery();
   const stories = useGetStoriesQuery();
   const categories = useGetCategoriesQuery();
-  const options = useSelector((state) => state.settings.options);
 
   if (
     categories.isLoading ||
@@ -72,8 +71,7 @@ const Home = () => {
   //     />
   //   );
   // }
-  const isMobileLG = useIsMobile("991px");
-  console.log(sales);
+
   return (
     <main>
       <Meta title="Главная" />
