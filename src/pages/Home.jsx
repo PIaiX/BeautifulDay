@@ -73,7 +73,7 @@ const Home = () => {
   // }
 
   return (
-    <main>
+    <main className="pb-0">
       <Meta title="Главная" />
       {banners?.data?.items?.length > 0 && (
         <section className="sec-1 mb-6">
@@ -140,12 +140,12 @@ const Home = () => {
               })}
           </Row>
           <Link to="/categories" className="btn-primary mx-auto mt-4">
-            показать все
+            Показать все
           </Link>
         </Container>
       </section>
 
-      <section className="sec-3 mb-6">
+      <section className="sec-3">
         <Container>
           <Row className="justify-content-end">
             <Col xs={12} md={8} lg={6}>
@@ -156,7 +156,6 @@ const Home = () => {
                 Скорее заказывайте воздушные шары, они понравятся как взрослым,
                 так и малышам
               </p>
-              {/* <button type='button' className='btn-info mx-auto mt-4'>Заказать</button> */}
               <Callback
                 btnText={"Заказать"}
                 btnClass={"btn-info mx-auto mt-4"}
@@ -266,7 +265,7 @@ const Home = () => {
       </section> */}
 
       {sales?.data?.items?.length > 0 && (
-        <section className="sec-6 mb-5">
+        <section className="sec-6 mt-5 mb-5">
           <Container>
             <Swiper
               className="sw-offers"

@@ -1,29 +1,37 @@
 import React, { useCallback, useLayoutEffect, useState } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Accordion from "react-bootstrap/Accordion";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import NavTop from "../components/utils/NavTop";
-import jsonData from "../data/categories";
-import CategoryCard from "../components/CategoryCard";
-import { Link, useParams } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
+import Row from "react-bootstrap/Row";
+import {
+  Link,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import "swiper/css";
-import SwiperButtonNext from "../components/utils/SwiperButtonNext";
-import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
+import { Swiper, SwiperSlide } from "swiper/react";
+import CategoryCard from "../components/CategoryCard";
+import Empty from "../components/Empty";
+import EmptyCatalog from "../components/empty/catalog";
 import ProductCard from "../components/ProductCard";
-import MultyRangeCustom from "../components/utils/MultyRangeCustom";
 import Filter from "../components/svgs/Filter";
 import PrevIcon from "../components/svgs/PrevIcon";
 import Loader from "../components/utils/Loader";
-import Empty from "../components/Empty";
-import EmptyCatalog from "../components/empty/catalog";
+import MultyRangeCustom from "../components/utils/MultyRangeCustom";
+import NavTop from "../components/utils/NavTop";
+import SwiperButtonNext from "../components/utils/SwiperButtonNext";
+import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
+import { childrenArray } from "../helpers/all";
 import { getCategory } from "../services/category";
 import { useGetCategoriesQuery } from "../services/home";
 
 const Category = () => {
   const { categoryId } = useParams();
+  const { search } = useLocation();
+  console.log(search);
+  const [searchParams, setSearchParams] = useSearchParams(search);
   const [show, setShow] = useState(false);
   const categories = useGetCategoriesQuery();
   const handleClose = () => setShow(false);
@@ -34,9 +42,27 @@ const Category = () => {
     item: {},
   });
 
+  // function handleFilter(event) {
+  //   event.preventDefault();
+  //   var data = new FormData(event.target);
+  //   let formObject = Object.fromEntries(data.entries());
+  //   console.log(formObject);
+  //   // setSearchParams((prevParams) => {
+  //   //   if (value === null) {
+  //   //     prevParams.delete(key);
+  //   //   } else {
+  //   //     prevParams.append(key, value); // <-- append key-value pair
+  //   //   }
+  //   //   return prevParams;
+  //   // });
+  // }
+
   const onLoad = useCallback(() => {
     getCategory(categoryId)
-      .then((res) => setCategory({ loading: false, item: res }))
+      .then((res) => {
+        res.params = childrenArray(res.params, "id", "parent");
+        setCategory({ loading: false, item: res });
+      })
       .catch(() => setCategory((data) => ({ ...data, loading: false })));
   }, [categoryId]);
 
@@ -117,7 +143,7 @@ const Category = () => {
                 responsive="lg"
               >
                 <Offcanvas.Body>
-                  <form action="" className="filter">
+                  <div className="filter">
                     <div className="filter-heading">
                       <button
                         type="button"
@@ -141,188 +167,105 @@ const Category = () => {
                         valueMax="650"
                       />
                     </fieldset>
-
-                    <fieldset>
-                      <legend>Характеристика 1</legend>
-                      <select className="w-100 mb-2">
-                        <option value="1">Значение 1</option>
-                        <option value="2">Значение 2</option>
-                        <option value="3">Значение 3</option>
-                      </select>
-                    </fieldset>
-
                     <Accordion defaultActiveKey="0">
-                      <Accordion.Item as="fieldset" eventKey="0">
-                        <Accordion.Header as="legend">
-                          Характеристика
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          <ul>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 1</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 2</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 3</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 4</span>
-                              </label>
-                            </li>
-                          </ul>
-                          <button type="button" className="more">
-                            показать все
-                          </button>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                      <Accordion.Item as="fieldset" eventKey="1">
-                        <Accordion.Header as="legend">
-                          Параметр 3
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          <ul>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 1</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 2</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 3</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 4</span>
-                              </label>
-                            </li>
-                          </ul>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                      <Accordion.Item as="fieldset" eventKey="2">
-                        <Accordion.Header as="legend">
-                          Параметр 4
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          <ul>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 1</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 2</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 3</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 4</span>
-                              </label>
-                            </li>
-                          </ul>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                      <Accordion.Item as="fieldset" eventKey="3">
-                        <Accordion.Header as="legend">
-                          Параметр 5
-                        </Accordion.Header>
-                        <Accordion.Body>
-                          <ul>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 1</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 2</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 3</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" />
-                                <span>Значение 4</span>
-                              </label>
-                            </li>
-                          </ul>
-                        </Accordion.Body>
-                      </Accordion.Item>
+                      {category.item?.params?.length > 0 &&
+                        category.item?.params.map((e) =>
+                          e.type === "select" && e?.children?.length > 0 ? (
+                            <fieldset>
+                              <legend>{e.title}</legend>
+                              <select
+                                onChange={(e) => {
+                                  if (e.target.value) {
+                                    searchParams.set("select", e.target.value);
+                                  } else {
+                                    searchParams.delete("select");
+                                  }
+                                  setSearchParams(searchParams);
+                                }}
+                                name="select"
+                                className="w-100 mb-2"
+                              >
+                                {e.children.map((item) => (
+                                  <option value={item.id}>{item.value}</option>
+                                ))}
+                              </select>
+                            </fieldset>
+                          ) : e.type === "checkbox" &&
+                            e?.children?.length > 0 ? (
+                            <Accordion.Item
+                              as="fieldset"
+                              defaultValue={0}
+                              eventKey="0"
+                            >
+                              <Accordion.Header as="legend">
+                                {e.title}
+                              </Accordion.Header>
+                              <Accordion.Body>
+                                <ul>
+                                  {e.children.map((item) => (
+                                    <li>
+                                      <label>
+                                        <input
+                                          type="checkbox"
+                                          name="checkbox"
+                                          onChange={(e) => {
+                                            if (e.target.value) {
+                                              searchParams.set("checkbox", [
+                                                e.target.value,
+                                              ]);
+                                            } else {
+                                              searchParams.delete("checkbox");
+                                            }
+                                            setSearchParams(searchParams);
+                                          }}
+                                          value={item.id}
+                                        />
+                                        <span>{item.value}</span>
+                                      </label>
+                                    </li>
+                                  ))}
+                                </ul>
+                                {/* <button type="button" className="more">
+                                  показать все
+                                </button> */}
+                              </Accordion.Body>
+                            </Accordion.Item>
+                          ) : null
+                        )}
                     </Accordion>
-                  </form>
+                  </div>
                 </Offcanvas.Body>
               </Offcanvas>
             </Col>
             <Col lg={9}>
               <div className="d-md-flex justify-content-between align-items-stretch mb-5">
-                <Swiper
-                  className="subcategories-slider"
-                  spaceBetween={10}
-                  slidesPerView={"auto"}
-                  speed={750}
-                  breakpoints={{
-                    576: {
-                      spaceBetween: 15,
-                    },
-                    992: {
-                      spaceBetween: 20,
-                    },
-                  }}
-                >
-                  <SwiperSlide>
-                    <Link to="">Подкатегория</Link>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <Link to="">Подкатегория</Link>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <Link to="">Подкатегория</Link>
-                  </SwiperSlide>
-                </Swiper>
+                {category?.item?.child?.length > 0 && (
+                  <Swiper
+                    className="subcategories-slider"
+                    spaceBetween={10}
+                    slidesPerView={"auto"}
+                    speed={750}
+                    breakpoints={{
+                      576: {
+                        spaceBetween: 15,
+                      },
+                      992: {
+                        spaceBetween: 20,
+                      },
+                    }}
+                  >
+                    {category.item.child.map((e) => (
+                      <SwiperSlide>
+                        <Link to={"/category/" + e.id}>{e.title}</Link>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                )}
                 <div className="d-flex">
-                  <select className="flex-1">
-                    <option value="">Рекомендуем</option>
-                    <option value="">Рекомендуем</option>
-                    <option value="">Рекомендуем</option>
+                  <select name="sort" className="flex-1">
+                    <option value="">Популярное</option>
+                    <option value="new">Новое</option>
+                    <option value="old">Старое</option>
                   </select>
                   <button
                     type="button"
