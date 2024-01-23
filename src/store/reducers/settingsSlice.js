@@ -1,49 +1,79 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    isConnected: true,
-    ip: '0.0.0.0',
-    options: {
-        name: 'ru.yooapp.app',
-        title: 'YooApp',
-        authType: 'email',
-        qrType: 'phone',
-        supportVisible: false,
-        colorBtn: '#009640',
-        payments: {
-            card: true,
-            cash: true,
-            online: false,
-        },
-        colorMain: '#009640',
-        versionIos: '0.0.1',
-        versionAndroid: '0.0.1',
-        colorMainBg: '#4caf50',
-        giftVisible: false,
-        promoVisible: true,
-        themeProduct: 0,
-        themeAddition: 0,
-        profilePointVisible: true,
-        productEnergyVisible: true,
+  isConnected: true,
+  ip: "0.0.0.0",
+  options: {
+    name: "ru.yooapp.app",
+    title: "YooApp",
+    authType: "email",
+    qrType: "phone",
+    supportVisible: false,
+    colorBtn: "#009640",
+    payments: {
+      card: true,
+      cash: true,
+      online: false,
     },
-}
+    colorMain: "#009640",
+    versionIos: "0.0.1",
+    versionAndroid: "0.0.1",
+    colorMainBg: "#4caf50",
+    giftVisible: false,
+    promoVisible: true,
+    themeProduct: 0,
+    themeAddition: 0,
+    profilePointVisible: true,
+    productEnergyVisible: true,
+  },
+  filter: [],
+};
 
 const settingsSlice = createSlice({
-    name: 'settings',
-    initialState,
-    reducers: {
-        updateConnect: (state, action) => {
-            state.isConnected = action.payload
-        },
-        updateOptions: (state, action) => {
-            state.options = action.payload
-        },
-        updateIp: (state, action) => {
-            state.ip = action.payload
-        },
+  name: "settings",
+  initialState,
+  reducers: {
+    updateConnect: (state, action) => {
+      state.isConnected = action.payload;
     },
-})
+    updateOptions: (state, action) => {
+      state.options = action.payload;
+    },
+    updateIp: (state, action) => {
+      state.ip = action.payload;
+    },
+    updateFilter: (state, action) => {
+      if (action?.payload?.id && action?.payload?.categoryId) {
+        let categoryIndex =
+          state?.filter?.length > 0
+            ? state.filter.findIndex(
+                (e) =>
+                  e.name === action.payload.name &&
+                  e.categoryId === action.payload.categoryId
+              )
+            : -1;
 
-export const {updateConnect, updateOptions, updateIp} = settingsSlice.actions
+        if (categoryIndex != -1) {
+          state.filter[categoryIndex] = action.payload;
+        } else if (state?.filter?.length > 0) {
+          state.filter.push(action.payload);
+        } else {
+          state.filter = [action.payload];
+        }
+      }
+    },
+    removeFilter: (state) => {
+      state.filter = [];
+    },
+  },
+});
 
-export default settingsSlice.reducer
+export const {
+  updateConnect,
+  updateOptions,
+  updateIp,
+  updateFilter,
+  removeFilter,
+} = settingsSlice.actions;
+
+export default settingsSlice.reducer;

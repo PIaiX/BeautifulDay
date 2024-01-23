@@ -26,12 +26,20 @@ import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
 import { childrenArray } from "../helpers/all";
 import { getCategory } from "../services/category";
 import { useGetCategoriesQuery } from "../services/home";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFilter, updateFilter } from "../store/reducers/settingsSlice";
 
 const Category = () => {
   const { categoryId } = useParams();
-  const { search } = useLocation();
-  console.log(search);
-  const [searchParams, setSearchParams] = useSearchParams(search);
+  const filters = useSelector(
+    (state) =>
+      state?.settings?.filter?.length > 0 &&
+      state.settings.filter.filter(
+        (e) => Number(e.categoryId) === Number(categoryId)
+      )
+  );
+  console.log(filters);
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const categories = useGetCategoriesQuery();
   const handleClose = () => setShow(false);
@@ -42,20 +50,18 @@ const Category = () => {
     item: {},
   });
 
-  // function handleFilter(event) {
-  //   event.preventDefault();
-  //   var data = new FormData(event.target);
-  //   let formObject = Object.fromEntries(data.entries());
-  //   console.log(formObject);
-  //   // setSearchParams((prevParams) => {
-  //   //   if (value === null) {
-  //   //     prevParams.delete(key);
-  //   //   } else {
-  //   //     prevParams.append(key, value); // <-- append key-value pair
-  //   //   }
-  //   //   return prevParams;
-  //   // });
-  // }
+  const getFilter = useCallback(
+    (id) => {
+      let isFilter =
+        Array.isArray(filters) && filters?.length > 0
+          ? filters.find((e) => Number(e.id) === Number(id))
+          : filters?.id
+          ? Number(filters.id) === Number(id)
+          : false;
+      return !!isFilter;
+    },
+    [filters]
+  );
 
   const onLoad = useCallback(() => {
     getCategory(categoryId)
@@ -153,7 +159,11 @@ const Category = () => {
                         <PrevIcon className="svgSW" />
                       </button>
                       <h5 className="ms-2 mb-0">Фильтры</h5>
-                      <button type="reset" className="ms-auto">
+                      <button
+                        type="reset"
+                        onClick={() => dispatch(removeFilter())}
+                        className="ms-auto"
+                      >
                         очистить
                       </button>
                     </div>
@@ -169,24 +179,32 @@ const Category = () => {
                     </fieldset>
                     <Accordion defaultActiveKey="0">
                       {category.item?.params?.length > 0 &&
-                        category.item?.params.map((e) =>
-                          e.type === "select" && e?.children?.length > 0 ? (
+                        category.item?.params.map((e) => {
+                          return e.type === "select" &&
+                            e?.children?.length > 0 ? (
                             <fieldset>
                               <legend>{e.title}</legend>
                               <select
-                                onChange={(e) => {
-                                  if (e.target.value) {
-                                    searchParams.set("select", e.target.value);
-                                  } else {
-                                    searchParams.delete("select");
-                                  }
-                                  setSearchParams(searchParams);
+                                onChange={(item) => {
+                                  dispatch(
+                                    updateFilter({
+                                      categoryId,
+                                      id: item.target.value,
+                                      type: e.type,
+                                      name: e.name,
+                                    })
+                                  );
                                 }}
                                 name="select"
                                 className="w-100 mb-2"
                               >
                                 {e.children.map((item) => (
-                                  <option value={item.id}>{item.value}</option>
+                                  <option
+                                    value={item.id}
+                                    selected={getFilter(item.id)}
+                                  >
+                                    {item.value}
+                                  </option>
                                 ))}
                               </select>
                             </fieldset>
@@ -208,15 +226,16 @@ const Category = () => {
                                         <input
                                           type="checkbox"
                                           name="checkbox"
-                                          onChange={(e) => {
-                                            if (e.target.value) {
-                                              searchParams.set("checkbox", [
-                                                e.target.value,
-                                              ]);
-                                            } else {
-                                              searchParams.delete("checkbox");
-                                            }
-                                            setSearchParams(searchParams);
+                                          checked={getFilter(item.id)}
+                                          onChange={(value) => {
+                                            dispatch(
+                                              updateFilter({
+                                                categoryId,
+                                                id: value.target.value,
+                                                type: e.type,
+                                                name: e.name,
+                                              })
+                                            );
                                           }}
                                           value={item.id}
                                         />
@@ -230,8 +249,8 @@ const Category = () => {
                                 </button> */}
                               </Accordion.Body>
                             </Accordion.Item>
-                          ) : null
-                        )}
+                          ) : null;
+                        })}
                     </Accordion>
                   </div>
                 </Offcanvas.Body>
