@@ -43,14 +43,13 @@ const settingsSlice = createSlice({
       state.ip = action.payload;
     },
     updateFilter: (state, action) => {
-      if (action?.payload?.id && action?.payload?.categoryId) {
+      if (action?.payload?.categoryId) {
         let categoryIndex =
           state?.filter?.length > 0
             ? state.filter.findIndex(
-                (e) =>
-                  e.name === action.payload.name &&
-                  e.categoryId === action.payload.categoryId
-              )
+              (e) =>
+                e.categoryId === action.payload.categoryId
+            )
             : -1;
 
         if (categoryIndex != -1) {

@@ -1,15 +1,16 @@
-import React, { useCallback, useLayoutEffect, useState } from "react";
+import React, {
+  useCallback,
+  useLayoutEffect,
+  useEffect,
+  useState,
+} from "react";
 import Accordion from "react-bootstrap/Accordion";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Row from "react-bootstrap/Row";
-import {
-  Link,
-  useLocation,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import { Link, useParams } from "react-router-dom";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CategoryCard from "../components/CategoryCard";
@@ -28,17 +29,18 @@ import { getCategory } from "../services/category";
 import { useGetCategoriesQuery } from "../services/home";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFilter, updateFilter } from "../store/reducers/settingsSlice";
+import { useForm, useWatch } from "react-hook-form";
 
 const Category = () => {
   const { categoryId } = useParams();
   const filters = useSelector(
     (state) =>
       state?.settings?.filter?.length > 0 &&
-      state.settings.filter.filter(
+      state.settings.filter.find(
         (e) => Number(e.categoryId) === Number(categoryId)
       )
   );
-  console.log(filters);
+
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const categories = useGetCategoriesQuery();
@@ -49,40 +51,48 @@ const Category = () => {
     loading: true,
     item: {},
   });
+  const {
+    control,
+    formState: { isValid, errors },
+    handleSubmit,
+    setValue,
+    reset,
+    trigger,
+    register,
+  } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    defaultValues: filters ?? {},
+  });
 
-  const getFilter = useCallback(
-    (id) => {
-      let isFilter =
-        Array.isArray(filters) && filters?.length > 0
-          ? filters.find((e) => Number(e.id) === Number(id))
-          : filters?.id
-          ? Number(filters.id) === Number(id)
-          : false;
-      return !!isFilter;
-    },
-    [filters]
-  );
+  const data = useWatch({ control });
 
   const onLoad = useCallback(() => {
-    getCategory(categoryId)
+    getCategory({ ...data, id: categoryId })
       .then((res) => {
         res.params = childrenArray(res.params, "id", "parent");
         setCategory({ loading: false, item: res });
       })
       .catch(() => setCategory((data) => ({ ...data, loading: false })));
-  }, [categoryId]);
+  }, [categoryId, data]);
 
   useLayoutEffect(() => {
     onLoad();
   }, [categoryId]);
+
+  useEffect(() => {
+    if (data) {
+      dispatch(updateFilter({ ...data, categoryId }));
+    }
+  }, [data, categoryId]);
 
   if (category?.loading) {
     return <Loader full />;
   }
 
   if (
-    !Array.isArray(category.item.products) ||
-    category.item.products.length <= 0
+    !Array.isArray(category.item.products.items) ||
+    category.item.products.items.length <= 0
   ) {
     return (
       <Empty
@@ -97,6 +107,7 @@ const Category = () => {
       />
     );
   }
+
   return (
     <main>
       <section className="category mb-5">
@@ -171,10 +182,11 @@ const Category = () => {
                     <fieldset>
                       <legend>Цена, ₽</legend>
                       <MultyRangeCustom
-                        minRange="0"
-                        maxRange="1000"
-                        valueMin="150"
-                        valueMax="650"
+                        minRange={category.item?.min ?? 0}
+                        maxRange={category.item?.max ?? 100}
+                        valueMin={data?.min ?? category.item?.min ?? 0}
+                        valueMax={data?.max ?? category.item?.max ?? 100}
+                        onChange={(e) => e && reset({ ...data, ...e })}
                       />
                     </fieldset>
                     <Accordion defaultActiveKey="0">
@@ -185,26 +197,22 @@ const Category = () => {
                             <fieldset>
                               <legend>{e.title}</legend>
                               <select
-                                onChange={(item) => {
-                                  dispatch(
-                                    updateFilter({
-                                      categoryId,
-                                      id: item.target.value,
-                                      type: e.type,
-                                      name: e.name,
-                                    })
-                                  );
-                                }}
+                                // onChange={(item) => {
+                                //   dispatch(
+                                //     updateFilter({
+                                //       categoryId,
+                                //       id: item.target.value,
+                                //       type: e.type,
+                                //       name: e.name,
+                                //     })
+                                //   );
+                                // }}
                                 name="select"
                                 className="w-100 mb-2"
+                                {...register(e.name)}
                               >
                                 {e.children.map((item) => (
-                                  <option
-                                    value={item.id}
-                                    selected={getFilter(item.id)}
-                                  >
-                                    {item.value}
-                                  </option>
+                                  <option value={item.id}>{item.value}</option>
                                 ))}
                               </select>
                             </fieldset>
@@ -226,18 +234,8 @@ const Category = () => {
                                         <input
                                           type="checkbox"
                                           name="checkbox"
-                                          checked={getFilter(item.id)}
-                                          onChange={(value) => {
-                                            dispatch(
-                                              updateFilter({
-                                                categoryId,
-                                                id: value.target.value,
-                                                type: e.type,
-                                                name: e.name,
-                                              })
-                                            );
-                                          }}
                                           value={item.id}
+                                          {...register(e.name)}
                                         />
                                         <span>{item.value}</span>
                                       </label>
@@ -252,6 +250,13 @@ const Category = () => {
                           ) : null;
                         })}
                     </Accordion>
+                    <Button
+                      variant="primary"
+                      className="w-100 rounded-3"
+                      onClick={() => onLoad()}
+                    >
+                      Применить
+                    </Button>
                   </div>
                 </Offcanvas.Body>
               </Offcanvas>
@@ -296,11 +301,12 @@ const Category = () => {
                 </div>
               </div>
               <Row xs={2} sm={3} xxl={4} className="gx-4 gy-5">
-                {category.item.products.map((e) => (
-                  <Col>
-                    <ProductCard data={e} />
-                  </Col>
-                ))}
+                {category.item?.products?.items?.length > 0 &&
+                  category.item.products.items.map((e) => (
+                    <Col>
+                      <ProductCard data={e} />
+                    </Col>
+                  ))}
               </Row>
             </Col>
           </Row>
