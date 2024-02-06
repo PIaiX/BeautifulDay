@@ -51,6 +51,7 @@ const Category = () => {
     loading: true,
     item: {},
   });
+
   const {
     control,
     formState: { isValid, errors },
@@ -60,9 +61,9 @@ const Category = () => {
     trigger,
     register,
   } = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-    defaultValues: filters ?? {},
+    mode: "all",
+    reValidateMode: "onChange",
+    defaultValues: filters ?? { options: [] },
   });
 
   const data = useWatch({ control });
@@ -70,7 +71,7 @@ const Category = () => {
   const onLoad = useCallback(() => {
     getCategory({ ...data, id: categoryId })
       .then((res) => {
-        res.params = childrenArray(res.params, "id", "parent");
+        res.params = childrenArray(res.params, "id", "parentId");
         setCategory({ loading: false, item: res });
       })
       .catch(() => setCategory((data) => ({ ...data, loading: false })));
@@ -81,31 +82,41 @@ const Category = () => {
   }, [categoryId]);
 
   useEffect(() => {
-    if (data) {
-      dispatch(updateFilter({ ...data, categoryId }));
-    }
+    dispatch(updateFilter({ ...data, categoryId }));
   }, [data, categoryId]);
+
+  const onFilter = useCallback(
+    (id) => {
+      let isOption =
+        data?.options?.length > 0 ? data.options.includes(Number(id)) : false;
+      return isOption;
+    },
+    [data]
+  );
+
+  const onChangeFilter = useCallback(
+    (id) => {
+      if (id) {
+        if (data?.options?.length > 0) {
+          let isOption = data.options.includes(Number(id));
+          if (isOption) {
+            setValue(
+              "options",
+              data.options.filter((optionId) => Number(optionId) != Number(id))
+            );
+          } else {
+            setValue("options", [...data.options, Number(id)]);
+          }
+        } else {
+          setValue("options", [Number(id)]);
+        }
+      }
+    },
+    [data]
+  );
 
   if (category?.loading) {
     return <Loader full />;
-  }
-
-  if (
-    !Array.isArray(category.item.products.items) ||
-    category.item.products.items.length <= 0
-  ) {
-    return (
-      <Empty
-        text="Товаров нет"
-        desc="Меню уже скоро появится"
-        image={() => <EmptyCatalog />}
-        button={
-          <Link className="btn-primary" to="/">
-            Перейти в меню
-          </Link>
-        }
-      />
-    );
   }
 
   return (
@@ -160,7 +171,7 @@ const Category = () => {
                 responsive="lg"
               >
                 <Offcanvas.Body>
-                  <div className="filter">
+                  <form className="filter">
                     <div className="filter-heading">
                       <button
                         type="button"
@@ -172,8 +183,14 @@ const Category = () => {
                       <h5 className="ms-2 mb-0">Фильтры</h5>
                       <button
                         type="reset"
-                        onClick={() => dispatch(removeFilter())}
                         className="ms-auto"
+                        onClick={() => {
+                          dispatch(removeFilter());
+                          reset({
+                            min: category.item?.min ?? 0,
+                            max: category.item?.max ?? 100,
+                          });
+                        }}
                       >
                         очистить
                       </button>
@@ -209,10 +226,15 @@ const Category = () => {
                                 // }}
                                 name="select"
                                 className="w-100 mb-2"
-                                {...register(e.name)}
+                                onChange={(e) => onChangeFilter(e.target.value)}
                               >
                                 {e.children.map((item) => (
-                                  <option value={item.id}>{item.value}</option>
+                                  <option
+                                    value={item.id}
+                                    selected={onFilter(item.id)}
+                                  >
+                                    {item.value}
+                                  </option>
                                 ))}
                               </select>
                             </fieldset>
@@ -235,7 +257,10 @@ const Category = () => {
                                           type="checkbox"
                                           name="checkbox"
                                           value={item.id}
-                                          {...register(e.name)}
+                                          defaultChecked={onFilter(item.id)}
+                                          onChange={(e) =>
+                                            onChangeFilter(e.target.value)
+                                          }
                                         />
                                         <span>{item.value}</span>
                                       </label>
@@ -257,7 +282,7 @@ const Category = () => {
                     >
                       Применить
                     </Button>
-                  </div>
+                  </form>
                 </Offcanvas.Body>
               </Offcanvas>
             </Col>
@@ -300,6 +325,19 @@ const Category = () => {
                   </button>
                 </div>
               </div>
+              {!Array.isArray(category.item.products.items) ||
+                (category.item.products.items.length <= 0 && (
+                  <Empty
+                    text="Товаров нет"
+                    desc="Меню уже скоро появится"
+                    image={() => <EmptyCatalog />}
+                    button={
+                      <Link className="btn-primary" to="/">
+                        Перейти в меню
+                      </Link>
+                    }
+                  />
+                ))}
               <Row xs={2} sm={3} xxl={4} className="gx-4 gy-5">
                 {category.item?.products?.items?.length > 0 &&
                   category.item.products.items.map((e) => (

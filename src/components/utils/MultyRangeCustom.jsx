@@ -8,9 +8,14 @@ const MultyRangeCustom = memo(
     valueMax = 1000,
     onChange,
   }) => {
-    let leftIndent = (Number(valueMin) / Number(maxRange)) * 100;
+    let leftIndent =
+      ((Number(valueMin) - Number(minRange)) /
+        (Number(maxRange) - Number(minRange))) *
+      100;
     let rangeWidth =
-      ((Number(valueMax) - Number(valueMin)) / Number(maxRange)) * 100;
+      ((Number(valueMax) - Number(valueMin)) /
+        (Number(maxRange) - Number(minRange))) *
+      100;
 
     let style = {
       left: leftIndent + "%",
