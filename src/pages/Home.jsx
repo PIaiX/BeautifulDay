@@ -1,21 +1,21 @@
 import React from "react";
+import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
 // import { useSelector } from "react-redux";
 
 import Offer from "../components/Offer";
 // import ProductCardMini from "../components/ProductCardMini";
 import CategoryCard from "../components/CategoryCard";
-import StoriesSection from "../components/StoriesSection";
 import Callback from "../components/modals/Callback";
+import StoriesSection from "../components/StoriesSection";
 // import ArticleCard from "../components/ArticleCard";
 // import EmptyCatalog from "../components/empty/catalog";
 
 import { Pagination } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 // import SwiperButtonNext from "../components/utils/SwiperButtonNext";
 // import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
 
@@ -26,13 +26,14 @@ import "swiper/css";
 // import isMobile from "../hooks/isMobile";
 
 // import Empty from "../components/Empty";
+import { useSelector } from "react-redux";
 import Meta from "../components/Meta";
 import Loader from "../components/utils/Loader";
 import { getImageURL } from "../helpers/all";
 import {
+  useGetBannersQuery,
   useGetCategoriesQuery,
   useGetSalesQuery,
-  useGetBannersQuery,
   useGetStoriesQuery,
 } from "../services/home";
 
@@ -41,6 +42,7 @@ const Home = () => {
   const sales = useGetSalesQuery();
   const stories = useGetStoriesQuery();
   const categories = useGetCategoriesQuery();
+  const options = useSelector((state) => state.settings.options);
 
   if (
     categories.isLoading ||
@@ -74,7 +76,10 @@ const Home = () => {
 
   return (
     <main className="pb-0">
-      <Meta title="Главная" />
+      <Meta
+        title={options?.title ?? "Главная"}
+        description={options?.description}
+      />
       {banners?.data?.items?.length > 0 && (
         <section className="sec-1 mb-6">
           <div className="container">

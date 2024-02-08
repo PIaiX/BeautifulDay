@@ -10,15 +10,13 @@ const $api = axios.create({
 });
 
 const client = new ClientJS();
-const browser = client.getBrowserData();
-const language = client.getLanguage();
 
 const DEVICE = JSON.stringify({
-  brand: browser.browser.name ?? "",
-  osName: browser.os.name ?? "",
-  osVersion: browser.os.version ?? "",
-  language: language ?? "ru-RU",
-});
+  brand: client.getBrowser(),
+  osName: client.getOS(),
+  osVersion: client.getOSVersion(),
+  language: client.getLanguage() ?? 'ru-RU',
+})
 
 $api.interceptors.request.use(
   async (config) => {

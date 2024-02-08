@@ -2,10 +2,9 @@ import React, { memo, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getCount } from "../helpers/all";
-import { useGetBannersQuery } from "../services/home";
 import AppDownload from "./svgs/AppDownload";
 
 import Phone from "../assets/imgs/phone.png";
@@ -29,7 +28,7 @@ import MenuBlog from "./svgs/MenuBlog";
 import MenuOffers from "./svgs/MenuOffers";
 import { HiOutlineArrowLeftCircle } from "react-icons/hi2";
 import { IoLogoWhatsapp } from "react-icons/io";
-import { IoCall, IoClose, IoCloseOutline } from "react-icons/io5";
+import { IoCall, IoClose } from "react-icons/io5";
 import DeliveryBar from "./DeliveryBar";
 
 const Header = memo(() => {
@@ -37,12 +36,9 @@ const Header = memo(() => {
   const user = useSelector((state) => state.auth.user);
   const cart = useSelector((state) => state.cart.items);
   const favorite = useSelector((state) => state.favorite.items);
-  const delivery = useSelector((state) => state.checkout.delivery);
+  // const delivery = useSelector((state) => state.checkout.delivery);
   const affiliate = useSelector((state) => state.affiliate.items);
   const options = useSelector((state) => state.settings.options);
-  const banners = useGetBannersQuery();
-
-  const dispatch = useDispatch();
 
   const [showMenu, setShowMenu] = useState(false);
   const [showApp, setShowApp] = useState(false);

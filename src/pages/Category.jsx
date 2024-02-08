@@ -24,12 +24,13 @@ import MultyRangeCustom from "../components/utils/MultyRangeCustom";
 import NavTop from "../components/utils/NavTop";
 import SwiperButtonNext from "../components/utils/SwiperButtonNext";
 import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
-import { childrenArray } from "../helpers/all";
+import { childrenArray, getImageURL } from "../helpers/all";
 import { getCategory } from "../services/category";
 import { useGetCategoriesQuery } from "../services/home";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFilter, updateFilter } from "../store/reducers/settingsSlice";
 import { useForm, useWatch } from "react-hook-form";
+import Meta from "../components/Meta";
 
 const Category = () => {
   const { categoryId } = useParams();
@@ -121,6 +122,19 @@ const Category = () => {
 
   return (
     <main>
+      <Meta
+        title={category?.item?.title}
+        description={category?.item?.description}
+        image={
+          category?.item?.media
+            ? getImageURL({
+                path: category.item.media,
+                size: "full",
+                type: "category",
+              })
+            : false
+        }
+      />
       <section className="category mb-5">
         <Container>
           <NavTop toBack={true} breadcrumbs={true} />
@@ -214,20 +228,13 @@ const Category = () => {
                             <fieldset>
                               <legend>{e.title}</legend>
                               <select
-                                // onChange={(item) => {
-                                //   dispatch(
-                                //     updateFilter({
-                                //       categoryId,
-                                //       id: item.target.value,
-                                //       type: e.type,
-                                //       name: e.name,
-                                //     })
-                                //   );
-                                // }}
                                 name="select"
                                 className="w-100 mb-2"
-                                onChange={(e) => onChangeFilter(e.target.value)}
+                                onChange={(s) =>
+                                  onChangeFilter({ [e.id]: s.target.value })
+                                }
                               >
+                                <option>Не выбрано</option>
                                 {e.children.map((item) => (
                                   <option
                                     value={item.id}
@@ -311,10 +318,12 @@ const Category = () => {
                   </Swiper>
                 )}
                 <div className="d-flex">
-                  <select name="sort" className="flex-1">
-                    <option value="">Популярное</option>
+                  <select className="flex-1" {...register("sort")}>
+                    <option value="">Сортировать по</option>
                     <option value="new">Новое</option>
                     <option value="old">Старое</option>
+                    <option value="cheaper">Дешевле</option>
+                    <option value="expensive">Дороже</option>
                   </select>
                   <button
                     type="button"
@@ -349,7 +358,7 @@ const Category = () => {
             </Col>
           </Row>
 
-          <h5>Загловок для сео</h5>
+          {/* <h5>Загловок для сео</h5>
           <hr />
           <p>
             Sed ut perspiciatis unde omnis iste natus error sit voluptatem
@@ -369,7 +378,7 @@ const Category = () => {
           </p>
           <button type="button" className="secondary mt-3">
             показать полностью
-          </button>
+          </button> */}
         </Container>
 
         {/* <div className="sticky-box mb-3 mb-sm-4 mb-md-5">
