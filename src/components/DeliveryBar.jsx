@@ -36,7 +36,7 @@ const DeliveryBar = () => {
                   : "full"
               }
             ></div>
-            <img src="/imgs/scooter.png" alt="delivery" />
+            <img src="/images/scooter.png" alt="delivery" />
           </div>
         </div>
       </div>
@@ -101,7 +101,7 @@ const DeliveryBar = () => {
             y="16"
             width="80"
             height="80"
-            xlinkHref="/imgs/scooter.png"
+            xlinkHref="/images/scooter.png"
           />
           <defs>
             <linearGradient

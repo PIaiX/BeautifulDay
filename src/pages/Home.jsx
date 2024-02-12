@@ -19,8 +19,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // import SwiperButtonNext from "../components/utils/SwiperButtonNext";
 // import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
 
-// import ArticlesMore from "../assets/imgs/articlesMore.jpg";
-// import ArticlesCover from "../assets/imgs/articlesCover.jpg";
+// import ArticlesMore from "../assets/images/articlesMore.jpg";
+// import ArticlesCover from "../assets/images/articlesCover.jpg";
 // import jsonData from "../data/categories";
 // import jsonArticles from "../data/articles";
 // import isMobile from "../hooks/isMobile";
@@ -150,7 +150,7 @@ const Home = () => {
         </Container>
       </section>
 
-      <section className="sec-3">
+      {/* <section className="sec-3">
         <Container>
           <Row className="justify-content-end">
             <Col xs={12} md={8} lg={6}>
@@ -168,7 +168,7 @@ const Home = () => {
             </Col>
           </Row>
         </Container>
-      </section>
+      </section> */}
 
       {/* {Array.isArray(categories.data) && categories.data.length > 0 && (
         <section className="sec-4 mb-6">

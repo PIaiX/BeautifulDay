@@ -1,13 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
-
+html {
+  scroll-behavior: smooth;
+}
 :root {
   --h-height: 70px;
   --f-height: 112px;
+  --main-color: #222;
+  --main-color-outline: #22222223;
+  --main-color-active: #22222223;
   @media (max-width: 991.98px) {
+    --h-height: 50px;
     --f-height: 70px;
   }
   @media (max-width: 767.98px) {
-    --h-height: 50px;
     --f-height: 60px;
   }
   @media (max-width: 575.98px) {
@@ -348,7 +354,7 @@ h6 {
 }
 .main-color,
 .primary {
-  color: $primary;
+  color: var(--main-color);
 }
 .main-color-60 {
   color: rgba($color: $primary, $alpha: 0.6);
@@ -393,7 +399,7 @@ input {
     height: $radius;
     border: 1px solid $black-gray;
     background-color: $white;
-    background-image: url(imgs/mark.svg);
+    background-image: url(images/mark.svg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -401,8 +407,8 @@ input {
     box-shadow: none;
     transition-property: border, background-color;
     &:checked {
-      border: 1px solid $primary;
-      background-color: $primary;
+      border: 1px solid var(--main-color);
+      background-color: var(--main-color);
     }
     &[role="switch"] {
       cursor: pointer;
@@ -604,12 +610,12 @@ label {
     }
     &:hover,
     &:focus {
-      color: $primary;
+      color: var(--main-color);
     }
     &:active {
       color: $white;
-      background-color: $primary;
-      border: 1px solid $primary;
+      background-color: var(--main-color-active);
+      border: 1px solid var(--main-color-active);
     }
   }
 }
@@ -655,15 +661,15 @@ button {
   &-primary {
     @extend .btn;
     color: $white;
-    background-color: $primary;
-    border: 1px solid $primary;
+    background-color: var(--main-color);
+    border: 1px solid var(--main-color);
     &:hover,
     &:focus,
     &:active,
     &.active {
       color: $white;
-      background-color: darken($color: $primary, $amount: 10%);
-      border: 1px solid darken($color: $primary, $amount: 10%);
+      background-color: var(--main-color-active);
+      border: 1px solid var(--main-color-active);
     }
   }
   &-secondary {
@@ -777,8 +783,8 @@ button {
     &.active {
       svg {
         path {
-          stroke: $primary;
-          fill: $primary;
+          stroke: var(--main-color);
+          fill: var(--main-color);
         }
       }
     }
@@ -799,7 +805,7 @@ select {
   border-radius: 5px;
   padding: 0.4em 1.2em;
   min-width: 200px;
-  background-image: url(imgs/icons/chevron-down.svg);
+  background-image: url(images/icons/chevron-down.svg);
   background-repeat: no-repeat;
   padding-right: 1em;
   background-position: calc(100% - 0.5em) 50%;
@@ -813,7 +819,7 @@ select {
     position: relative;
     z-index: 10;
     @include flex();
-    border: 1px solid $primary;
+    border: 1px solid var(--main-color);
     border-radius: 1.5em;
     padding: 0.45em 0.75em;
     height: 100%;
@@ -844,7 +850,7 @@ select {
     }
     &-chevron {
       font-size: 1em;
-      color: $primary;
+      color: var(--main-color);
       margin-left: 0.25em;
     }
   }
@@ -994,7 +1000,7 @@ select {
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background-color: $primary;
+        background-color: var(--main-color);
         transform: translateY(-4px);
         cursor: grab;
       }
@@ -1009,7 +1015,7 @@ select {
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background-color: $primary;
+        background-color: var(--main-color);
         transform: translateY(-4px);
         cursor: grab;
         &:active {
@@ -1023,7 +1029,7 @@ select {
       left: 0px;
       width: 30%;
       height: 100%;
-      background-color: $primary;
+      background-color: var(--main-color);
       z-index: 2;
     }
   }
@@ -1117,7 +1123,7 @@ select {
       color: $secondary;
     }
     &:active {
-      color: $primary;
+      color: var(--main-color);
     }
     svg {
       stroke-width: 1.25px;
@@ -1206,7 +1212,7 @@ select {
           background-color: $secondary;
         }
         .icon {
-          background-color: $primary;
+          background-color: var(--main-color);
           color: $white;
         }
         + li:not(.full) {
@@ -1291,8 +1297,8 @@ select {
   --bs-accordion-active-bg: transparent;
   --bs-accordion-border-color: transparent;
   --bs-accordion-border-width: 0px;
-  --bs-accordion-btn-icon: url(imgs/icons/chevron-down.svg);
-  --bs-accordion-btn-active-icon: url(imgs/icons/chevron-down.svg);
+  --bs-accordion-btn-icon: url(images/icons/chevron-down.svg);
+  --bs-accordion-btn-active-icon: url(images/icons/chevron-down.svg);
   --bs-accordion-btn-icon-width: 0.8em;
   --bs-accordion-btn-icon-size: 0.8em;
   --bs-accordion-body-padding-x: 0em;
@@ -1428,12 +1434,12 @@ header {
     }
   }
   .logo {
-    width: 270px;
-    @media (max-width: $bp-xxl) {
-      width: 200px;
-    }
+    max-width: 200px;
+    max-height: 60px;
+
     @media (max-width: $bp-sm) {
-      width: 35px;
+      max-width: 100px;
+      max-height: 30px;
     }
   }
   .phone {
@@ -1444,7 +1450,7 @@ header {
     &:hover,
     &:focus,
     &:active {
-      color: $primary;
+      color: var(--main-color);
     }
   }
   .formSearch {
@@ -1470,7 +1476,7 @@ header {
   }
   .btn-icon {
     position: relative;
-    color: $primary;
+    color: var(--main-color);
     font-size: 1.65em;
     svg {
       stroke-width: 1.5px;
@@ -1481,7 +1487,7 @@ header {
       right: -0.5em;
       font-size: 11px;
       font-weight: 400;
-      background-color: $primary;
+      background-color: var(--main-color);
       color: $white;
       width: 1.6em;
       height: 1.6em;
@@ -1500,7 +1506,7 @@ header {
     &:hover,
     &:focus,
     &:active {
-      color: $primary;
+      color: var(--main-color);
     }
   }
 }
@@ -1655,7 +1661,7 @@ main {
     @include roundedImg(var(--w));
     background-color: $white;
     padding: 2px;
-    border: 3px solid $primary;
+    border: 3px solid var(--main-color);
     @media (max-width: $bp-md) {
       padding: 1px;
       border-width: 2px;
@@ -1773,26 +1779,26 @@ main {
     position: relative;
     padding: 0.5em 0em;
     margin: 0em auto 0.5em;
-    &::before {
-      content: "";
-      position: absolute;
-      top: -0.5em;
-      left: -1.75em;
-      background: url(imgs/icons/vbiehf.png) no-repeat;
-      background-size: contain;
-      width: 3em;
-      height: 2em;
-    }
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0em;
-      right: -2em;
-      background: url(imgs/icons/vbi.png) no-repeat;
-      background-size: contain;
-      width: 2em;
-      height: 1.65em;
-    }
+    // &::before {
+    //   content: "";
+    //   position: absolute;
+    //   top: -0.5em;
+    //   left: -1.75em;
+    //   background: url(images/icons/vbiehf.png) no-repeat;
+    //   background-size: contain;
+    //   width: 3em;
+    //   height: 2em;
+    // }
+    // &::after {
+    //   content: "";
+    //   position: absolute;
+    //   bottom: 0em;
+    //   right: -2em;
+    //   background: url(images/icons/vbi.png) no-repeat;
+    //   background-size: contain;
+    //   width: 2em;
+    //   height: 1.65em;
+    // }
   }
 }
 //Category
@@ -1825,7 +1831,7 @@ main {
       a {
         transition: color $transition;
         &:hover {
-          color: $primary;
+          color: var(--main-color);
         }
       }
     }
@@ -2462,7 +2468,7 @@ main {
     a {
       transition: $transition;
       &:hover {
-        color: $primary;
+        color: var(--main-color);
       }
     }
   }
@@ -2627,7 +2633,7 @@ main {
 
 /* Section 3 */
 .sec-3 {
-  background: url(imgs/bg/gradient.jpg) no-repeat;
+  background: url(images/bg/gradient.jpg) no-repeat;
   background-size: cover;
   color: $white;
   padding: 4em 0em;
@@ -2638,7 +2644,7 @@ main {
   }
   @media (max-width: $bp-md) {
     padding: 2em 0em 16em;
-    background: url(imgs/bg/gradientM.jpg) no-repeat;
+    background: url(images/bg/gradientM.jpg) no-repeat;
     background-position: 50% 50%;
   }
   &::after {
@@ -2648,7 +2654,7 @@ main {
     left: 0px;
     width: 60%;
     height: calc(100% + 7em);
-    background: url(imgs/bg/balloons.png) no-repeat;
+    background: url(images/bg/balloons.png) no-repeat;
     background-size: contain;
     background-position: 50% 100%;
     z-index: 10;
@@ -2716,7 +2722,7 @@ main {
         a {
           transition: color $transition;
           &:hover {
-            color: $primary;
+            color: var(--main-color);
           }
         }
         @media (max-width: $bp-lg) {
@@ -3294,7 +3300,8 @@ footer {
     height: 100%;
     @include flex(row, space-between, center, nowrap);
     .logo {
-      width: 200px;
+      max-width: 200px;
+      max-height: 80px;
     }
     a {
       transition: color $transition;
@@ -4093,7 +4100,7 @@ ACCOUNT
           box-sizing: content-box;
           transition: background-color $transition;
           &.active {
-            background-color: $primary;
+            background-color: var(--main-color);
           }
         }
       }
@@ -4131,7 +4138,7 @@ ACCOUNT
             box-sizing: content-box;
             transition: background-color $transition;
             &.active {
-              background-color: $primary;
+              background-color: var(--main-color);
             }
           }
         }
@@ -4237,8 +4244,8 @@ ACCOUNT
     bottom: 0px;
     z-index: 10;
     width: 38%;
-    background-color: $primary;
-    background-image: url(imgs/bg/entrance.jpg);
+    background-color: var(--main-color);
+    background-image: url(images/bg/entrance.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 100% 50%;

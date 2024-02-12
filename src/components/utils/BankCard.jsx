@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
+import React, { useState } from "react";
+import Modal from "react-bootstrap/Modal";
 import { HiXMark } from "react-icons/hi2";
-import Trash from '../svgs/Trash';
-
+import Trash from "../svgs/Trash";
 
 const BankCard = () => {
   const [showDelConfirmation, setShowDelConfirmation] = useState(false);
@@ -10,8 +9,7 @@ const BankCard = () => {
   return (
     <div className="bankcard">
       <div className="d-flex justify-content-between align-items-center">
-
-        <img src="imgs/tinkoff.jpg" alt="tinkoff" className="bankcard-logo" />
+        <img src="images/tinkoff.jpg" alt="tinkoff" className="bankcard-logo" />
         <button
           type="button"
           onClick={() => setShowDelConfirmation(true)}
@@ -21,7 +19,7 @@ const BankCard = () => {
         </button>
       </div>
       <div className="d-flex justify-content-between align-items-center">
-        <img src="imgs/visa.jpg" alt="visa" className="bankcard-type" />
+        <img src="images/visa.jpg" alt="visa" className="bankcard-type" />
         <div className="bankcard-num">
           <span className="d-none d-sm-inline">**** **** ****</span>
           <span className="d-sm-none">* * * </span>
@@ -29,7 +27,6 @@ const BankCard = () => {
           <span>6789</span>
         </div>
       </div>
-
 
       <Modal
         show={showDelConfirmation}

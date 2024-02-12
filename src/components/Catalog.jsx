@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CategoryCard from "./CategoryCard";
-import Choose from "../assets/imgs/choose.svg";
+import Choose from "../assets/images/choose.svg";
 import GridIcon from "./svgs/GridIcon";
 import {
   // HiOutlineAdjustmentsHorizontal,

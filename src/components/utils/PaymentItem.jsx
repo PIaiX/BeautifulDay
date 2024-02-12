@@ -4,21 +4,21 @@ const PaymentItem = ({ data, active, onClick }) => {
   const images = {
     online: (
       <img
-        src="/imgs/payment/online.svg"
+        src="/images/payment/online.svg"
         alt={data.title}
         className="payment-logo"
       />
     ),
     cash: (
       <img
-        src="/imgs/payment/cash.svg"
+        src="/images/payment/cash.svg"
         alt={data.title}
         className="payment-logo"
       />
     ),
     card: (
       <img
-        src="/imgs/payment/card.svg"
+        src="/images/payment/card.svg"
         alt={data.title}
         className="payment-logo"
       />

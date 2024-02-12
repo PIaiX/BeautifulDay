@@ -3,13 +3,13 @@ import Container from "react-bootstrap/Container";
 import useIsMobile from "../hooks/isMobile";
 import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import AppStore from "../assets/imgs/appstore.svg";
-import GooglePlay from "../assets/imgs/googleplay.svg";
-import LogoTextWhite from "../assets/imgs/logo-text-white.svg";
+import AppStore from "../assets/images/appstore.svg";
+import GooglePlay from "../assets/images/googleplay.svg";
+import LogoTextWhite from "../assets/images/logo-text-white.svg";
 
 import { getCount } from "../helpers/all";
 
-import LogoWhite from "../assets/imgs/LogoBeautifulDayWhite.svg";
+import LogoWhite from "../assets/images/LogoBeautifulDayWhite.svg";
 import BellIcon from "./svgs/BellIcon";
 
 import CartIcon from "./svgs/CartIcon";
@@ -76,7 +76,7 @@ const Footer = memo(() => {
         ) : (
           <div className="desktop">
             <img
-              src={LogoWhite}
+              src="/logo.png"
               alt={options?.title ?? "YOOAPP"}
               className="logo"
             />

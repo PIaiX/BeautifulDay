@@ -70,6 +70,7 @@ const Category = () => {
   const data = useWatch({ control });
 
   const onLoad = useCallback(() => {
+    console.log(124);
     getCategory({ ...data, id: categoryId })
       .then((res) => {
         res.params = childrenArray(res.params, "id", "parentId");
@@ -87,33 +88,75 @@ const Category = () => {
   }, [data, categoryId]);
 
   const onFilter = useCallback(
-    (id) => {
+    (option) => {
       let isOption =
-        data?.options?.length > 0 ? data.options.includes(Number(id)) : false;
-      return isOption;
+        data?.options && data?.options?.length > 0
+          ? option?.type == "select"
+            ? data.options.findIndex(
+                (e) =>
+                  e.type == option.type && Number(e.id) == Number(option.id)
+              )
+            : data.options.findIndex(
+                (e) =>
+                  e.type == option.type &&
+                  Number(e.value) == Number(option.value) &&
+                  Number(e.id) == Number(option.id)
+              )
+          : -1;
+
+      return isOption == -1 ? false : data?.options[isOption]?.value;
     },
-    [data]
+    [data?.options]
   );
 
   const onChangeFilter = useCallback(
-    (id) => {
-      if (id) {
+    (option) => {
+      if (option) {
         if (data?.options?.length > 0) {
-          let isOption = data.options.includes(Number(id));
-          if (isOption) {
-            setValue(
-              "options",
-              data.options.filter((optionId) => Number(optionId) != Number(id))
+          if (option?.type == "checkbox") {
+            let isOption = data.options.findIndex(
+              (e) =>
+                e.type == option.type &&
+                Number(e.value) == Number(option.value) &&
+                Number(e.id) == Number(option.id)
             );
-          } else {
-            setValue("options", [...data.options, Number(id)]);
+            if (isOption >= 0 && isOption != -1) {
+              setValue(
+                "options",
+                data.options.filter((e) => e.value != option.value)
+              );
+            } else {
+              setValue("options", [...data.options, option]);
+            }
+          } else if (option?.type == "select") {
+            let isOption = data.options.findIndex(
+              (e) => e.type == option.type && Number(e.id) == Number(option.id)
+            );
+
+            if (
+              option?.id &&
+              (!option?.value || option.value == null || option.value == "NaN")
+            ) {
+              setValue(
+                "options",
+                data.options.filter((e) => e.value == null)
+              );
+            } else {
+              if (isOption >= 0 && isOption != -1) {
+                let options = [...data.options];
+                options[isOption] = option;
+                setValue("options", options);
+              } else {
+                setValue("options", [...data.options, option]);
+              }
+            }
           }
         } else {
-          setValue("options", [Number(id)]);
+          setValue("options", [option]);
         }
       }
     },
-    [data]
+    [data?.options]
   );
 
   if (category?.loading) {
@@ -231,17 +274,20 @@ const Category = () => {
                                 name="select"
                                 className="w-100 mb-2"
                                 onChange={(s) =>
-                                  onChangeFilter({ [e.id]: s.target.value })
+                                  onChangeFilter({
+                                    type: e.type,
+                                    id: Number(e.id),
+                                    value: Number(s.target.value),
+                                  })
                                 }
+                                defaultValue={onFilter({
+                                  type: e.type,
+                                  id: e.id,
+                                })}
                               >
                                 <option>Не выбрано</option>
                                 {e.children.map((item) => (
-                                  <option
-                                    value={item.id}
-                                    selected={onFilter(item.id)}
-                                  >
-                                    {item.value}
-                                  </option>
+                                  <option value={item.id}>{item.value}</option>
                                 ))}
                               </select>
                             </fieldset>
@@ -264,9 +310,17 @@ const Category = () => {
                                           type="checkbox"
                                           name="checkbox"
                                           value={item.id}
-                                          defaultChecked={onFilter(item.id)}
-                                          onChange={(e) =>
-                                            onChangeFilter(e.target.value)
+                                          defaultChecked={onFilter({
+                                            type: e.type,
+                                            id: e.id,
+                                            value: item.id,
+                                          })}
+                                          onChange={() =>
+                                            onChangeFilter({
+                                              type: e.type,
+                                              id: Number(e.id),
+                                              value: Number(item.id),
+                                            })
                                           }
                                         />
                                         <span>{item.value}</span>
@@ -334,7 +388,7 @@ const Category = () => {
                   </button>
                 </div>
               </div>
-              {!Array.isArray(category.item.products.items) ||
+              {!Array.isArray(category.item?.products?.items) ||
                 (category.item.products.items.length <= 0 && (
                   <Empty
                     text="Товаров нет"

@@ -146,7 +146,7 @@ const Contact = () => {
                           <Placemark
                             options={{
                               iconLayout: "default#image",
-                              iconImageHref: "imgs/marker.png",
+                              iconImageHref: "images/marker.png",
                               iconImageSize: [38, 54],
                             }}
                             geometry={[

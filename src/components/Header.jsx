@@ -7,13 +7,10 @@ import { Link } from "react-router-dom";
 import { getCount } from "../helpers/all";
 import AppDownload from "./svgs/AppDownload";
 
-import Phone from "../assets/imgs/phone.png";
-import AppStore from "../assets/imgs/appstore-black.svg";
-import GooglePlay from "../assets/imgs/googleplay-black.svg";
-
-import Logo from "../assets/imgs/LogoBeautifulDay.svg";
-import LogoMini from "../assets/imgs/LogoBeautifulDayMini.svg";
-import Happiness from "../assets/imgs/happiness.jpg";
+import Phone from "../assets/images/phone.png";
+import AppStore from "../assets/images/appstore-black.svg";
+import GooglePlay from "../assets/images/googleplay-black.svg";
+import Happiness from "../assets/images/happiness.jpg";
 // icons
 import YooApp from "./svgs/YooApp";
 import Loupe from "./svgs/Loupe";
@@ -55,12 +52,12 @@ const Header = memo(() => {
           <nav className="h-100">
             <Link to="/">
               <img
-                src={Logo}
+                src="/logo.png"
                 alt={options?.title ?? "YOOAPP"}
                 className="logo d-none d-sm-block"
               />
               <img
-                src={LogoMini}
+                src="/logo-sm.png"
                 alt={options?.title ?? "YOOAPP"}
                 className="logo d-sm-none"
               />
@@ -79,15 +76,15 @@ const Header = memo(() => {
                 <Link to="/promo">Акции</Link>
               </li>
             </ul>
-            <form action="" className="formSearch">
+            {/* <form action="" className="formSearch">
               <input type="search" />
               <Link to="/search">
                 <Loupe />
               </Link>
-              {/* <button type='submit'>
+              <button type='submit'>
                 <Loupe/>
-              </button> */}
-            </form>
+              </button>
+            </form> */}
             {mainAffiliate && mainAffiliate?.phone[0] && (
               <a href={"tel:" + mainAffiliate.phone[0]} className="phone">
                 {mainAffiliate.phone[0]}
