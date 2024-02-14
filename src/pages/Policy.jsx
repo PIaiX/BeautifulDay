@@ -27,7 +27,7 @@ const Policy = () => {
         button={
           <a
             className="btn-primary"
-            onclick={() => {
+            onСlick={() => {
               location.reload();
               return false;
             }}

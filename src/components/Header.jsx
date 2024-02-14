@@ -1,97 +1,211 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
-
-import { useSelector } from "react-redux";
+import {
+  HiOutlineArrowLeftCircle,
+  HiOutlineDevicePhoneMobile,
+  HiOutlineHeart,
+  HiOutlineShoppingBag,
+  HiOutlineUserCircle,
+} from "react-icons/hi2";
+import { IoLogoWhatsapp } from "react-icons/io";
+import { IoCall, IoClose, IoCloseOutline } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getCount } from "../helpers/all";
-import AppDownload from "./svgs/AppDownload";
-
-import Phone from "../assets/images/phone.png";
 import AppStore from "../assets/images/appstore-black.svg";
 import GooglePlay from "../assets/images/googleplay-black.svg";
-import Happiness from "../assets/images/happiness.jpg";
-// icons
-import YooApp from "./svgs/YooApp";
-import Loupe from "./svgs/Loupe";
-import CartIcon from "./svgs/CartIcon";
-import Heart from "./svgs/Heart";
-import CrossIcon from "./svgs/CrossIcon";
-import MenuIcon from "./svgs/MenuIcon";
-import MenuPhone from "./svgs/MenuPhone";
+import Phone from "../assets/images/phone.png";
+import { getCount, getImageURL } from "../helpers/all";
+import { useGetBannersQuery } from "../services/home";
+import ScrollToTop from "./ScrollToTop";
+import AppDownload from "./svgs/AppDownload";
 import MenuDelivery from "./svgs/MenuDelivery";
 import MenuDocs from "./svgs/MenuDocs";
-import MenuBlog from "./svgs/MenuBlog";
-import MenuOffers from "./svgs/MenuOffers";
-import { HiOutlineArrowLeftCircle } from "react-icons/hi2";
-import { IoLogoWhatsapp } from "react-icons/io";
-import { IoCall, IoClose } from "react-icons/io5";
+import MenuIcon from "./svgs/MenuIcon";
+import MenuPhone from "./svgs/MenuPhone";
+import YooApp from "./svgs/YooApp";
 import DeliveryBar from "./DeliveryBar";
+import Select from "./utils/Select";
+import { editDeliveryCheckout } from "../store/reducers/checkoutSlice";
+import { Col, Modal, Row } from "react-bootstrap";
+import { mainAffiliateEdit } from "../store/reducers/affiliateSlice";
+import { DADATA_TOKEN, DADATA_URL_GEO } from "../config/api";
+import axios from "axios";
+import { setUser } from "../store/reducers/authSlice";
+import CartIcon from "./svgs/CartIcon";
 
 const Header = memo(() => {
   const isAuth = useSelector((state) => state.auth.isAuth);
   const user = useSelector((state) => state.auth.user);
   const cart = useSelector((state) => state.cart.items);
   const favorite = useSelector((state) => state.favorite.items);
-  // const delivery = useSelector((state) => state.checkout.delivery);
   const affiliate = useSelector((state) => state.affiliate.items);
   const options = useSelector((state) => state.settings.options);
-
+  const delivery = useSelector((state) => state.checkout.delivery);
+  const banners = useGetBannersQuery();
+  const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const [showApp, setShowApp] = useState(false);
   const [isContacts, setIsContacts] = useState(false);
+  const [showCity, setShowCity] = useState(false);
   const count = getCount(cart);
 
+  const defaultCityOptions = user?.options ?? null;
   const mainAffiliate =
-    affiliate?.length > 0 ? affiliate.find((e) => e.main) : false;
+    affiliate?.length > 0
+      ? defaultCityOptions?.city && defaultCityOptions?.citySave
+        ? affiliate.find(
+            (e) =>
+              e.options.city.toLowerCase() ===
+              defaultCityOptions.city.toLowerCase()
+          )
+        : affiliate.find((e) => e.main)
+      : false;
+
+  useEffect(() => {
+    if (!defaultCityOptions?.city && "geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        if (
+          position?.coords?.latitude &&
+          position?.coords?.longitude &&
+          DADATA_TOKEN &&
+          DADATA_URL_GEO
+        ) {
+          let geo = await axios.post(
+            DADATA_URL_GEO,
+            JSON.stringify({
+              lat: position.coords.latitude,
+              lon: position.coords.longitude,
+            }),
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: "Token " + DADATA_TOKEN,
+              },
+            }
+          );
+          if (
+            geo?.data?.suggestions &&
+            geo?.data?.suggestions[0]?.data?.city &&
+            affiliate?.length > 0
+          ) {
+            let city = affiliate.find(
+              (e) =>
+                e.options.city.toLowerCase() ===
+                geo.data.suggestions[0].data.city.toLowerCase()
+            );
+            if (city) {
+              dispatch(
+                setUser({
+                  ...user,
+                  options: {
+                    ...user.options,
+                    city: city.options.city,
+                  },
+                })
+              );
+            }
+          }
+        }
+      });
+    }
+  }, []);
 
   return (
     <>
       <header>
-        <Container className="full h-100">
+        <Container className="h-100">
           <nav className="h-100">
             <Link to="/">
               <img
                 src="/logo.png"
                 alt={options?.title ?? "YOOAPP"}
-                className="logo d-none d-sm-block"
+                className="logo"
               />
-              <img
-                src="/logo-sm.png"
-                alt={options?.title ?? "YOOAPP"}
-                className="logo d-sm-none"
-              />
+              {/* <span className="ms-3 logo-name">
+                {options?.title ?? "YOOAPP"}
+              </span> */}
             </Link>
-
-            <ul className="d-none d-lg-flex">
+            {/* <ul className="text-menu">
               <li>
-                <Link to="/categories" className="btn-primary">
-                  Каталог
+                <Link onClick={() => setShowCity(true)} className="main-color">
+                  {defaultCityOptions?.city ?? "Выберите город"}
                 </Link>
+                {!defaultCityOptions?.citySave && defaultCityOptions?.city && (
+                  <div className="no-city">
+                    <p className="mb-3">
+                      Ваш город <b>{defaultCityOptions.city}</b> город?
+                    </p>
+                    <div className="d-flex align-items-center justify-content-center">
+                      <Link
+                        className="btn btn-sm btn-primary me-2"
+                        onClick={() => {
+                          dispatch(
+                            setUser({
+                              ...user,
+                              options: {
+                                ...user.options,
+                                citySave: true,
+                              },
+                            })
+                          );
+                        }}
+                      >
+                        Да
+                      </Link>
+                      <Link
+                        className="btn btn-sm btn-light"
+                        onClick={() => setShowCity(true)}
+                      >
+                        Нет
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </li>
-              {/* <li>
+            </ul> */}
+            <ul className="text-menu d-none d-lg-flex">
+              {options?.menu?.length > 0 ? (
+                options.menu.map((e) => (
+                  <li>
+                    <Link
+                      to={e.page}
+                      className={e.type == "dark" ? "btn-primary" : ""}
+                    >
+                      {e.title}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <>
+                  <li>
+                    <Link to="/categories" className="btn-primary">
+                      Каталог
+                    </Link>
+                  </li>
+                  {/* <li>
                 <Link to="/">Новинки</Link>
               </li> */}
-              <li>
-                <Link to="/promo">Акции</Link>
-              </li>
+                  <li>
+                    <Link to="/promo">Акции</Link>
+                  </li>
+                </>
+              )}
             </ul>
-            {/* <form action="" className="formSearch">
-              <input type="search" />
-              <Link to="/search">
-                <Loupe />
-              </Link>
-              <button type='submit'>
-                <Loupe/>
-              </button>
-            </form> */}
-            {mainAffiliate && mainAffiliate?.phone[0] && (
-              <a href={"tel:" + mainAffiliate.phone[0]} className="phone">
-                {mainAffiliate.phone[0]}
-              </a>
-            )}
+            {mainAffiliate &&
+              mainAffiliate?.options?.phone &&
+              mainAffiliate?.options?.phone[0] && (
+                <a
+                  href={"tel:" + mainAffiliate.options.phone[0]}
+                  className="phone"
+                >
+                  <HiOutlineDevicePhoneMobile className="fs-12" />
+                  <span className="ms-1">{mainAffiliate.options.phone[0]}</span>
+                </a>
+              )}
 
-            <ul>
+            <ul className="icons-menu">
               <li className="d-none d-lg-block">
                 <Link to="/cart" className="btn-icon">
                   <CartIcon />
@@ -132,9 +246,26 @@ const Header = memo(() => {
                   onClick={() => setShowMenu(!showMenu)}
                   className="btn-menu"
                 >
-                  {showMenu ? <CrossIcon /> : <MenuIcon />}
+                  {showMenu ? <IoCloseOutline /> : <MenuIcon />}
                 </button>
               </li>
+              {/* <li>
+                <Select
+                  value="ru"
+                  data={[
+                    {
+                      value: "ru",
+                      title: "русский",
+                      image: ruFlag,
+                    },
+                    {
+                      value: "en",
+                      title: "english",
+                      image: engFlag,
+                    },
+                  ]}
+                />
+              </li> */}
             </ul>
           </nav>
         </Container>
@@ -208,10 +339,31 @@ const Header = memo(() => {
               </div>
             ) : (
               <>
-                <img
-                  src={Happiness}
-                  alt="Beautiful Day"
-                  className="menu-offer"
+                {banners?.data?.items?.length > 0 && (
+                  <img
+                    src={getImageURL({
+                      path: banners.data.items[0].medias,
+                      type: "banner",
+                      size: "full",
+                    })}
+                    alt="Большие пиццы"
+                    className="menu-offer"
+                  />
+                )}
+                <Select
+                  className="my-3"
+                  data={[
+                    {
+                      value: "delivery",
+                      title: "Доставка",
+                    },
+                    {
+                      value: "pickup",
+                      title: "Самовывоз",
+                    },
+                  ]}
+                  value={delivery}
+                  onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
                 />
                 <nav>
                   <ul>
@@ -228,19 +380,7 @@ const Header = memo(() => {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/">
-                        <MenuBlog />
-                        <span>Новости</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/promo">
-                        <MenuOffers />
-                        <span>Акции</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/">
+                      <Link to="/policy" onClick={() => setShowMenu(false)}>
                         <MenuDocs />
                         <span>Политика конфиденциальности</span>
                       </Link>
@@ -326,6 +466,55 @@ const Header = memo(() => {
           </Container>
         </Offcanvas.Body>
       </Offcanvas>
+      <Modal
+        size="xl"
+        centered
+        className="city"
+        show={showCity}
+        onHide={() => setShowCity(false)}
+      >
+        <Modal.Body className="p-4">
+          <img src="/logo.png" className="logo mb-4" />
+          <button
+            type="button"
+            className="btn-close close"
+            aria-label="Close"
+            onClick={() => setShowCity(false)}
+          ></button>
+          {affiliate?.length > 0 && (
+            <Row>
+              {affiliate.map((e, index) => (
+                <Col key={index}>
+                  <a
+                    onClick={() => {
+                      dispatch(
+                        setUser({
+                          ...user,
+                          options: {
+                            ...user.options,
+                            citySave: true,
+                            city: e.options.city,
+                          },
+                        })
+                      );
+                      setShowCity(false);
+                    }}
+                    className={
+                      "p-2 fw-6" +
+                      (e.options.city === defaultCityOptions?.city
+                        ? " active"
+                        : "")
+                    }
+                  >
+                    {e.options.city}
+                  </a>
+                </Col>
+              ))}
+            </Row>
+          )}
+        </Modal.Body>
+      </Modal>
+      <ScrollToTop count={count} />
     </>
   );
 });

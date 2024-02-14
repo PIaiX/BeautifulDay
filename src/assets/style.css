@@ -256,7 +256,7 @@ h6 {
 }
 
 .secondary {
-  color: #5c5def;
+  color: var(--main-color);
 }
 
 .bg-success {
@@ -375,13 +375,13 @@ input[type=radio]::before {
   height: 50%;
   width: 50%;
   border-radius: 50%;
-  background-color: #5c5def;
+  background-color: var(--main-color);
   transform: translate(-50%, -50%);
   transition: background-color 300ms ease-in;
   opacity: 0;
 }
 input[type=radio]:checked {
-  border-color: #5c5def;
+  border-color: var(--main-color);
 }
 input[type=radio]:checked::before {
   opacity: 1;
@@ -480,7 +480,7 @@ label span {
   display: none;
 }
 .inputGroup label input:checked + .text {
-  background-color: #5c5def;
+  background-color: var(--main-color);
   color: #fff;
 }
 .inputGroup li {
@@ -539,14 +539,14 @@ label span {
   border: 1px solid #dfe2e5;
   border-radius: 1em;
   margin: 0px 0.25em;
-  color: #5c5def;
+  color: var(--main-color);
 }
 .countInput button {
   padding: 0.3em;
   background-color: #fff;
   border: 1px solid #dfe2e5;
   border-radius: 1em;
-  color: #5c5def;
+  color: var(--main-color);
   height: 2em;
   width: 2em;
   display: flex;
@@ -637,8 +637,8 @@ button {
 }
 .btn-secondary {
   color: #fff;
-  background-color: #5c5def;
-  border: 1px solid #5c5def;
+  background-color: var(--main-color);
+  border: 1px solid var(--main-color);
 }
 .btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active, .btn-secondary.active {
   color: #fff;
@@ -656,19 +656,19 @@ button {
   border: 1px solid #39b05e;
 }
 .btn-light {
-  color: #5c5def;
+  color: var(--main-color);
   background-color: #f3f7ff;
   border: 1px solid #f3f7ff;
 }
 .btn-light:hover, .btn-light:focus {
-  color: #5c5def;
+  color: var(--main-color);
   background-color: #f3f7ff;
-  border: 1px solid #5c5def;
+  border: 1px solid var(--main-color);
 }
 .btn-light:active, .btn-light.active {
   color: #fff;
-  background-color: #5c5def;
-  border: 1px solid #5c5def;
+  background-color: var(--main-color);
+  border: 1px solid var(--main-color);
 }
 .btn-info {
   color: #1c1c1c;
@@ -915,7 +915,7 @@ select {
   padding: 0px;
 }
 .input-file svg {
-  color: #5c5def;
+  color: var(--main-color);
   font-size: 1.5em;
   stroke-width: 1.25px;
 }
@@ -924,7 +924,7 @@ select {
   bottom: -0.25em;
   right: 0px;
   color: #fff;
-  background-color: #5c5def;
+  background-color: var(--main-color);
   font-weight: 500;
   line-height: 1.3em;
   font-size: 0.8em;
@@ -1136,7 +1136,7 @@ select {
   opacity: 0;
 }
 .swiper-arrow:hover, .swiper-arrow-next:hover, .swiper-arrow-prev:hover, .swiper-arrow:focus, .swiper-arrow-next:focus, .swiper-arrow-prev:focus {
-  color: #5c5def;
+  color: var(--main-color);
 }
 .swiper-arrow:active, .swiper-arrow-next:active, .swiper-arrow-prev:active {
   color: var(--main-color);
@@ -1178,7 +1178,7 @@ select {
   align-items: center;
   flex-wrap: nowrap;
   margin-right: 2em;
-  color: #5c5def;
+  color: var(--main-color);
 }
 .navTop-back svg {
   font-size: 1.6em;
@@ -1200,7 +1200,7 @@ select {
   margin: 0em 0.5em;
 }
 .navTop-breadcrumbs li:last-child {
-  color: #5c5def;
+  color: var(--main-color);
 }
 
 .gifts {
@@ -1249,7 +1249,7 @@ select {
   font-size: 1.25em;
 }
 .gifts ul li.full .bar {
-  background-color: #5c5def;
+  background-color: var(--main-color);
 }
 .gifts ul li.full .icon {
   background-color: var(--main-color);
@@ -1307,7 +1307,7 @@ select {
 }
 .tabs li button.active {
   color: #1c1c1c;
-  border-bottom: 2px solid #5c5def;
+  border-bottom: 2px solid var(--main-color);
 }
 
 .breadcrumbs {
@@ -1511,12 +1511,12 @@ header nav ul li:not(:first-child) {
 }
 header .logo {
   max-width: 200px;
-  max-height: 60px;
+  max-height: 50px;
 }
-@media (max-width: 575.98px) {
+@media (max-width: 991.98px) {
   header .logo {
     max-width: 100px;
-    max-height: 30px;
+    max-height: 45px;
   }
 }
 header .phone {
@@ -1662,7 +1662,7 @@ header .btn-menu:hover, header .btn-menu:focus, header .btn-menu:active {
 .offcanvas-menu .offcanvas-body nav ul li a svg,
 .offcanvas-menu .offcanvas-body nav ul li button svg {
   font-size: 1.6em;
-  color: #5c5def;
+  color: var(--main-color);
   margin-right: 0.5em;
 }
 @media (max-width: 575.98px) {
@@ -2056,7 +2056,7 @@ main {
   flex-wrap: nowrap;
   margin-bottom: 1em;
   border-bottom: 1px solid #dfe2e5;
-  color: #5c5def;
+  color: var(--main-color);
   padding-bottom: 0.5em;
 }
 
@@ -2436,7 +2436,7 @@ main {
 }
 .features li div:last-child {
   width: 45%;
-  color: #5c5def;
+  color: var(--main-color);
 }
 
 .product-slider {
@@ -3339,9 +3339,9 @@ main {
 }
 .cart-item .left .text h6 .tag {
   float: right;
-  color: #5c5def;
+  color: var(--main-color);
   font-size: 0.75em;
-  border: 1px solid #5c5def;
+  border: 1px solid var(--main-color);
   border-radius: 1em;
   padding: 0.3em 0.6em;
   transform: rotate(-3.5deg);
@@ -3547,7 +3547,7 @@ footer .mobile ul li a .badge {
   flex-wrap: nowrap;
 }
 footer .mobile ul li a.active {
-  background-color: #5c5def;
+  background-color: var(--main-color);
   max-width: 130px;
 }
 footer .mobile ul li a.active .badge {
@@ -3623,7 +3623,7 @@ ACCOUNT
   justify-content: flex-start;
   align-items: center;
   flex-wrap: nowrap;
-  color: #5c5def;
+  color: var(--main-color);
   margin-right: 0.5em;
   font-size: 1.1em;
 }
@@ -3693,11 +3693,11 @@ ACCOUNT
   color: #1c1c1c;
 }
 .account-nav ul li a:hover, .account-nav ul li a:focus {
-  color: #5c5def;
+  color: var(--main-color);
 }
 .account-nav ul li a:active, .account-nav ul li a.active {
   background-color: #f3f7ff;
-  color: #5c5def;
+  color: var(--main-color);
 }
 .account-menu .btn-settings {
   background-color: #f4f6f8;
@@ -3755,7 +3755,7 @@ ACCOUNT
 .account-menu nav ul li a .badge {
   background-color: #f3f7ff;
   border-radius: 1em;
-  color: #5c5def;
+  color: var(--main-color);
   width: 1.5em;
   height: 1.5em;
   font-weight: 400;
@@ -3947,7 +3947,7 @@ ACCOUNT
   }
 }
 .account .order-card-btn a {
-  color: #5c5def;
+  color: var(--main-color);
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -4066,7 +4066,7 @@ ACCOUNT
 }
 @media (max-width: 767.98px) {
   .account .order-item .show {
-    color: #5c5def;
+    color: var(--main-color);
     font-weight: 300;
   }
 }
@@ -4301,7 +4301,7 @@ ACCOUNT
   width: var(--icon);
   height: var(--icon);
   border-radius: 50%;
-  background-color: #5c5def;
+  background-color: var(--main-color);
 }
 .account .notifications-list li .info {
   position: relative;
@@ -4314,7 +4314,7 @@ ACCOUNT
 }
 .account .notifications-list li .info .NB {
   float: right;
-  color: #5c5def;
+  color: var(--main-color);
   background-color: #f3f7ff;
   font-size: 0.75em;
   border-radius: 1.25em;
