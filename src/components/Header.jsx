@@ -62,55 +62,55 @@ const Header = memo(() => {
         : affiliate.find((e) => e.main)
       : false;
 
-  useEffect(() => {
-    if (!defaultCityOptions?.city && "geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        if (
-          position?.coords?.latitude &&
-          position?.coords?.longitude &&
-          DADATA_TOKEN &&
-          DADATA_URL_GEO
-        ) {
-          let geo = await axios.post(
-            DADATA_URL_GEO,
-            JSON.stringify({
-              lat: position.coords.latitude,
-              lon: position.coords.longitude,
-            }),
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                Authorization: "Token " + DADATA_TOKEN,
-              },
-            }
-          );
-          if (
-            geo?.data?.suggestions &&
-            geo?.data?.suggestions[0]?.data?.city &&
-            affiliate?.length > 0
-          ) {
-            let city = affiliate.find(
-              (e) =>
-                e.options.city.toLowerCase() ===
-                geo.data.suggestions[0].data.city.toLowerCase()
-            );
-            if (city) {
-              dispatch(
-                setUser({
-                  ...user,
-                  options: {
-                    ...user.options,
-                    city: city.options.city,
-                  },
-                })
-              );
-            }
-          }
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!defaultCityOptions?.city && "geolocation" in navigator) {
+  //     navigator.geolocation.getCurrentPosition(async (position) => {
+  //       if (
+  //         position?.coords?.latitude &&
+  //         position?.coords?.longitude &&
+  //         DADATA_TOKEN &&
+  //         DADATA_URL_GEO
+  //       ) {
+  //         let geo = await axios.post(
+  //           DADATA_URL_GEO,
+  //           JSON.stringify({
+  //             lat: position.coords.latitude,
+  //             lon: position.coords.longitude,
+  //           }),
+  //           {
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //               Accept: "application/json",
+  //               Authorization: "Token " + DADATA_TOKEN,
+  //             },
+  //           }
+  //         );
+  //         if (
+  //           geo?.data?.suggestions &&
+  //           geo?.data?.suggestions[0]?.data?.city &&
+  //           affiliate?.length > 0
+  //         ) {
+  //           let city = affiliate.find(
+  //             (e) =>
+  //               e.options.city.toLowerCase() ===
+  //               geo.data.suggestions[0].data.city.toLowerCase()
+  //           );
+  //           if (city) {
+  //             dispatch(
+  //               setUser({
+  //                 ...user,
+  //                 options: {
+  //                   ...user.options,
+  //                   city: city.options.city,
+  //                 },
+  //               })
+  //             );
+  //           }
+  //         }
+  //       }
+  //     });
+  //   }
+  // }, []);
 
   return (
     <>

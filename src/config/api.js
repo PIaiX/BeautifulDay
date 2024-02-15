@@ -55,6 +55,9 @@ const apiRoutes = {
 
   ACCOUNT: '/user',
 
+  // category
+  HOME: SERVICE_CATALOG + '/home',
+
   // Options
   OPTIONS: SERVICE_CATALOG + '/options',
 

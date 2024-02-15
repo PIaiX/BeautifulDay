@@ -33,18 +33,20 @@ import { getImageURL } from "../helpers/all";
 import {
   useGetBannersQuery,
   useGetCategoriesQuery,
+  useGetHomeQuery,
   useGetSalesQuery,
   useGetStoriesQuery,
 } from "../services/home";
 import Widgets from "../components/Widgets";
 
 const Home = () => {
+  const home = useGetHomeQuery();
   const banners = useGetBannersQuery();
   const sales = useGetSalesQuery();
   const stories = useGetStoriesQuery();
   const categories = useGetCategoriesQuery();
   const options = useSelector((state) => state.settings.options);
-
+  console.log(home);
   if (
     categories.isLoading ||
     sales.isLoading ||

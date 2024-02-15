@@ -9,6 +9,9 @@ export const homeApi = createApi({
   refetchOnMountOrArgChange: true,
   keepUnusedDataFor: 350,
   endpoints: (build) => ({
+    getHome: build.query({
+      query: () => apiRoutes.HOME,
+    }),
     getBanners: build.query({
       query: () => apiRoutes.BANNERS,
     }),
@@ -24,5 +27,5 @@ export const homeApi = createApi({
   }),
 });
 
-export const { useGetCategoriesQuery, useGetSalesQuery, useGetBannersQuery, useGetStoriesQuery } =
+export const { useGetCategoriesQuery, useGetSalesQuery, useGetBannersQuery, useGetStoriesQuery, useGetHomeQuery } =
   homeApi;
