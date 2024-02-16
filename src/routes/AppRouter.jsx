@@ -14,6 +14,8 @@ import Recovery from "../pages/auth/Recovery";
 import Registration from "../pages/auth/Registration";
 import Blog from "../pages/Blog";
 import Cart from "../pages/Cart";
+import PortfolioList from "../pages/PortfolioList";
+import Portfolio from "../pages/Portfolio";
 import Categories from "../pages/Categories";
 import Category from "../pages/Category";
 import Checkout from "../pages/Checkout";
@@ -25,10 +27,14 @@ import NotFound from "../pages/NotFound";
 import OfferPage from "../pages/OfferPage";
 import Policy from "../pages/Policy";
 import Product from "../pages/Product";
+import Project from "../pages/Project";
+import Service from "../pages/Service";
 import Promo from "../pages/Promo";
 import SearchResults from "../pages/SearchResults";
 import AccountRouter from "./AccountRouter";
 import AuthRoute from "./AuthRoute";
+import Projects from "../pages/Projects";
+import Services from "../pages/Services";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,6 +44,10 @@ const router = createBrowserRouter(
       <Route path="category/:categoryId" element={<Category />} />
       <Route path="menu/product" element={<Product />} />
       <Route path="product/:productId" element={<Product />} />
+      <Route path="projects" element={<Projects />} />
+      <Route path="project/:productId" element={<Project />} />
+      <Route path="services" element={<Services />} />
+      <Route path="service/:productId" element={<Service />} />
       <Route path="cart" element={<Cart />} errorElement={<Error />} />
       <Route path="checkout" element={<Checkout />} errorElement={<Error />} />
       <Route path="promo" element={<Promo />} />
@@ -78,6 +88,8 @@ const router = createBrowserRouter(
 
       <Route path="recovery" element={<Recovery />} />
       <Route path="login" element={<Registration />} />
+      <Route path="portfolio" element={<PortfolioList />} />
+      <Route path="portfolio/:id" element={<Portfolio />} />
       <Route path="articles" element={<Blog />} />
       <Route path="articles/:id" element={<Article />} />
     </Route>

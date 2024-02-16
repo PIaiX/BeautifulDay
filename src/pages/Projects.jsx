@@ -1,56 +1,42 @@
 import React, {
   useCallback,
-  useLayoutEffect,
   useEffect,
+  useLayoutEffect,
   useState,
 } from "react";
 import Accordion from "react-bootstrap/Accordion";
+import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
-import { Link, useParams } from "react-router-dom";
+import { useForm, useWatch } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import "swiper/css";
-import { Swiper, SwiperSlide } from "swiper/react";
-import CategoryCard from "../components/CategoryCard";
 import Empty from "../components/Empty";
 import EmptyCatalog from "../components/empty/catalog";
+import Meta from "../components/Meta";
 import ProductCard from "../components/ProductCard";
+import ProjectItem from "../components/ProjectItem";
 import Filter from "../components/svgs/Filter";
 import PrevIcon from "../components/svgs/PrevIcon";
 import Loader from "../components/utils/Loader";
 import MultyRangeCustom from "../components/utils/MultyRangeCustom";
 import NavTop from "../components/utils/NavTop";
-import SwiperButtonNext from "../components/utils/SwiperButtonNext";
-import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
-import { childrenArray, getImageURL } from "../helpers/all";
-import { getCategory } from "../services/category";
-import { useGetCategoriesQuery } from "../services/home";
-import { useDispatch, useSelector } from "react-redux";
+import { getProjects } from "../services/project";
 import { removeFilter, updateFilter } from "../store/reducers/settingsSlice";
-import { useForm, useWatch } from "react-hook-form";
-import Meta from "../components/Meta";
 
-const Category = () => {
-  const { categoryId } = useParams();
-  const filters = useSelector(
-    (state) =>
-      state?.settings?.filter?.length > 0 &&
-      state.settings.filter.find(
-        (e) => Number(e.categoryId) === Number(categoryId)
-      )
-  );
-
+const Projects = () => {
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
-  const categories = useGetCategoriesQuery();
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [category, setCategory] = useState({
+  const [projects, setProjects] = useState({
     loading: true,
-    item: {},
+    items: [],
   });
 
   const {
@@ -64,27 +50,26 @@ const Category = () => {
   } = useForm({
     mode: "all",
     reValidateMode: "onChange",
-    defaultValues: filters ?? { options: [] },
+    defaultValues: { options: [] },
   });
 
   const data = useWatch({ control });
 
   const onLoad = useCallback(() => {
-    getCategory({ ...data, id: categoryId })
+    getProjects()
       .then((res) => {
-        res.params = childrenArray(res.params, "id", "parentId");
-        setCategory({ loading: false, item: res });
+        setProjects({ ...res, loading: false });
       })
-      .catch(() => setCategory((data) => ({ ...data, loading: false })));
-  }, [categoryId, data]);
+      .catch(() => setProjects((res) => ({ ...res, loading: false })));
+  }, []);
 
   useLayoutEffect(() => {
     onLoad();
-  }, [categoryId]);
+  }, []);
 
   useEffect(() => {
-    dispatch(updateFilter({ ...data, categoryId }));
-  }, [data, categoryId]);
+    dispatch(updateFilter({ ...data }));
+  }, [data]);
 
   const onFilter = useCallback(
     (option) => {
@@ -158,66 +143,18 @@ const Category = () => {
     [data?.options]
   );
 
-  if (category?.loading) {
+  if (projects?.loading) {
     return <Loader full />;
   }
 
   return (
     <main>
-      <Meta
-        title={category?.item?.title}
-        description={category?.item?.description}
-        image={
-          category?.item?.media
-            ? getImageURL({
-                path: category.item.media,
-                size: "full",
-                type: "category",
-              })
-            : false
-        }
-      />
+      <Meta title="Проекты" />
       <section className="category mb-5">
         <Container>
           <NavTop toBack={true} breadcrumbs={true} />
-          {categories?.data?.length > 0 && (
-            <Swiper
-              className="category-topSlider mb-5"
-              spaceBetween={10}
-              slidesPerView={2}
-              speed={750}
-              breakpoints={{
-                576: {
-                  spaceBetween: 16,
-                  slidesPerView: 3,
-                },
-                768: {
-                  slidesPerView: 4,
-                  spaceBetween: 16,
-                },
-                992: {
-                  slidesPerView: 5,
-                  spaceBetween: 16,
-                },
-                1200: {
-                  slidesPerView: 6,
-                  spaceBetween: 16,
-                },
-              }}
-            >
-              {categories.data.map((obj) => {
-                return (
-                  <SwiperSlide key={obj.id}>
-                    <CategoryCard data={obj} />
-                  </SwiperSlide>
-                );
-              })}
-              <SwiperButtonPrev />
-              <SwiperButtonNext />
-            </Swiper>
-          )}
 
-          <h1 className="mb-4 mb-lg-5">{category.item.title ?? "Категория"}</h1>
+          <h1 className="mb-4 mb-lg-5">Проекты</h1>
           <Row className="gx-5 mb-5">
             <Col lg={3} className="position-relative">
               <Offcanvas
@@ -237,7 +174,7 @@ const Category = () => {
                         <PrevIcon className="svgSW" />
                       </button>
                       <h5 className="ms-2 mb-0">Фильтры</h5>
-                      <button
+                      {/* <button
                         type="reset"
                         className="ms-auto"
                         onClick={() => {
@@ -249,10 +186,10 @@ const Category = () => {
                         }}
                       >
                         очистить
-                      </button>
+                      </button> */}
                     </div>
 
-                    <fieldset>
+                    {/* <fieldset>
                       <legend>Цена, ₽</legend>
                       <MultyRangeCustom
                         minRange={category.item?.min ?? 0}
@@ -327,14 +264,12 @@ const Category = () => {
                                     </li>
                                   ))}
                                 </ul>
-                                {/* <button type="button" className="more">
-                                  показать все
-                                </button> */}
+                         
                               </Accordion.Body>
                             </Accordion.Item>
                           ) : null;
                         })}
-                    </Accordion>
+                    </Accordion> */}
                     <Button
                       variant="primary"
                       className="w-100 rounded-3"
@@ -348,50 +283,25 @@ const Category = () => {
             </Col>
             <Col lg={9}>
               <div className="d-md-flex justify-content-between align-items-stretch mb-5">
-                {category?.item?.child?.length > 0 && (
-                  <Swiper
-                    className="subcategories-slider"
-                    spaceBetween={10}
-                    slidesPerView={"auto"}
-                    speed={750}
-                    breakpoints={{
-                      576: {
-                        spaceBetween: 15,
-                      },
-                      992: {
-                        spaceBetween: 20,
-                      },
-                    }}
-                  >
-                    {category.item.child.map((e) => (
-                      <SwiperSlide>
-                        <Link to={"/category/" + e.id}>{e.title}</Link>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                )}
-                <div className="d-flex">
-                  <select className="flex-1" {...register("sort")}>
-                    <option value="">Сортировать по</option>
-                    <option value="new">Новое</option>
-                    <option value="old">Старое</option>
-                    <option value="cheaper">Дешевле</option>
-                    <option value="expensive">Дороже</option>
-                  </select>
-                  <button
-                    type="button"
-                    onClick={handleShow}
-                    className="input d-lg-none p-2 ms-3 w-fit"
-                  >
-                    <Filter className="fs-14 dark-gray" />
-                  </button>
-                </div>
+                <select className="flex-1" {...register("sort")}>
+                  <option value="">Сортировать по</option>
+                  <option value="new">Новое</option>
+                  <option value="old">Старое</option>
+                  <option value="cheaper">Дешевле</option>
+                  <option value="expensive">Дороже</option>
+                </select>
+                <button
+                  type="button"
+                  onClick={handleShow}
+                  className="input d-lg-none p-2 ms-3 w-fit"
+                >
+                  <Filter className="fs-14 dark-gray" />
+                </button>
               </div>
-              {!Array.isArray(category.item?.products?.items) ||
-                (category.item.products.items.length <= 0 && (
+              {!Array.isArray(projects?.items) ||
+                (projects.items.length <= 0 && (
                   <Empty
-                    text="Товаров нет"
-                    desc="Меню уже скоро появится"
+                    text="Проектов нет"
                     image={() => <EmptyCatalog />}
                     button={
                       <Link className="btn-primary" to="/">
@@ -401,10 +311,10 @@ const Category = () => {
                   />
                 ))}
               <Row xs={2} sm={3} xxl={4} className="gx-4 gy-5">
-                {category.item?.products?.items?.length > 0 &&
-                  category.item.products.items.map((e) => (
+                {projects?.items?.length > 0 &&
+                  projects.items.map((e) => (
                     <Col>
-                      <ProductCard data={e} />
+                      <ProjectItem data={e} />
                     </Col>
                   ))}
               </Row>
@@ -446,4 +356,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default Projects;

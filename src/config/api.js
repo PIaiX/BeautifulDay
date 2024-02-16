@@ -61,6 +61,9 @@ const apiRoutes = {
   // Options
   OPTIONS: SERVICE_CATALOG + '/options',
 
+  PROJECTS: SERVICE_CATALOG + '/projects',
+  SERVICES: SERVICE_CATALOG + '/services',
+
   // category
   CATEGORY_ALL: SERVICE_CATALOG + '/categories',
   CATEGORY_ONE: SERVICE_CATALOG + '/category',

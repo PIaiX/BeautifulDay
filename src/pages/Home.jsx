@@ -30,52 +30,16 @@ import { useSelector } from "react-redux";
 import Meta from "../components/Meta";
 import Loader from "../components/utils/Loader";
 import { getImageURL } from "../helpers/all";
-import {
-  useGetBannersQuery,
-  useGetCategoriesQuery,
-  useGetHomeQuery,
-  useGetSalesQuery,
-  useGetStoriesQuery,
-} from "../services/home";
+import { useGetHomeQuery } from "../services/home";
 import Widgets from "../components/Widgets";
 
 const Home = () => {
   const home = useGetHomeQuery();
-  const banners = useGetBannersQuery();
-  const sales = useGetSalesQuery();
-  const stories = useGetStoriesQuery();
-  const categories = useGetCategoriesQuery();
   const options = useSelector((state) => state.settings.options);
-  console.log(home);
-  if (
-    categories.isLoading ||
-    sales.isLoading ||
-    banners.isLoading ||
-    stories.isLoading
-  ) {
+
+  if (home?.isLoading) {
     return <Loader full />;
   }
-
-  // if (!Array.isArray(categories.data) || categories.data.length <= 0) {
-  //   return (
-  //     <Empty
-  //       text="Нет товаров"
-  //       desc="Временно товары отсуствуют"
-  //       image={() => <EmptyCatalog />}
-  //       button={
-  //         <a
-  //           className="btn-primary"
-  //           onСlick={() => {
-  //             location.reload();
-  //             return false;
-  //           }}
-  //         >
-  //           Обновить страницу
-  //         </a>
-  //       }
-  //     />
-  //   );
-  // }
 
   return (
     <main className="pb-0">
@@ -83,7 +47,7 @@ const Home = () => {
         title={options?.title ?? "Главная"}
         description={options?.description}
       />
-      {banners?.data?.items?.length > 0 && (
+      {home?.data?.banners?.length > 0 && (
         <section className="sec-1 mb-6">
           <div className="container">
             <div className="row justify-content-center">
@@ -100,7 +64,7 @@ const Home = () => {
                   speed={750}
                   pagination={{ clickable: true }}
                 >
-                  {banners.data.items.map((e, index) => (
+                  {home.data.banners.map((e, index) => (
                     <SwiperSlide key={index}>
                       <Link>
                         <img
@@ -121,15 +85,15 @@ const Home = () => {
           </div>
         </section>
       )}
-      {stories?.data?.items?.length > 0 && (
+      {home?.data?.stories?.length > 0 && (
         <section className="sec-2 mb-6">
           <Container className="position-relative">
-            <StoriesSection data={stories.data.items} />
+            <StoriesSection data={home.data.stories} />
           </Container>
         </section>
       )}
 
-      {options?.widget?.length > 0 && <Widgets data={options.widget} />}
+      {home?.data?.widgets?.length > 0 && <Widgets data={home.data.widgets} />}
 
       {/* <section className="sec-3">
         <Container>
@@ -250,7 +214,7 @@ const Home = () => {
         </Container>
       </section> */}
 
-      {sales?.data?.items?.length > 0 && (
+      {home?.data?.sales?.length > 0 && (
         <section className="sec-6 mt-5 mb-5">
           <Container>
             <Swiper
@@ -270,7 +234,7 @@ const Home = () => {
                 },
               }}
             >
-              {sales.data.items.map((e, index) => (
+              {home.data.sales.map((e, index) => (
                 <SwiperSlide key={index}>
                   <Offer data={e} />
                 </SwiperSlide>
@@ -278,7 +242,7 @@ const Home = () => {
             </Swiper>
 
             <Link to="/promo" className="btn-primary mt-4 mt-sm-5 mx-auto">
-              смотреть все акции
+              Смотреть все акции
             </Link>
           </Container>
         </section>

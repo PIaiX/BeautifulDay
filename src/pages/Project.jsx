@@ -24,7 +24,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperButtonNext from "../components/utils/SwiperButtonNext";
 import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
 
-const Product = () => {
+const Project = () => {
   const [featuresShow, setFeaturesShow] = useState(false);
   const options = useSelector((state) => state.settings.options);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -51,11 +51,6 @@ const Product = () => {
     getProduct(productId)
       .then((res) => {
         setProduct({ ...res, loading: false });
-        data.cart.data.modifiers =
-          res?.modifiers?.length > 0
-            ? res.modifiers.find((e) => e.main)
-            : false;
-        setData(data);
       })
       .catch(() => setProduct((data) => ({ ...data, loading: false })));
   }, [productId]);
@@ -78,17 +73,6 @@ const Product = () => {
       />
     );
   }
-  const price = data?.cart?.data?.modifiers?.price
-    ? data.cart.data.modifiers.price
-    : product?.modifiers?.length > 0 && Array.isArray(product.modifiers)
-    ? Math.min(...product.modifiers.map((item) => item.price))
-    : product?.item?.modifiers?.price ?? product?.price ?? 0;
-
-  const discount = data?.cart?.data?.modifiers?.discount
-    ? data.cart.data.modifiers.discount
-    : product?.modifiers?.length > 0 && Array.isArray(product.modifiers)
-    ? Math.min(...product.modifiers.map((item) => item.discount))
-    : product?.modifiers?.discount ?? product?.discount ?? 0;
 
   return (
     <main>
@@ -109,12 +93,12 @@ const Product = () => {
         <NavTop
           toBack={true}
           breadcrumbs={[
-            {
-              title: product?.category?.title ?? "Нет категории",
-              link: product?.category?.id
-                ? "/category/" + product.category.id
-                : "/menu",
-            },
+            // {
+            //   title: product?.category?.title ?? "Нет категории",
+            //   link: product?.category?.id
+            //     ? "/category/" + product.category.id
+            //     : "/menu",
+            // },
             {
               title: product?.title ?? "Нет названия",
             },
@@ -183,68 +167,46 @@ const Product = () => {
                 <Col className="d-flex flex-column justify-content-between">
                   <div>
                     <h1>{product.title}</h1>
-                    {product.code && <p>Артикул: {product.code}</p>}
+                    <p>{product.description}</p>
                   </div>
-
-                  {/* <div className='productPage-price'>
-                    <div>
-                      <div className='fs-12'>650 ₽</div>
-                      <div className='gray fs-09 text-decoration-line-through'> 650 </div>
-                    </div>
-                    <button type='button' className='btn-primary ms-2 ms-xl-3'>Заказать</button>
-                    <CountInput className="ms-2 ms-xl-4"/>
-                  </div> */}
-
-                  <div className="productPage-price">
+                  <div>
                     <div className="me-2 me-xl-3">
-                      <div className="fs-12">{customPrice(price)}</div>
-                      {discount > 0 && (
+                      <div className="fs-14 fw-6">
+                        {customPrice(product?.price ?? 0)}
+                      </div>
+                      {product?.discount > 0 && (
                         <div className="gray fs-09 text-decoration-line-through">
-                          {customPrice(discount)}
+                          {customPrice(product?.discount ?? 0)}
                         </div>
                       )}
                     </div>
-                    <ButtonCart
-                      full
-                      product={product}
-                      data={data}
-                      className="btn-primary ms-2 ms-xl-3"
-                    >
-                      Заказать
-                    </ButtonCart>
+
+                    {options?.project?.buttons?.length > 0 ? (
+                      options?.project?.buttons.map((e) => (
+                        <Link
+                          className={
+                            "mt-3 w-100 btn" +
+                            (e.type == "dark"
+                              ? " btn-primary"
+                              : " btn-primary-outline")
+                          }
+                        >
+                          {e.title}
+                        </Link>
+                      ))
+                    ) : (
+                      <ButtonCart
+                        full
+                        product={product}
+                        data={data}
+                        className="btn-primary ms-2 ms-xl-3"
+                      >
+                        Заказать
+                      </ButtonCart>
+                    )}
                   </div>
                 </Col>
               </Row>
-            </Col>
-            <Col
-              xs={12}
-              lg={3}
-              className="d-none d-lg-block mt-3mt-sm-4 mt-md-0"
-            >
-              <div className="box">
-                <h6 className="secondary">Доставка:</h6>
-                <p className="fs-09 dark-gray">
-                  По Казани осуществляется по договорённости с курьером.
-                  Минимальная сумма заказа 400 ₽
-                </p>
-                <p className="fs-09 dark-gray">
-                  По России через компанию CDEK или почтой России
-                </p>
-                <h6 className="mt-4 secondary">Самовывоз:</h6>
-                <p className="fs-09 dark-gray">
-                  Магазин по адресу: Татарстан, Казань, Рашида Вагопова 3
-                </p>
-                {options?.payments && (
-                  <>
-                    <h6 className="mt-4 secondary">Оплата:</h6>
-                    <p className="fs-09 dark-gray">
-                      {options?.payments?.cash && " Наличными "}
-                      {options?.payments?.card && " Банковской картой "}
-                      {options?.payments?.online && " Онлайн "}
-                    </p>
-                  </>
-                )}
-              </div>
             </Col>
           </Row>
         </form>
@@ -334,4 +296,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default Project;

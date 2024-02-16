@@ -8,7 +8,9 @@ const Empty = memo(({ text, mini, desc, image = false, button }) => {
         (mini ? " mini" : "")
       }
     >
-      {image && <div className="mb-4">{image()}</div>}
+      {image && (
+        <div className="mb-4 d-flex justify-content-center">{image()}</div>
+      )}
       <div>
         <p className="text-center h4">{text ?? "Ничего нет"}</p>
         {desc && <p className="text-center text-muted">{desc}</p>}
