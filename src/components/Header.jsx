@@ -11,7 +11,7 @@ import {
 import { IoLogoWhatsapp } from "react-icons/io";
 import { IoCall, IoClose, IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import AppStore from "../assets/images/appstore-black.svg";
 import GooglePlay from "../assets/images/googleplay-black.svg";
 import Phone from "../assets/images/phone.png";
@@ -169,12 +169,12 @@ const Header = memo(() => {
               {options?.menu?.length > 0 ? (
                 options.menu.map((e) => (
                   <li>
-                    <Link
+                    <NavLink
                       to={e.page}
                       className={e.type == "dark" ? "btn-primary" : ""}
                     >
                       {e.title}
-                    </Link>
+                    </NavLink>
                   </li>
                 ))
               ) : (

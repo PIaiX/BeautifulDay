@@ -5,14 +5,26 @@ import { getImageURL } from "../helpers/all";
 
 const PortfolioItem = ({ data }) => {
   return (
-    <figure className="offer">
-      <LazyLoadImage src="/images/img2.jpg" alt="offer" loading="lazy" />
-      <figcaption>
-        <Link to="/promo/1" className="btn-light">
-          Заказать
-        </Link>
-      </figcaption>
-    </figure>
+    <Link to={"/portfolio/" + data.id}>
+      <figure className="offer">
+        <LazyLoadImage
+          src={getImageURL({
+            path:
+              data?.medias?.length > 0
+                ? data.medias.filter((e) => e.main)[0]?.media
+                : false,
+            type: "portfolio",
+          })}
+          alt="offer"
+          loading="lazy"
+        />
+        <figcaption className="d-flex align-items-center">
+          <Link to={"/portfolio/" + data.id} className="btn-light">
+            Перейти
+          </Link>
+        </figcaption>
+      </figure>
+    </Link>
   );
 };
 

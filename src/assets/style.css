@@ -11,22 +11,26 @@ html {
   --main-color: #222;
   --main-color-outline: #22222223;
   --main-color-active: #22222223;
+  --offer-w: 260px;
 }
 @media (max-width: 991.98px) {
   :root {
     --h-height: 50px;
     --f-height: 70px;
+    --offer-w: 260px;
   }
 }
 @media (max-width: 767.98px) {
   :root {
     --f-height: 60px;
+    --offer-w: 250px;
   }
 }
 @media (max-width: 575.98px) {
   :root {
     --h-height: 45px;
     --f-height: 50px;
+    --offer-w: 35vw;
   }
 }
 
@@ -3059,35 +3063,17 @@ main {
 
 /* Articles END */
 /* Section 6 */
-.sec-6 {
-  --offer-w: 350px;
-}
-@media (max-width: 1199.98px) {
-  .sec-6 {
-    --offer-w: 300px;
-  }
-}
-@media (max-width: 991.98px) {
-  .sec-6 {
-    --offer-w: 310px;
-  }
-}
-@media (max-width: 575.98px) {
-  .sec-6 {
-    --offer-w: 45vw;
-  }
-}
-.sec-6 .offer {
+.offer {
   width: 100%;
   position: relative;
   transition: transform 200ms linear;
 }
 @media (max-width: 575.98px) {
-  .sec-6 .offer {
+  .offer {
     font-size: 11px;
   }
 }
-.sec-6 .offer img {
+.offer img {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -3096,7 +3082,7 @@ main {
      object-fit: cover;
   border-radius: 1em;
 }
-.sec-6 .offer figcaption {
+.offer figcaption {
   position: absolute;
   top: 0%;
   left: 0px;
@@ -3112,53 +3098,57 @@ main {
   flex-wrap: nowrap;
 }
 @media (max-width: 1199.98px) {
-  .sec-6 .offer figcaption {
+  .offer figcaption {
     padding: 1em;
   }
 }
-.sec-6 .sw-offers {
+
+.sw-offers {
   overflow: hidden;
   padding: 1em 0.5em;
 }
-.sec-6 .sw-offers:hover .offer {
+.sw-offers:hover .offer {
   transform: rotate(0deg) !important;
 }
-.sec-6 .sw-offers .swiper-slide {
+.sw-offers .swiper-slide {
   width: var(--offer-w);
 }
 @media (min-width: 991.98px) {
-  .sec-6 .sw-offers .swiper-slide:nth-child(odd) .offer {
+  .sw-offers .swiper-slide:nth-child(odd) .offer {
     transform: rotate(3deg);
   }
-  .sec-6 .sw-offers .swiper-slide:nth-child(even) .offer {
+  .sw-offers .swiper-slide:nth-child(even) .offer {
     transform: rotate(-3deg);
   }
 }
-.sec-6 .offer-page-img {
+
+.offer-page-img {
   width: 100%;
   height: var(--offer-w);
   border-radius: 1em;
 }
-.sec-6 .box {
+
+.box {
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.06);
   padding: 2em;
   border-radius: 1em;
   font-size: 1.2em;
 }
 @media (max-width: 1199.98px) {
-  .sec-6 .box {
+  .box {
     font-size: 1.1em;
   }
 }
 @media (max-width: 767.98px) {
-  .sec-6 .box {
+  .box {
     padding: 1em;
   }
 }
-.sec-6 .box p:not(:first-child) {
+.box p:not(:first-child) {
   margin-top: 1em;
 }
-.sec-6 .offer-product {
+
+.offer-product {
   padding: 1.25em 0px;
   width: 100%;
   display: grid;
@@ -3168,41 +3158,41 @@ main {
   grid-template-areas: "img about price";
 }
 @media (max-width: 1399.98px) {
-  .sec-6 .offer-product {
+  .offer-product {
     grid-template-columns: 100px auto 250px;
   }
 }
 @media (max-width: 1199.98px) {
-  .sec-6 .offer-product {
+  .offer-product {
     grid-template-columns: 100px auto 210px;
   }
 }
 @media (max-width: 767.98px) {
-  .sec-6 .offer-product {
+  .offer-product {
     grid-template-columns: 120px auto;
     grid-template-rows: auto;
     grid-template-areas: "img about" "img price";
   }
 }
-.sec-6 .offer-product-img {
+.offer-product-img {
   grid-area: img;
 }
-.sec-6 .offer-product-img img {
+.offer-product-img img {
   width: 100%;
 }
-.sec-6 .offer-product-about {
+.offer-product-about {
   grid-area: about;
 }
-.sec-6 .offer-product-about p {
+.offer-product-about p {
   color: #637381;
   margin-bottom: 0.5em;
 }
 @media (max-width: 575.98px) {
-  .sec-6 .offer-product-about p {
+  .offer-product-about p {
     font-size: 0.9em;
   }
 }
-.sec-6 .offer-product-price {
+.offer-product-price {
   grid-area: price;
   display: flex;
   flex-direction: column;
@@ -3211,15 +3201,15 @@ main {
   flex-wrap: nowrap;
 }
 @media (max-width: 767.98px) {
-  .sec-6 .offer-product-price {
+  .offer-product-price {
     flex-direction: row;
     justify-content: space-between;
   }
-  .sec-6 .offer-product-price .btn-fav {
+  .offer-product-price .btn-fav {
     display: none;
   }
 }
-.sec-6 .offer-products-list li:not(:first-child) {
+.offer-products-list li:not(:first-child) {
   border-top: 1px solid #f4f6f8;
 }
 

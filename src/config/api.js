@@ -68,6 +68,10 @@ const apiRoutes = {
   CATEGORY_ALL: SERVICE_CATALOG + '/categories',
   CATEGORY_ONE: SERVICE_CATALOG + '/category',
 
+  // Portfolio
+  PORTFOLIO: SERVICE_CATALOG + '/portfolio',
+  PORTFOLIO_ONE: SERVICE_CATALOG + '/portfolio/one',
+
   // product
   PRODUCT: SERVICE_CATALOG + "/product",
   PRODUCTS: SERVICE_CATALOG + "/products",

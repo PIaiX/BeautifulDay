@@ -4,7 +4,6 @@ import React, {
   useLayoutEffect,
   useState,
 } from "react";
-import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
@@ -17,15 +16,13 @@ import "swiper/css";
 import Empty from "../components/Empty";
 import EmptyCatalog from "../components/empty/catalog";
 import Meta from "../components/Meta";
-import ProductCard from "../components/ProductCard";
 import ProjectItem from "../components/ProjectItem";
 import Filter from "../components/svgs/Filter";
 import PrevIcon from "../components/svgs/PrevIcon";
 import Loader from "../components/utils/Loader";
-import MultyRangeCustom from "../components/utils/MultyRangeCustom";
 import NavTop from "../components/utils/NavTop";
 import { getProjects } from "../services/project";
-import { removeFilter, updateFilter } from "../store/reducers/settingsSlice";
+import { updateFilter } from "../store/reducers/settingsSlice";
 
 const Projects = () => {
   const dispatch = useDispatch();
@@ -152,7 +149,7 @@ const Projects = () => {
       <Meta title="Проекты" />
       <section className="category mb-5">
         <Container>
-          <NavTop toBack={true} breadcrumbs={true} />
+          {/* <NavTop toBack={true} breadcrumbs={true} /> */}
 
           <h1 className="mb-4 mb-lg-5">Проекты</h1>
           <Row className="gx-5 mb-5">

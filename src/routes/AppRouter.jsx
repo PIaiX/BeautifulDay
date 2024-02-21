@@ -35,11 +35,13 @@ import AccountRouter from "./AccountRouter";
 import AuthRoute from "./AuthRoute";
 import Projects from "../pages/Projects";
 import Services from "../pages/Services";
+import About from "../pages/About";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<AppLayout />}>
       <Route index element={<Home />} errorElement={<Error />} />
+      <Route path="about" element={<About />} />
       <Route path="categories" element={<Categories />} />
       <Route path="category/:categoryId" element={<Category />} />
       <Route path="menu/product" element={<Product />} />
@@ -89,7 +91,7 @@ const router = createBrowserRouter(
       <Route path="recovery" element={<Recovery />} />
       <Route path="login" element={<Registration />} />
       <Route path="portfolio" element={<PortfolioList />} />
-      <Route path="portfolio/:id" element={<Portfolio />} />
+      <Route path="portfolio/:portfolioId" element={<Portfolio />} />
       <Route path="articles" element={<Blog />} />
       <Route path="articles/:id" element={<Article />} />
     </Route>

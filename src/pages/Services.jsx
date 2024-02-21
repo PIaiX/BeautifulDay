@@ -153,7 +153,7 @@ const Services = () => {
       <Meta title="Услуги" />
       <section className="category mb-5">
         <Container>
-          <NavTop toBack={true} breadcrumbs={true} />
+          {/* <NavTop toBack={true} breadcrumbs={true} /> */}
 
           <h1 className="mb-4 mb-lg-5">Услуги</h1>
           <Row className="gx-5 mb-5">

@@ -93,18 +93,15 @@ const Project = () => {
         <NavTop
           toBack={true}
           breadcrumbs={[
-            // {
-            //   title: product?.category?.title ?? "Нет категории",
-            //   link: product?.category?.id
-            //     ? "/category/" + product.category.id
-            //     : "/menu",
-            // },
+            {
+              title: "Проекты",
+              link: "/projects",
+            },
             {
               title: product?.title ?? "Нет названия",
             },
           ]}
         />
-
         <form className="productPage mb-4 mb-md-5">
           <Row className="gx-4 gx-xl-5">
             <Col xs={12} lg={9}>

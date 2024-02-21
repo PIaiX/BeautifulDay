@@ -9,16 +9,20 @@ html {
   --main-color: #222;
   --main-color-outline: #22222223;
   --main-color-active: #22222223;
+  --offer-w: 260px;
   @media (max-width: 991.98px) {
     --h-height: 50px;
     --f-height: 70px;
+    --offer-w: 260px;
   }
   @media (max-width: 767.98px) {
     --f-height: 60px;
+    --offer-w: 250px;
   }
   @media (max-width: 575.98px) {
     --h-height: 45px;
     --f-height: 50px;
+    --offer-w: 35vw;
   }
 }
 
@@ -3007,142 +3011,132 @@ main {
 /* Articles END */
 
 /* Section 6 */
-.sec-6 {
-  --offer-w: 350px;
-  @media (max-width: $bp-xl) {
-    --offer-w: 300px;
-  }
-  @media (max-width: $bp-lg) {
-    --offer-w: 310px;
-  }
+
+.offer {
+  width: 100%;
+  position: relative;
+  // @include shadowF();
+  transition: transform 200ms linear;
   @media (max-width: $bp-sm) {
-    --offer-w: 45vw;
+    font-size: 11px;
   }
-  .offer {
-    width: 100%;
+  img {
     position: relative;
-    // @include shadowF();
-    transition: transform 200ms linear;
-    @media (max-width: $bp-sm) {
-      font-size: 11px;
-    }
-    img {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: var(--offer-w);
-      object-fit: cover;
-      border-radius: $radius;
-    }
-    figcaption {
-      @include absBG(10);
-      color: $white;
-      padding: 2em;
-      @include flex(column, flex-end, stretch, nowrap);
-      @media (max-width: $bp-xl) {
-        padding: 1em;
-      }
-    }
-  }
-  .sw-offers {
-    overflow: hidden;
-    padding: 1em 0.5em;
-    &:hover {
-      .offer {
-        transform: rotate(0deg) !important;
-      }
-    }
-    .swiper-slide {
-      width: var(--offer-w);
-      @media (min-width: 991.98px) {
-        &:nth-child(odd) {
-          .offer {
-            transform: rotate(3deg);
-          }
-        }
-        &:nth-child(even) {
-          .offer {
-            transform: rotate(-3deg);
-          }
-        }
-      }
-    }
-  }
-  .offer-page-img {
+    z-index: 1;
     width: 100%;
     height: var(--offer-w);
+    object-fit: cover;
     border-radius: $radius;
   }
-  .box {
-    @include shadow();
+  figcaption {
+    @include absBG(10);
+    color: $white;
     padding: 2em;
-    border-radius: $radius;
-    font-size: 1.2em;
+    @include flex(column, flex-end, stretch, nowrap);
     @media (max-width: $bp-xl) {
-      font-size: 1.1em;
-    }
-    @media (max-width: $bp-md) {
       padding: 1em;
     }
-    p {
-      &:not(:first-child) {
-        margin-top: 1em;
-      }
+  }
+}
+.sw-offers {
+  overflow: hidden;
+  padding: 1em 0.5em;
+  &:hover {
+    .offer {
+      transform: rotate(0deg) !important;
     }
   }
-  .offer-product {
-    padding: 1.25em 0px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 100px auto 280px;
-    grid-template-rows: auto;
-    gap: 1em;
-    grid-template-areas: "img about price";
-    @media (max-width: $bp-xxl) {
-      grid-template-columns: 100px auto 250px;
-    }
-    @media (max-width: $bp-xl) {
-      grid-template-columns: 100px auto 210px;
-    }
-    @media (max-width: $bp-md) {
-      grid-template-columns: 120px auto;
-      grid-template-rows: auto;
-      grid-template-areas: "img about" "img price";
-    }
-    &-img {
-      grid-area: img;
-      img {
-        width: 100%;
-      }
-    }
-    &-about {
-      grid-area: about;
-      p {
-        color: $black-gray;
-        margin-bottom: 0.5em;
-        @media (max-width: $bp-sm) {
-          font-size: 0.9em;
+  .swiper-slide {
+    width: var(--offer-w);
+    @media (min-width: 991.98px) {
+      &:nth-child(odd) {
+        .offer {
+          transform: rotate(3deg);
         }
       }
-    }
-    &-price {
-      grid-area: price;
-      @include flex(column, center, flex-end, nowrap);
-      @media (max-width: $bp-md) {
-        flex-direction: row;
-        justify-content: space-between;
-        .btn-fav {
-          display: none;
+      &:nth-child(even) {
+        .offer {
+          transform: rotate(-3deg);
         }
-      }
-    }
-    &s-list {
-      li:not(:first-child) {
-        border-top: 1px solid $light-gray;
       }
     }
   }
 }
+.offer-page-img {
+  width: 100%;
+  height: var(--offer-w);
+  border-radius: $radius;
+}
+.box {
+  @include shadow();
+  padding: 2em;
+  border-radius: $radius;
+  font-size: 1.2em;
+  @media (max-width: $bp-xl) {
+    font-size: 1.1em;
+  }
+  @media (max-width: $bp-md) {
+    padding: 1em;
+  }
+  p {
+    &:not(:first-child) {
+      margin-top: 1em;
+    }
+  }
+}
+.offer-product {
+  padding: 1.25em 0px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 100px auto 280px;
+  grid-template-rows: auto;
+  gap: 1em;
+  grid-template-areas: "img about price";
+  @media (max-width: $bp-xxl) {
+    grid-template-columns: 100px auto 250px;
+  }
+  @media (max-width: $bp-xl) {
+    grid-template-columns: 100px auto 210px;
+  }
+  @media (max-width: $bp-md) {
+    grid-template-columns: 120px auto;
+    grid-template-rows: auto;
+    grid-template-areas: "img about" "img price";
+  }
+  &-img {
+    grid-area: img;
+    img {
+      width: 100%;
+    }
+  }
+  &-about {
+    grid-area: about;
+    p {
+      color: $black-gray;
+      margin-bottom: 0.5em;
+      @media (max-width: $bp-sm) {
+        font-size: 0.9em;
+      }
+    }
+  }
+  &-price {
+    grid-area: price;
+    @include flex(column, center, flex-end, nowrap);
+    @media (max-width: $bp-md) {
+      flex-direction: row;
+      justify-content: space-between;
+      .btn-fav {
+        display: none;
+      }
+    }
+  }
+  &s-list {
+    li:not(:first-child) {
+      border-top: 1px solid $light-gray;
+    }
+  }
+}
+
 .offerPage {
   @media (max-width: $bp-md) {
     --offer-w: 500px;
