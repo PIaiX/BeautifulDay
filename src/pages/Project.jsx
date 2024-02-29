@@ -23,12 +23,13 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperButtonNext from "../components/utils/SwiperButtonNext";
 import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
+import Callback from "../components/modals/Callback";
 
 const Project = () => {
   const [featuresShow, setFeaturesShow] = useState(false);
   const options = useSelector((state) => state.settings.options);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
-
+  const [show, setShow] = useState(false);
   const { productId } = useParams();
 
   const [product, setProduct] = useState({
@@ -181,6 +182,7 @@ const Project = () => {
                     {options?.project?.buttons?.length > 0 ? (
                       options?.project?.buttons.map((e) => (
                         <Link
+                          onClick={() => setShow(true)}
                           className={
                             "mt-3 w-100 btn" +
                             (e.type == "dark"
@@ -201,6 +203,7 @@ const Project = () => {
                         Заказать
                       </ButtonCart>
                     )}
+                    <Callback show={show} setShow={setShow} />
                   </div>
                 </Col>
               </Row>
@@ -219,7 +222,7 @@ const Project = () => {
                 Описание
               </button>
             </li>
-            <li>
+            {/* <li>
               <button
                 type="button"
                 onClick={() => setFeaturesShow(true)}
@@ -227,7 +230,7 @@ const Project = () => {
               >
                 Характеристики
               </button>
-            </li>
+            </li> */}
           </ul>
           {featuresShow ? (
             <ul className="features px-2 py-3 p-sm-4">

@@ -62,55 +62,55 @@ const Header = memo(() => {
         : affiliate.find((e) => e.main)
       : false;
 
-  // useEffect(() => {
-  //   if (!defaultCityOptions?.city && "geolocation" in navigator) {
-  //     navigator.geolocation.getCurrentPosition(async (position) => {
-  //       if (
-  //         position?.coords?.latitude &&
-  //         position?.coords?.longitude &&
-  //         DADATA_TOKEN &&
-  //         DADATA_URL_GEO
-  //       ) {
-  //         let geo = await axios.post(
-  //           DADATA_URL_GEO,
-  //           JSON.stringify({
-  //             lat: position.coords.latitude,
-  //             lon: position.coords.longitude,
-  //           }),
-  //           {
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //               Accept: "application/json",
-  //               Authorization: "Token " + DADATA_TOKEN,
-  //             },
-  //           }
-  //         );
-  //         if (
-  //           geo?.data?.suggestions &&
-  //           geo?.data?.suggestions[0]?.data?.city &&
-  //           affiliate?.length > 0
-  //         ) {
-  //           let city = affiliate.find(
-  //             (e) =>
-  //               e.options.city.toLowerCase() ===
-  //               geo.data.suggestions[0].data.city.toLowerCase()
-  //           );
-  //           if (city) {
-  //             dispatch(
-  //               setUser({
-  //                 ...user,
-  //                 options: {
-  //                   ...user.options,
-  //                   city: city.options.city,
-  //                 },
-  //               })
-  //             );
-  //           }
-  //         }
-  //       }
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!defaultCityOptions?.city && "geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        if (
+          position?.coords?.latitude &&
+          position?.coords?.longitude &&
+          DADATA_TOKEN &&
+          DADATA_URL_GEO
+        ) {
+          let geo = await axios.post(
+            DADATA_URL_GEO,
+            JSON.stringify({
+              lat: position.coords.latitude,
+              lon: position.coords.longitude,
+            }),
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: "Token " + DADATA_TOKEN,
+              },
+            }
+          );
+          if (
+            geo?.data?.suggestions &&
+            geo?.data?.suggestions[0]?.data?.city &&
+            affiliate?.length > 0
+          ) {
+            let city = affiliate.find(
+              (e) =>
+                e.options.city.toLowerCase() ===
+                geo.data.suggestions[0].data.city.toLowerCase()
+            );
+            if (city) {
+              dispatch(
+                setUser({
+                  ...user,
+                  options: {
+                    ...user.options,
+                    city: city.options.city,
+                  },
+                })
+              );
+            }
+          }
+        }
+      });
+    }
+  }, []);
 
   return (
     <>
@@ -127,56 +127,65 @@ const Header = memo(() => {
                 {options?.title ?? "YOOAPP"}
               </span> */}
             </Link>
-            {/* <ul className="text-menu">
-              <li>
-                <Link onClick={() => setShowCity(true)} className="main-color">
-                  {defaultCityOptions?.city ?? "Выберите город"}
-                </Link>
-                {!defaultCityOptions?.citySave && defaultCityOptions?.city && (
-                  <div className="no-city">
-                    <p className="mb-3">
-                      Ваш город <b>{defaultCityOptions.city}</b> город?
-                    </p>
-                    <div className="d-flex align-items-center justify-content-center">
-                      <Link
-                        className="btn btn-sm btn-primary me-2"
-                        onClick={() => {
-                          dispatch(
-                            setUser({
-                              ...user,
-                              options: {
-                                ...user.options,
-                                citySave: true,
-                              },
-                            })
-                          );
-                        }}
-                      >
-                        Да
-                      </Link>
-                      <Link
-                        className="btn btn-sm btn-light"
-                        onClick={() => setShowCity(true)}
-                      >
-                        Нет
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </li>
-            </ul> */}
+            <ul>
+              {affiliate.length > 0 && (
+                <li>
+                  <Link
+                    onClick={() => setShowCity(true)}
+                    className="main-color"
+                  >
+                    {defaultCityOptions?.city ?? "Выберите город"}
+                  </Link>
+                  {!defaultCityOptions?.citySave &&
+                    defaultCityOptions?.city && (
+                      <div className="no-city">
+                        <p className="mb-3">
+                          Ваш город <b>{defaultCityOptions.city}</b>?
+                        </p>
+                        <div className="d-flex align-items-center justify-content-center">
+                          <Link
+                            className="btn btn-sm btn-primary me-2"
+                            onClick={() => {
+                              dispatch(
+                                setUser({
+                                  ...user,
+                                  options: {
+                                    ...user.options,
+                                    citySave: true,
+                                  },
+                                })
+                              );
+                            }}
+                          >
+                            Да
+                          </Link>
+                          <Link
+                            className="btn btn-sm btn-light"
+                            onClick={() => setShowCity(true)}
+                          >
+                            Нет
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                </li>
+              )}
+            </ul>
             <ul className="text-menu d-none d-lg-flex">
               {options?.menu?.length > 0 ? (
-                options.menu.map((e) => (
-                  <li>
-                    <NavLink
-                      to={e.page}
-                      className={e.type == "dark" ? "btn-primary" : ""}
-                    >
-                      {e.title}
-                    </NavLink>
-                  </li>
-                ))
+                options.menu.map(
+                  (e) =>
+                    e?.status && (
+                      <li>
+                        <NavLink
+                          to={e?.link ?? e.page}
+                          // className={e.type == "dark" ? "btn-primary" : ""}
+                        >
+                          {e.title}
+                        </NavLink>
+                      </li>
+                    )
+                )
               ) : (
                 <>
                   <li>
@@ -184,9 +193,6 @@ const Header = memo(() => {
                       Каталог
                     </Link>
                   </li>
-                  {/* <li>
-                <Link to="/">Новинки</Link>
-              </li> */}
                   <li>
                     <Link to="/promo">Акции</Link>
                   </li>
@@ -206,12 +212,14 @@ const Header = memo(() => {
               )}
 
             <ul className="icons-menu">
-              <li className="d-none d-lg-block">
-                <Link to="/cart" className="btn-icon">
-                  <CartIcon />
-                  {count > 0 && <span className="badge">{count}</span>}
-                </Link>
-              </li>
+              {options?.cart && (
+                <li className="d-none d-lg-block">
+                  <Link to="/cart" className="btn-icon">
+                    <CartIcon />
+                    {count > 0 && <span className="badge">{count}</span>}
+                  </Link>
+                </li>
+              )}
               {isAuth && (
                 <li className="d-none d-lg-block">
                   <Link to="/account/favorites" className="btn-icon">
@@ -368,13 +376,13 @@ const Header = memo(() => {
                 <nav>
                   <ul>
                     <li>
-                      <Link to="/contact" onClick={() => setShowMenu(false)}>
+                      <Link to="/contacts" onClick={() => setShowMenu(false)}>
                         <MenuPhone />
                         <span>Контакты</span>
                       </Link>
                     </li>
                     <li>
-                      <Link to="/contact" onClick={() => setShowMenu(false)}>
+                      <Link to="/contacts" onClick={() => setShowMenu(false)}>
                         <MenuDelivery />
                         <span>Оплата и доставка</span>
                       </Link>

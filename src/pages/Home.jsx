@@ -1,14 +1,14 @@
 import React from "react";
-import Col from "react-bootstrap/Col";
+// import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
+// import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
 // import { useSelector } from "react-redux";
 
 import Offer from "../components/Offer";
 // import ProductCardMini from "../components/ProductCardMini";
-import CategoryCard from "../components/CategoryCard";
-import Callback from "../components/modals/Callback";
+// import CategoryCard from "../components/CategoryCard";
+// import Callback from "../components/modals/Callback";
 import StoriesSection from "../components/StoriesSection";
 // import ArticleCard from "../components/ArticleCard";
 // import EmptyCatalog from "../components/empty/catalog";

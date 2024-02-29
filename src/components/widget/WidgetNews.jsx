@@ -30,7 +30,7 @@ const WidgetNews = memo((data) => {
                 );
               })}
               <Col md={4} xl={3}>
-                <Link to="/articles" className="more">
+                <Link to="/blogs" className="more">
                   <img src={ArticlesMore} alt="more" className="img" />
                 </Link>
               </Col>
@@ -51,7 +51,7 @@ const WidgetNews = memo((data) => {
               );
             })}
             <SwiperSlide>
-              <Link to="/articles" className="more">
+              <Link to="/blogs" className="more">
                 <img src={ArticlesMore} alt="more" className="img" />
               </Link>
             </SwiperSlide>

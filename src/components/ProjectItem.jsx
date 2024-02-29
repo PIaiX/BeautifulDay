@@ -24,14 +24,17 @@ const ProjectItem = memo(({ data }) => {
       <Link to={"/project/" + data.id}>
         <h6 className="text-center text-md-start">{data.title}</h6>
       </Link>
-      <div className="d-flex justify-content-between align-items-center">
+      <Link
+        to={"/project/" + data.id}
+        className="d-flex justify-content-between align-items-center"
+      >
         <div className="fs-11">{customPrice(price)}</div>
-        <div>
+        {/* <div>
           <Link to={"/project/" + data.id} className="btn btn-sm btn-primary">
             Подробнее
           </Link>
-        </div>
-      </div>
+        </div> */}
+      </Link>
     </div>
   );
 });

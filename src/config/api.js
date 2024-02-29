@@ -85,6 +85,7 @@ const apiRoutes = {
   // Checkout, Order
   ORDER_CREATE: SERVICE_ORDER + '/create',
   ORDER_DELIVERY: SERVICE_ORDER + '/delivery',
+  FEEDBACK_CREATE: SERVICE_ORDER + '/feedback',
 
   // Message
   MESSAGES: SERVICE_MESSAGE + '/',

@@ -5,6 +5,10 @@ const createOrder = async (data) => {
   const response = await $authApi.post(apiRoutes.ORDER_CREATE, data);
   return response;
 };
+const createFeedback = async (data) => {
+  const response = await $authApi.post(apiRoutes.FEEDBACK_CREATE, data);
+  return response;
+};
 const getDelivery = async (data) => {
   const response = await $authApi.get(apiRoutes.ORDER_DELIVERY, {
     params: data,
@@ -27,4 +31,4 @@ const getOrders = async (page, limit) => {
   return response?.data;
 };
 
-export { getOrder, getOrders, createOrder, getDelivery };
+export { getOrder, createFeedback, getOrders, createOrder, getDelivery };

@@ -282,7 +282,7 @@ textarea,
   background-color: #fff;
   border: 1px solid #dfe2e5;
   border-radius: 5px;
-  padding: 0.4em 1.2em;
+  padding: 0.4em 0.8em;
   width: 100%;
   outline: none;
   display: block;
@@ -609,7 +609,7 @@ button {
   color: inherit;
 }
 
-.btn, .btn-aqua, .btn-info, .btn-light, .btn-success, .btn-secondary, .btn-primary-outline, .btn-primary {
+.btn, header nav ul li a.active, .btn-aqua, .btn-info, .btn-light, .btn-success, .btn-secondary, .btn-primary-outline, .btn-primary {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -625,7 +625,7 @@ button {
   border-radius: 1.5em;
 }
 @media (max-width: 1199.98px) {
-  .btn, .btn-aqua, .btn-info, .btn-light, .btn-success, .btn-secondary, .btn-primary-outline, .btn-primary {
+  .btn, header nav ul li a.active, .btn-aqua, .btn-info, .btn-light, .btn-success, .btn-secondary, .btn-primary-outline, .btn-primary {
     padding: 0.5em 1.2em;
   }
 }
@@ -728,7 +728,7 @@ button {
   background-color: #47bacd;
   color: #fff;
 }
-.btn[disabled], [disabled].btn-primary, [disabled].btn-primary-outline, [disabled].btn-secondary, [disabled].btn-success, [disabled].btn-light, [disabled].btn-info, [disabled].btn-aqua {
+.btn[disabled], header nav ul li a[disabled].active, [disabled].btn-primary, [disabled].btn-primary-outline, [disabled].btn-secondary, [disabled].btn-success, [disabled].btn-light, [disabled].btn-info, [disabled].btn-aqua {
   background-color: #f4f6f8;
   border: 1px solid #f4f6f8;
   color: #637381;
@@ -1522,6 +1522,14 @@ header nav ul li:not(:first-child) {
   header nav ul li:not(:first-child) {
     margin-left: 1.5em;
   }
+}
+header nav ul li a.active {
+  color: #fff;
+  background-color: var(--main-color);
+}
+header nav ul li a.active:hover, header nav ul li a.active:focus, header nav ul li a.active:active, header nav ul li a.active.active {
+  color: #fff;
+  background-color: var(--main-color-active);
 }
 header .logo {
   max-width: 200px;
@@ -3600,6 +3608,25 @@ footer .mobile ul li a.active .text {
   max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
+}
+
+.city a.active {
+  color: var(--main-color);
+}
+.city .logo {
+  max-height: 80px;
+  max-width: 200px;
+}
+
+.no-city {
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 1.5em;
+  border-radius: 1em;
+  background-color: #fff;
+  font-size: 1.2em;
+  z-index: 100;
+  position: absolute;
+  top: var(--h-height);
 }
 
 /***********

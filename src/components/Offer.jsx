@@ -5,7 +5,7 @@ import { getImageURL } from "../helpers/all";
 
 const Offer = ({ data }) => {
   return (
-    <Link to={"/portfolio/" + data.id}>
+    <Link to={"/portfolio/" + data?.id}>
       <figure className="offer">
         <LazyLoadImage
           src={getImageURL({
@@ -18,11 +18,11 @@ const Offer = ({ data }) => {
           alt="offer"
           loading="lazy"
         />
-        <figcaption className="d-flex align-items-center">
-          <Link to={"/portfolio/" + data.id} className="btn-light">
+        {/* <figcaption className="d-flex align-items-center">
+          <Link to={"/portfolio/" + data?.id} className="btn-light">
             Перейти
           </Link>
-        </figcaption>
+        </figcaption> */}
       </figure>
     </Link>
   );

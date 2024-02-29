@@ -1,11 +1,9 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useGetCategoriesQuery } from "../../services/home";
-import CategoryCard from "../CategoryCard";
 import Callback from "../modals/Callback";
 
 const WidgetContact = memo((data) => {
+  const [show, setShow] = useState(false);
   return (
     <section className="sec-3">
       <Container>
@@ -13,7 +11,14 @@ const WidgetContact = memo((data) => {
           <Col xs={12} md={8} lg={6}>
             <h2 className="text-center">{data?.title ?? "Оформите заявку"}</h2>
             {data?.desc && <p className="text-center">{data.desc}</p>}
-            <Callback btnText={"Заказать"} btnClass={"btn-info mx-auto mt-4"} />
+            <button
+              type="button"
+              className="btn-info mx-auto mt-4"
+              onClick={() => setShow(true)}
+            >
+              Заказать
+            </button>
+            <Callback show={show} setShow={setShow} />
           </Col>
         </Row>
       </Container>

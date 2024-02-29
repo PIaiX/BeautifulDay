@@ -260,7 +260,7 @@ const Product = () => {
                 Описание
               </button>
             </li>
-            <li>
+            {/* <li>
               <button
                 type="button"
                 onClick={() => setFeaturesShow(true)}
@@ -268,7 +268,7 @@ const Product = () => {
               >
                 Характеристики
               </button>
-            </li>
+            </li> */}
           </ul>
           {featuresShow ? (
             <ul className="features px-2 py-3 p-sm-4">

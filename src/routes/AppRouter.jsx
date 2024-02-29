@@ -92,8 +92,8 @@ const router = createBrowserRouter(
       <Route path="login" element={<Registration />} />
       <Route path="portfolio" element={<PortfolioList />} />
       <Route path="portfolio/:portfolioId" element={<Portfolio />} />
-      <Route path="articles" element={<Blog />} />
-      <Route path="articles/:id" element={<Article />} />
+      <Route path="blogs" element={<Blog />} />
+      <Route path="blog/:id" element={<Article />} />
     </Route>
   )
 );

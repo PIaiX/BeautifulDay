@@ -386,7 +386,7 @@ textarea,
   background-color: $white;
   border: 1px solid $gray;
   border-radius: 5px;
-  padding: 0.4em 1.2em;
+  padding: 0.4em 0.8em;
   width: 100%;
   outline: none;
   display: block;
@@ -1446,6 +1446,19 @@ header {
           margin-left: 1.5em;
           @media (max-width: $bp-xxl) {
             margin-left: 1.5em;
+          }
+        }
+        a.active {
+          @extend .btn;
+          color: $white;
+          background-color: var(--main-color);
+
+          &:hover,
+          &:focus,
+          &:active,
+          &.active {
+            color: $white;
+            background-color: var(--main-color-active);
           }
         }
       }
@@ -3419,7 +3432,25 @@ footer {
     }
   }
 }
-
+.city {
+  a.active {
+    color: var(--main-color);
+  }
+  .logo {
+    max-height: 80px;
+    max-width: 200px;
+  }
+}
+.no-city {
+  @include shadow();
+  padding: 1.5em;
+  border-radius: $radius;
+  background-color: #fff;
+  font-size: 1.2em;
+  z-index: 100;
+  position: absolute;
+  top: var(--h-height);
+}
 /***********
 ACCOUNT
 ***********/
