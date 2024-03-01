@@ -2699,43 +2699,38 @@ main {
 
 /* Section 3 */
 .sec-3 {
-  background: url(images/bg/gradient.jpg) no-repeat;
-  background-size: cover;
-  color: $white;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: 4em 0em;
   position: relative;
-  margin-top: 10em;
-  @media (max-width: $bp-lg) {
-    margin-top: 0em;
+  margin-bottom: 4em;
+  @media (max-width: $bp-sm) {
+    background-image: none !important;
   }
-  @media (max-width: $bp-md) {
-    padding: 2em 0em 16em;
-    background: url(images/bg/gradientM.jpg) no-repeat;
-    background-position: 50% 50%;
-  }
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    width: 60%;
-    height: calc(100% + 7em);
-    background: url(images/bg/balloons.png) no-repeat;
-    background-size: contain;
-    background-position: 50% 100%;
-    z-index: 10;
-    @media (max-width: $bp-lg) {
-      width: 50%;
-      height: 100%;
-    }
-    @media (max-width: $bp-md) {
-      width: 100%;
-      height: 16em;
-    }
-    @media (max-width: $bp-sm) {
-      background-size: cover;
-    }
-  }
+  // &::after {
+  //   content: "";
+  //   position: absolute;
+  //   bottom: 0px;
+  //   left: 0px;
+  //   width: 60%;
+  //   height: calc(100% + 7em);
+  //   background: url(images/bg/balloons.png) no-repeat;
+  //   background-size: contain;
+  //   background-position: 50% 100%;
+  //   z-index: 10;
+  //   @media (max-width: $bp-lg) {
+  //     width: 50%;
+  //     height: 100%;
+  //   }
+  //   @media (max-width: $bp-md) {
+  //     width: 100%;
+  //     height: 16em;
+  //   }
+  //   @media (max-width: $bp-sm) {
+  //     background-size: cover;
+  //   }
+  // }
 }
 
 .sec-4 {
@@ -2945,9 +2940,6 @@ main {
     @media (max-width: $bp-sm) {
       display: none;
     }
-  }
-  .btn-primary {
-    display: none;
   }
 }
 .article-single {

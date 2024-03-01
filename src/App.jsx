@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./assets/style.min.css";
 import Loader from "./components/utils/Loader";
 import socket from "./config/socket";
-import { convertColor, setCssColor } from "./helpers/all";
+import { convertColor, getImageURL, setCssColor } from "./helpers/all";
 import AppRouter from "./routes/AppRouter";
 import { checkAuth, logout } from "./services/auth";
 import { getFavorites } from "./services/favorite";
@@ -35,7 +35,7 @@ function App() {
 
   const updateColor = useCallback(
     (options) => {
-      if (options.colorMain) {
+      if (options?.colorMain) {
         setCssColor("--main-color", options.colorMain);
         setCssColor(
           "--main-color-active",
@@ -61,6 +61,19 @@ function App() {
           if (res?.options) {
             dispatch(updateOptions(res.options));
             updateColor(res.options);
+            if (res.options.favicon) {
+              let link = document.querySelector("link[rel~='icon']");
+              if (!link) {
+                link = document.createElement("link");
+                link.rel = "icon";
+                document.getElementsByTagName("head")[0].appendChild(link);
+              }
+              link.href = getImageURL({
+                path: res.options.favicon,
+                type: "all/web/favicon",
+                size: "full",
+              });
+            }
           }
 
           res?.affiliates && dispatch(updateAffiliate(res.affiliates));

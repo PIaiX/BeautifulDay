@@ -119,7 +119,15 @@ const Header = memo(() => {
           <nav className="h-100">
             <Link to="/">
               <img
-                src="/logo.png"
+                src={
+                  options?.logo
+                    ? getImageURL({
+                        path: options.logo,
+                        type: "all/web/logo",
+                        size: "full",
+                      })
+                    : "/logo.png"
+                }
                 alt={options?.title ?? "YOOAPP"}
                 className="logo"
               />

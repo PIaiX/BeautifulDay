@@ -92,6 +92,9 @@ const apiRoutes = {
   MESSAGE: SERVICE_MESSAGE + '/one',
   MESSAGES_VIEW: SERVICE_MESSAGE + '/view',
 
+  BLOGS: '/blog',
+  BLOG: '/blog/one',
+
   // Search
   SEARCH_GET: '/search',
 

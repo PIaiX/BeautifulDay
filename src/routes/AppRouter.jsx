@@ -93,7 +93,7 @@ const router = createBrowserRouter(
       <Route path="portfolio" element={<PortfolioList />} />
       <Route path="portfolio/:portfolioId" element={<Portfolio />} />
       <Route path="blogs" element={<Blog />} />
-      <Route path="blog/:id" element={<Article />} />
+      <Route path="blog/:blogId" element={<Article />} />
     </Route>
   )
 );

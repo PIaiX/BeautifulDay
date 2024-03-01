@@ -4,13 +4,38 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CategoryCard from "../components/CategoryCard";
 import { getCategories } from "../services/category";
+import Loader from "../components/utils/Loader";
+import EmptyCatalog from "../components/empty/catalog";
+import { Link } from "react-router-dom";
+import Empty from "../components/Empty";
 
 const Categories = () => {
-  const [categories, setCategories] = useState();
+  const [categories, setCategories] = useState({ loading: true, items: [] });
 
   useEffect(() => {
-    getCategories({ size: 50 }).then((res) => setCategories(res));
+    getCategories({ size: 50 })
+      .then((res) => setCategories({ loading: false, items: res }))
+      .catch(() => setBlogs({ loading: false, items: [] }));
   }, []);
+
+  if (categories?.loading) {
+    return <Loader full />;
+  }
+
+  if (categories?.items?.length === 0) {
+    return (
+      <Empty
+        text="Каталога нет"
+        desc="Каталог уже скоро появится"
+        image={() => <EmptyCatalog />}
+        button={
+          <Link className="btn-primary" to="/">
+            Перейти на главную
+          </Link>
+        }
+      />
+    );
+  }
 
   return (
     <main>
