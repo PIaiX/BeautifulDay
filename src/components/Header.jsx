@@ -63,7 +63,11 @@ const Header = memo(() => {
       : false;
 
   useEffect(() => {
-    if (!defaultCityOptions?.city && "geolocation" in navigator) {
+    if (
+      affiliate?.length > 1 &&
+      !defaultCityOptions?.city &&
+      "geolocation" in navigator
+    ) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         if (
           position?.coords?.latitude &&
