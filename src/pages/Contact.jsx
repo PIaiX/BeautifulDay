@@ -16,7 +16,9 @@ const Contact = () => {
   const zones = useSelector((state) => state.affiliate.zones);
 
   const [mainAffiliate, setMainAffiliate] = useState(
-    affiliate?.length > 0 ? affiliate.find((e) => e.main) : false
+    affiliate?.length > 0
+      ? affiliate.find((e) => e.main) ?? affiliate[0]
+      : affiliate[0] ?? false
   );
 
   if (!mainAffiliate || !mainAffiliate?.phone?.length > 0) {
@@ -48,7 +50,7 @@ const Contact = () => {
             <Col md={4}>
               <div className="box">
                 <div className="d-flex align-items-baseline mb-5">
-                  <h1 className="mb-0">Контакты </h1>
+                  <h1 className="mb-0">Контакты</h1>
                   <h5 className="mb-0">
                     <span className="mx-3">•</span>
                     {mainAffiliate.options.city}
@@ -59,17 +61,12 @@ const Contact = () => {
                 {mainAffiliate?.phone[0] && (
                   <>
                     <p className="mb-3">
-                      <a
-                        href={"tel:" + mainAffiliate.phone[0]}
-                        className="d-flex"
-                      >
-                        <HiOutlineDevicePhoneMobile className="fs-15 main-color" />
-                        <span className="fs-11 ms-2 main-color">
-                          Горячая линия
-                        </span>
-                        <span className="fs-11 ms-2">
-                          {mainAffiliate.phone[0]}
-                        </span>
+                      <a href={"tel:" + mainAffiliate.phone[0]}>
+                        <p className="fs-11 ms-2 main-color">
+                          <HiOutlineDevicePhoneMobile className="fs-15 main-color me-1" />
+                          <span>Горячая линия</span>
+                        </p>
+                        <p className="fs-11 ms-2">{mainAffiliate.phone[0]}</p>
                       </a>
                     </p>
                     <p className="mb-3">
@@ -98,18 +95,19 @@ const Contact = () => {
                     <li>
                       <a onClick={() => setMainAffiliate(e)}>
                         <h6 className="mb-2">{e.full}</h6>
-                        <p className="main-color mt-2 mb-1">
-                          Доставка и самовывоз
-                        </p>
-                        <p className="mb-3">
-                          {e?.options?.work &&
-                          e.options.work[moment().weekday()]?.start &&
-                          e.options.work[moment().weekday()]?.end
-                            ? `Работает с ${
-                                e.options.work[moment().weekday()].start
-                              } до ${e.options.work[moment().weekday()].end}`
-                            : ""}
-                        </p>
+
+                        {e?.options?.work &&
+                        e.options.work[moment().weekday()]?.start &&
+                        e.options.work[moment().weekday()]?.end ? (
+                          <>
+                            <p className="main-color mt-2 mb-1">
+                              Доставка и самовывоз
+                            </p>
+                            <p className="mb-3">{`Работает с ${
+                              e.options.work[moment().weekday()].start
+                            } до ${e.options.work[moment().weekday()].end}`}</p>
+                          </>
+                        ) : null}
 
                         {e?.phone[0] && (
                           <>

@@ -1,7 +1,8 @@
 import React, { memo } from "react";
+import WidgetBlogs from "./widget/WidgetBlogs";
 import WidgetContact from "./widget/WidgetContact";
-import WidgetNews from "./widget/WidgetNews";
 import WidgetProjects from "./widget/WidgetProjects";
+import WidgetSales from "./widget/WidgetSales";
 import WidgetServices from "./widget/WidgetServices";
 
 const Widgets = memo(({ data }) => {
@@ -13,8 +14,12 @@ const Widgets = memo(({ data }) => {
           <WidgetProjects {...e} />
         ) : e.value == "contact" ? (
           <WidgetContact {...e} />
-        ) : e.value == "news" ? (
-          <WidgetNews {...e} />
+        ) : e.value == "sales" ? (
+          <WidgetSales {...e} />
+        ) : e.value == "banners" ? (
+          <WidgetContact {...e} />
+        ) : e.value == "blogs" ? (
+          <WidgetBlogs {...e} />
         ) : null
       )
     : null;

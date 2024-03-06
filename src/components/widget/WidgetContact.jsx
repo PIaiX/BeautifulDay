@@ -11,7 +11,7 @@ const WidgetContact = memo((data) => {
   return (
     <Container>
       <section
-        className="sec-3"
+        className="sec-feedback"
         style={{
           backgroundImage: `url(${getImageURL({
             path: options.feedback,

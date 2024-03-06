@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { memo, useCallback } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useSelector } from "react-redux";
 import Input from "../utils/Input";
@@ -8,12 +8,13 @@ import { Col, Row } from "react-bootstrap";
 import { createFeedback } from "../../services/order";
 import { NotificationManager } from "react-notifications";
 
-const Callback = ({ show = false, setShow, type, page, product, ip }) => {
+const Callback = memo(({ show = false, setShow, type, page, product, ip }) => {
   const options = useSelector((state) => state.settings.options);
 
   const {
     register,
     formState: { errors, isValid },
+    reset,
     handleSubmit,
   } = useForm({
     mode: "onChange",
@@ -31,7 +32,7 @@ const Callback = ({ show = false, setShow, type, page, product, ip }) => {
       .then(() => {
         NotificationManager.success("Заявка успешно отправлена");
         reset();
-        handleClose();
+        setShow(false);
       })
       .catch((err) => {
         NotificationManager.error(
@@ -101,6 +102,6 @@ const Callback = ({ show = false, setShow, type, page, product, ip }) => {
       </Modal.Body>
     </Modal>
   );
-};
+});
 
 export default Callback;

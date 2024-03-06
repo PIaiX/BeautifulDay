@@ -17,7 +17,7 @@ const Catalog = memo(({ data }) => {
   const [viewCategories, setViewCategories] = useState(false);
 
   return (
-    <section className="sec-3 mb-5">
+    <section className="mb-5">
       {viewCategories ? (
         <Container className="box">
           <button

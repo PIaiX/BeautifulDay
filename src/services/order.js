@@ -7,7 +7,7 @@ const createOrder = async (data) => {
 };
 const createFeedback = async (data) => {
   const response = await $authApi.post(apiRoutes.FEEDBACK_CREATE, data);
-  return response;
+  return response?.data;
 };
 const getDelivery = async (data) => {
   const response = await $authApi.get(apiRoutes.ORDER_DELIVERY, {

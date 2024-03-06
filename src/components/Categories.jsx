@@ -14,7 +14,6 @@ import {
 const Categories = memo(({ className, data }) => {
   const [isFull, setIsFull] = useState(false);
   const swiperRef = useRef(null);
-
   const handleExpand = () => {
     swiperRef.current.swiper.disable();
     setIsFull(true);
