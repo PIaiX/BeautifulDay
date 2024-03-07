@@ -1,17 +1,15 @@
 import moment from "moment";
 import React, { useLayoutEffect, useState } from "react";
-import { Badge } from "react-bootstrap";
-import { HiOutlineArrowLeftCircle } from "react-icons/hi2";
-import { IoCreateOutline, IoEye, IoEyeOutline } from "react-icons/io5";
+import { IoEyeOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import AccountTitleReturn from "../../components/AccountTitleReturn";
 import DataTable from "../../components/DataTable";
 import Empty from "../../components/Empty";
-import EmptyOrders from "../../components/empty/orders";
 import Meta from "../../components/Meta";
 import Loader from "../../components/utils/Loader";
-import { customPrice, deliveryData, paymentData } from "../../helpers/all";
+import { customPrice, deliveryData } from "../../helpers/all";
 import { getOrders } from "../../services/order";
-import AccountTitleReturn from '../../components/AccountTitleReturn';
+import { ReactComponent as EmptyOrders } from "../../components/empty/order.svg";
 
 const Orders = () => {
   const [orders, setOrders] = useState({
@@ -29,7 +27,9 @@ const Orders = () => {
     {
       name: "Статус",
       selector: "status",
-      cell: (row) => <div className="bg-success success rounded-3 px-1">Принят</div>,
+      cell: (row) => (
+        <div className="bg-success success rounded-3 px-1">Принят</div>
+      ),
     },
     {
       name: "Способ",
@@ -88,7 +88,7 @@ const Orders = () => {
   return (
     <section className="sec-orders">
       <Meta title="Заказы" />
-      <AccountTitleReturn link={'/account'} title={'Заказы'}/>
+      <AccountTitleReturn link={"/account"} title={"Заказы"} />
 
       <DataTable
         columns={orderColumns}

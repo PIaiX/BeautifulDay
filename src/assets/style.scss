@@ -1665,7 +1665,7 @@ main {
 }
 
 .sec-2 {
-  --w: 150px;
+  --w: 120px;
   @media (max-width: $bp-md) {
     position: relative;
   }
@@ -2324,17 +2324,17 @@ main {
       margin-bottom: 1em;
     }
     @media (max-width: $bp-sm) {
-      --img: calc(88vw - 50px - 1em);
+      --img: calc(88vw - 90px - 1em);
     }
     .thumbSlider {
-      width: 50px;
+      width: 90px;
       margin-right: 1em;
       height: var(--img);
       .swiper-slide {
-        height: 50px;
+        height: 90px;
         img {
           width: 100%;
-          @include roundedImg(50px, $radius * 0.5, cover);
+          @include roundedImg(90px, $radius * 0.5, cover);
           background-color: $white;
           border: 1px solid $light-gray;
         }

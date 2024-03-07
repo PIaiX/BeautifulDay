@@ -5,7 +5,7 @@ import { NotificationManager } from "react-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Empty from "../../components/Empty";
-import EmptyActivate from "../../components/empty/activate";
+import { ReactComponent as EmptyActivate } from "../../components/empty/activate.svg";
 import Meta from "../../components/Meta";
 import InputCode from "../../components/utils/InputCode";
 import { authActivate, authNewKeyActivate, logout } from "../../services/auth";

@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Offer from "../components/Offer";
 import ArticlePreview from "../components/ArticlePreview";
 import { getBlogs } from "../services/blog";
-import EmptyCatalog from "../components/empty/catalog";
+import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
 import { Link } from "react-router-dom";
 import Empty from "../components/Empty";
 import Loader from "../components/utils/Loader";

@@ -9,7 +9,7 @@ import BtnFav from "../components/utils/BtnFav";
 import { Link, useParams } from "react-router-dom";
 import ButtonCart from "../components/ButtonCart";
 import Empty from "../components/Empty";
-import EmptyCatalog from "../components/empty/catalog";
+import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
 import Meta from "../components/Meta";
 import Loader from "../components/utils/Loader";
 import NavTop from "../components/utils/NavTop";

@@ -15,7 +15,7 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CategoryCard from "../components/CategoryCard";
 import Empty from "../components/Empty";
-import EmptyCatalog from "../components/empty/catalog";
+import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
 import ProductCard from "../components/ProductCard";
 import Filter from "../components/svgs/Filter";
 import PrevIcon from "../components/svgs/PrevIcon";
@@ -31,6 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeFilter, updateFilter } from "../store/reducers/settingsSlice";
 import { useForm, useWatch } from "react-hook-form";
 import Meta from "../components/Meta";
+import ProjectItem from "../components/ProjectItem";
 
 const Category = () => {
   const { categoryId } = useParams();
@@ -390,23 +391,31 @@ const Category = () => {
               {!Array.isArray(category.item?.products?.items) ||
                 (category.item.products.items.length <= 0 && (
                   <Empty
-                    text="Товаров нет"
-                    desc="Меню уже скоро появится"
+                    text="Ничего нет"
+                    desc="Контент уже скоро появится"
                     image={() => <EmptyCatalog />}
                     button={
                       <Link className="btn-primary" to="/">
-                        Перейти в меню
+                        Перейти на главную
                       </Link>
                     }
                   />
                 ))}
               <Row xs={2} sm={3} xxl={4} className="gx-4 gy-5">
                 {category.item?.products?.items?.length > 0 &&
-                  category.item.products.items.map((e) => (
-                    <Col>
-                      <ProductCard data={e} />
-                    </Col>
-                  ))}
+                  category.item.products.items.map((e) =>
+                    e.type == "dish" || e.type == "product" ? (
+                      <Col>
+                        <ProductCard data={e} />
+                      </Col>
+                    ) : (
+                      (e.type == "project" || e.type == "service") && (
+                        <Col>
+                          <ProjectItem data={e} />
+                        </Col>
+                      )
+                    )
+                  )}
               </Row>
             </Col>
           </Row>

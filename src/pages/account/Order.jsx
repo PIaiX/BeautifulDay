@@ -5,12 +5,12 @@ import Row from "react-bootstrap/Row";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import Empty from "../../components/Empty";
-import EmptyOrders from "../../components/empty/orders";
+import { ReactComponent as EmptyOrders } from "../../components/empty/order.svg";
 import OrderItem from "../../components/OrderItem";
 import socket from "../../config/socket";
 import { customPrice, deliveryData, paymentData } from "../../helpers/all";
 import { getOrder } from "../../services/order";
-import AccountTitleReturn from '../../components/AccountTitleReturn';
+import AccountTitleReturn from "../../components/AccountTitleReturn";
 import { RxDotFilled } from "react-icons/rx";
 
 const Order = () => {
@@ -72,7 +72,10 @@ const Order = () => {
   console.log(status);
   return (
     <section>
-      <AccountTitleReturn link={'/account/orders'} title={'Заказ № '+order.item.id}/>
+      <AccountTitleReturn
+        link={"/account/orders"}
+        title={"Заказ № " + order.item.id}
+      />
 
       <Row>
         <Col lg={8} className="mb-4 mb-lg-0">
@@ -105,7 +108,7 @@ const Order = () => {
                 {status?.name ?? "Принят"}
               </div>
               <div className="order-card-delivery">
-                {deliveryText} <RxDotFilled className="primary ms-1"/>
+                {deliveryText} <RxDotFilled className="primary ms-1" />
               </div>
               {order.item.delivery == "delivery" ? (
                 <address className="d-block fs-09 dark-gray">
@@ -127,9 +130,7 @@ const Order = () => {
               )}
               {order.item.description && (
                 <>
-                  <div className="primary mt-4 mt-xxl-5 mb-1">
-                    Комментарий
-                  </div>
+                  <div className="primary mt-4 mt-xxl-5 mb-1">Комментарий</div>
                   <textarea
                     disabled
                     className="fs-09"
@@ -148,10 +149,8 @@ const Order = () => {
                 <p>Доставка</p>
                 <p className="secondary">бесплатно</p>
               </div> */}
-
-              
             </div>
-            <hr className='my-0'/>
+            <hr className="my-0" />
             <div className="fw-6 p-2 px-xl-3 d-flex justify-content-between">
               <p>Итоговая сумма</p>
               <p>{customPrice(order.item.total)}</p>
@@ -163,7 +162,11 @@ const Order = () => {
               {/* <p className="fs-09 secondary">
                 34 бонуса будут начислены за этот заказ
               </p> */}
-              <button type="submit" disabled className="btn-secondary w-100 mt-2">
+              <button
+                type="submit"
+                disabled
+                className="btn-secondary w-100 mt-2"
+              >
                 Отменить заказ
               </button>
             </div>

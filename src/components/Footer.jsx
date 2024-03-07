@@ -138,7 +138,7 @@ const Footer = memo(() => {
                 ) : (
                   <>
                     <li>
-                      <Link to="/categories" className="btn-primary">
+                      <Link to="/categories" className="me-4">
                         Каталог
                       </Link>
                     </li>

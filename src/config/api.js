@@ -1,5 +1,5 @@
-const API_TOKEN = "1lsoqzffdvye3c2m48lpkuhb702jtcmmcldwk";
-const DOMAIN = "dom.yooapp.online";
+const API_TOKEN = "snz3kmqx11t6bj07kzxakgkvj2ih8p0iaxnxp";
+const DOMAIN = "pechat.yooapp.online";
 const SITE_URL = "https://yooapp.ru";
 const BASE_URL = "https://api.yooapp.ru";
 const ADMIN_URL = "https://admin.yooapp.ru";

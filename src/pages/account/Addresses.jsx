@@ -4,7 +4,7 @@ import AccountTitleReturn from "../../components/AccountTitleReturn";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Empty from "../../components/Empty";
-import EmptyAddresses from "../../components/empty/addresses";
+import { ReactComponent as EmptyAddresses } from "../../components/empty/address.svg";
 
 const Addresses = () => {
   const addresses = useSelector((state) => state.address);
@@ -45,7 +45,12 @@ const Addresses = () => {
           {addresses?.items?.length > 0 &&
             addresses.items.map((e) => <LiAddress data={e} />)}
         </ul>
-        <Link to='add' className='w-xs-100 btn-secondary mt-3 mt-lg-0 mb-0 mb-lg-3'>+ Добавить адрес</Link>
+        <Link
+          to="add"
+          className="w-xs-100 btn-secondary mt-3 mt-lg-0 mb-0 mb-lg-3"
+        >
+          + Добавить адрес
+        </Link>
       </div>
     </section>
   );

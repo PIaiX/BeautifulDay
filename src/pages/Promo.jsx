@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import "swiper/css";
 import Empty from "../components/Empty";
-import EmptySale from "../components/empty/sale";
+import { ReactComponent as EmptySale } from "../components/empty/sale.svg";
 import Offer from "../components/Offer";
 import Loader from "../components/utils/Loader";
 import { useGetSalesQuery } from "../services/home";

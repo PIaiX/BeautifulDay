@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Empty from "../components/Empty";
-import EmptyWork from "../components/empty/work";
+import { ReactComponent as EmptyWork } from "../components/empty/work.svg";
 import Loader from "../components/utils/Loader";
 import { getDocument } from "../services/document";
 

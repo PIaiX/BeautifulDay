@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import { HiOutlineDevicePhoneMobile } from "react-icons/hi2";
 import { YMaps, Map, Placemark, Polygon } from "@pbe/react-yandex-maps";
 import { useSelector } from "react-redux";
-import EmptyWork from "../components/empty/work";
+import { ReactComponent as EmptyWork } from "../components/empty/work.svg";
 import Empty from "../components/Empty";
 import { customPrice } from "../helpers/all";
 import moment from "moment";

@@ -14,7 +14,7 @@ import { Link, useParams } from "react-router-dom";
 import { getBlog } from "../services/blog";
 import Loader from "../components/utils/Loader";
 import Empty from "../components/Empty";
-import EmptyCatalog from "../components/empty/catalog";
+import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
 import { getImageURL } from "../helpers/all";
 
 const Article = () => {
@@ -59,7 +59,7 @@ const Article = () => {
               <h1 className="mb-3 mb-sm-4">{blog.title}</h1>
               <div dangerouslySetInnerHTML={{ __html: blog.content }} />
             </Col>
-            <Col lg={3} className="d-none d-lg-block">
+            {/* <Col lg={3} className="d-none d-lg-block">
               <h5 className="fs-11">Вам может быть интересно</h5>
               <ul className="news-list">
                 <li>
@@ -91,7 +91,7 @@ const Article = () => {
                   <time className="secondary">22 Июня, 2022</time>
                 </li>
               </ul>
-            </Col>
+            </Col> */}
           </Row>
         </section>
 

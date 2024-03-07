@@ -2,9 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Empty from "../../components/Empty";
-import EmptyFavorite from "../../components/empty/favorite";
+import { ReactComponent as EmptyFavorite } from "../../components/empty/favorite.svg";
 import ProductCard from "../../components/ProductCard";
-import AccountTitleReturn from '../../components/AccountTitleReturn';
+import AccountTitleReturn from "../../components/AccountTitleReturn";
 
 const Favorites = () => {
   const data = useSelector((state) => state.favorite.items);
@@ -27,7 +27,7 @@ const Favorites = () => {
 
   return (
     <div>
-      <AccountTitleReturn link={'/account'} title={'Избранное'}/>
+      <AccountTitleReturn link={"/account"} title={"Избранное"} />
       <ul className="list-unstyled row row-cols-2 row-cols-sm-2 row-cols-lg-3 gx-4 gx-xl-4 gy-5">
         {data.map((e) => (
           <li>

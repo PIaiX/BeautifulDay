@@ -17,7 +17,7 @@ import { Link, useParams } from "react-router-dom";
 import { getPortfolioOne } from "../services/portfolio";
 import Loader from "../components/utils/Loader";
 import Empty from "../components/Empty";
-import EmptyCatalog from "../components/empty/catalog";
+import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
 import PortfolioItem from "../components/PortfolioItem";
 
 const Portfolio = () => {

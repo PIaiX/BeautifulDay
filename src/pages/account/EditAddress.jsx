@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AccountTitleReturn from "../../components/AccountTitleReturn";
 import Empty from "../../components/Empty";
-import EmptyAddresses from "../../components/empty/addresses";
+import { ReactComponent as EmptyAddresses } from "../../components/empty/address.svg";
 import Meta from "../../components/Meta";
 import Input from "../../components/utils/Input";
 import Loader from "../../components/utils/Loader";
