@@ -5,26 +5,43 @@ import { getImageURL } from "../helpers/all";
 
 const Offer = ({ data }) => {
   return (
-    <Link to={"/portfolio/" + data?.id}>
-      <figure className="offer">
+    <figure className="offer">
+      {data?.medias && (
         <LazyLoadImage
           src={getImageURL({
-            path:
-              data?.medias?.length > 0
-                ? data.medias.filter((e) => e.main)[0]?.media
-                : false,
-            type: "portfolio",
+            path: data.medias,
+            type: "sale",
+            size: "full",
           })}
-          alt="offer"
+          alt={data?.title}
           loading="lazy"
         />
-        {/* <figcaption className="d-flex align-items-center">
-          <Link to={"/portfolio/" + data?.id} className="btn-light">
-            Перейти
-          </Link>
-        </figcaption> */}
-      </figure>
-    </Link>
+      )}
+      <figcaption>
+        <div>
+          {data?.title && (
+            <h4 className={data?.blackText ? "black" : ""}>{data.title}</h4>
+          )}
+          {data?.desc && (
+            <h6 className={data?.blackText ? "black fw-4" : "fw-4"}>
+              {data.desc}
+            </h6>
+          )}
+        </div>
+        <Link
+          to={
+            data?.options?.link
+              ? data.options.link
+              : data?.id
+              ? "/promo/" + data.id
+              : ""
+          }
+          className="btn-white"
+        >
+          Заказать
+        </Link>
+      </figcaption>
+    </figure>
   );
 };
 
