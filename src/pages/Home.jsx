@@ -15,7 +15,7 @@ const Home = () => {
   }
 
   return (
-    <main className="pb-0">
+    <main>
       <Meta
         title={options?.title ?? "Главная"}
         description={options?.description}

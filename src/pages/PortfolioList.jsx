@@ -20,12 +20,12 @@ const PortfolioList = () => {
   return (
     <main className="inner">
       <Container>
-        <section className="sec-6 pt-4 pt-lg-0 mb-5">
+        <section className="sec-6 mb-5">
           <h1 className="inner mb-4">Портфолио</h1>
           <Row className="gx-4 gx-lg-5">
             {portfolio.items.map((e) => {
               return (
-                <Col key={e.id} lg={3}>
+                <Col key={e.id} xs={6} lg={3}>
                   <PortfolioItem data={e} />
                 </Col>
               );

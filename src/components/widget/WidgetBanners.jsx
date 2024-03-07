@@ -10,7 +10,7 @@ const WidgetBanners = memo((data) => {
     return null;
   }
   return (
-    <section className="sec-1 mb-6">
+    <section className="sec-1 mb-5">
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-12 col-md-11 col-lg-9 col-xl-8">

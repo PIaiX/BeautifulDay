@@ -6,7 +6,7 @@ import { getImageURL } from "../helpers/all";
 const PortfolioItem = ({ data }) => {
   return (
     <Link to={"/portfolio/" + data.id}>
-      <figure className="offer">
+      <figure className="offer mb-4">
         <LazyLoadImage
           src={getImageURL({
             path:

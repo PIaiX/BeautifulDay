@@ -1405,45 +1405,40 @@ body {
 
 header {
   height: var(--h-height);
+  --pad: 40px;
+  background-color: $white;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 1050;
+  padding: 0px var(--pad);
+  @include shadow();
+  width: calc(100% + var(--pad) * 2);
+  margin-left: calc(var(--pad) * -1);
+  @include flex(row, space-between, center, nowrap);
+  @media (max-width: $bp-xl) {
+    --pad: 30px;
+  }
   @media (max-width: $bp-lg) {
-    background-color: $white;
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    z-index: 1050;
-    @include shadow();
-    .select {
-      width: 6em;
-      &-button-value {
-        span {
-          display: none;
-        }
-      }
-    }
+    --pad: 0px;
+    box-shadow: none;
+  }
+  svg {
+    stroke-width: 1px;
   }
   nav {
-    --pad: 40px;
-    background-color: $white;
-    padding: 0px var(--pad);
-    border-radius: 0px 0px $radius $radius;
-    width: calc(100% + var(--pad) * 2);
-    margin-left: calc(var(--pad) * -1);
-    @include flex(row, space-between, center, nowrap);
-    @media (max-width: $bp-xl) {
-      --pad: 30px;
-    }
-    @media (max-width: $bp-lg) {
-      --pad: 0px;
-      box-shadow: none;
-      border-radius: 0px;
-    }
-    ul {
-      @include list();
-      @include flex();
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  ul {
+    @include list();
+    @include flex();
+    &.text-menu {
       li {
         &:not(:first-child) {
-          margin-left: 1.5em;
+          margin-left: 2.5em;
           @media (max-width: $bp-xxl) {
             margin-left: 1.5em;
           }
@@ -1463,77 +1458,57 @@ header {
         }
       }
     }
+    &.icons-menu {
+      & > li {
+        &:not(:first-child) {
+          margin-left: 1.25em;
+        }
+      }
+    }
   }
-  .logo {
-    max-width: 200px;
-    max-height: 50px;
 
-    @media (max-width: $bp-lg) {
-      max-width: 100px;
+  .logo {
+    max-height: 50px;
+    max-width: 200px;
+    @media (max-width: $bp-xl) {
       max-height: 45px;
+      max-width: 120px;
+    }
+    object-fit: contain;
+  }
+  .logo-name {
+    font-size: 18px;
+    font-weight: bold;
+    @media (max-width: $bp-xl) {
+      font-size: 16px;
     }
   }
   .phone {
-    display: block;
+    @include flex(row, flex-start, center, nowrap);
     color: $black;
-    font-size: 1.2em;
     transition: color $transition;
     &:hover,
     &:focus,
     &:active {
       color: var(--main-color);
     }
-  }
-  .formSearch {
-    @include flex();
-    position: relative;
-    @media (max-width: $bp-xl) {
+    @media (max-width: $bp-lg) {
       display: none;
     }
-    button,
-    a {
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      height: 100%;
-      width: 2em;
-      font-size: 1.25em;
-      @include flex();
-      svg {
-        color: $black-gray;
-        stroke-width: 1.5px;
-      }
-    }
   }
-  .btn-icon {
-    position: relative;
-    color: var(--main-color);
-    font-size: 1.65em;
-    svg {
-      stroke-width: 1.5px;
-    }
-    .badge {
-      position: absolute;
-      bottom: 0px;
-      right: -0.5em;
-      font-size: 11px;
-      font-weight: 400;
-      background-color: var(--main-color);
-      color: $white;
-      width: 1.6em;
-      height: 1.6em;
-      border-radius: 50%;
-      @include flex();
-    }
+  .badge {
+    font-size: 10px;
+    background-color: var(--main-color);
+    color: #fff;
+    width: 1.6em;
+    height: 1.6em;
+    @include flex();
   }
   .btn-menu {
-    color: $gray;
+    color: var(--light-gray);
     font-size: 2em;
     @include flex();
     transition: color $transition;
-    svg {
-      stroke-width: 1.25px;
-    }
     &:hover,
     &:focus,
     &:active {
@@ -1599,11 +1574,39 @@ header {
 }
 
 main {
-  min-height: calc(100vh - var(--h-height) - var(--f-height));
-  padding: 3em 0px;
+  min-height: calc(100vh - var(--h-height));
+  padding: 30px 0px;
+  margin-top: var(--h-height);
   @media (max-width: $bp-lg) {
     min-height: 100vh;
-    padding: var(--h-height) 0px var(--f-height);
+    padding: 30px 0px calc(var(--f-height) + 50px);
+  }
+}
+.hello {
+  min-height: 70vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 30px 10px;
+  align-items: center;
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  color: #fff !important;
+  &.light {
+    color: #222 !important;
+  }
+  &-box {
+    max-width: 500px;
+    h1 {
+      font-size: 40px;
+      font-weight: bold;
+    }
+    p {
+      font-size: 18px;
+    }
   }
 }
 
@@ -1658,7 +1661,7 @@ main {
         height: 250px;
       }
       @media (max-width: $bp-md) {
-        height: auto;
+        height: 170px;
       }
     }
   }
@@ -1688,17 +1691,17 @@ main {
   padding: 3px;
   img {
     display: block;
-    margin: 0 auto 1em;
+    margin: 0 auto 0px;
     @include roundedImg(var(--w));
     background-color: $white;
     padding: 2px;
     border: 3px solid var(--main-color);
     @media (max-width: $bp-md) {
-      padding: 1px;
       border-width: 2px;
     }
   }
   figcaption {
+    margin-top: 1em;
     font-size: 0.9em;
     text-align: center;
     @media (max-width: $bp-sm) {

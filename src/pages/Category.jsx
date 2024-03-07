@@ -180,42 +180,44 @@ const Category = () => {
       />
       <section className="category mb-5">
         <Container>
-          <NavTop toBack={true} breadcrumbs={true} />
-          {categories?.data?.length > 0 && (
-            <Swiper
-              className="category-topSlider mb-5"
-              spaceBetween={10}
-              slidesPerView={2}
-              speed={750}
-              breakpoints={{
-                576: {
-                  spaceBetween: 16,
-                  slidesPerView: 3,
-                },
-                768: {
-                  slidesPerView: 4,
-                  spaceBetween: 16,
-                },
-                992: {
-                  slidesPerView: 5,
-                  spaceBetween: 16,
-                },
-                1200: {
-                  slidesPerView: 6,
-                  spaceBetween: 16,
-                },
-              }}
-            >
-              {categories.data.map((obj) => {
-                return (
-                  <SwiperSlide key={obj.id}>
-                    <CategoryCard data={obj} />
-                  </SwiperSlide>
-                );
-              })}
-              <SwiperButtonPrev />
-              <SwiperButtonNext />
-            </Swiper>
+          {categories?.data?.length > 1 && (
+            <>
+              <NavTop toBack={true} breadcrumbs={true} />
+              <Swiper
+                className="category-topSlider mb-5"
+                spaceBetween={10}
+                slidesPerView={2}
+                speed={750}
+                breakpoints={{
+                  576: {
+                    spaceBetween: 16,
+                    slidesPerView: 3,
+                  },
+                  768: {
+                    slidesPerView: 4,
+                    spaceBetween: 16,
+                  },
+                  992: {
+                    slidesPerView: 5,
+                    spaceBetween: 16,
+                  },
+                  1200: {
+                    slidesPerView: 6,
+                    spaceBetween: 16,
+                  },
+                }}
+              >
+                {categories.data.map((obj) => {
+                  return (
+                    <SwiperSlide key={obj.id}>
+                      <CategoryCard data={obj} />
+                    </SwiperSlide>
+                  );
+                })}
+                <SwiperButtonPrev />
+                <SwiperButtonNext />
+              </Swiper>
+            </>
           )}
 
           <h1 className="mb-4 mb-lg-5">{category.item.title ?? "Категория"}</h1>
