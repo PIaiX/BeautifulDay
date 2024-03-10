@@ -6,6 +6,9 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import {
   HiOutlineArrowLeftCircle,
   HiOutlineDevicePhoneMobile,
+  HiOutlineHeart,
+  HiOutlineShoppingBag,
+  HiOutlineUserCircle,
 } from "react-icons/hi2";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { IoCall, IoClose, IoCloseOutline } from "react-icons/io5";
@@ -218,22 +221,27 @@ const Header = memo(() => {
                   <span className="ms-1">{mainAffiliate.options.phone[0]}</span>
                 </a>
               )}
-
             <ul className="icons-menu">
               {options?.cart && (
                 <li className="d-none d-lg-block">
-                  <Link to="/cart" className="btn-icon">
-                    <CartIcon />
-                    {count > 0 && <span className="badge">{count}</span>}
+                  <Link to="/cart" className="position-relative">
+                    <HiOutlineShoppingBag size={25} />
+                    {count > 0 && (
+                      <span className="position-absolute top-100 start-100 translate-middle badge rounded-pill">
+                        {count}
+                      </span>
+                    )}
                   </Link>
                 </li>
               )}
               {isAuth && (
                 <li className="d-none d-lg-block">
-                  <Link to="/account/favorites" className="btn-icon">
-                    <Heart />
+                  <Link to="/account/favorites" className="position-relative">
+                    <HiOutlineHeart size={25} />
                     {favorite?.length > 0 && (
-                      <span className="badge">{favorite?.length}</span>
+                      <span className="position-absolute top-100 start-100 translate-middle badge rounded-pill">
+                        {favorite?.length}
+                      </span>
                     )}
                   </Link>
                 </li>
@@ -265,23 +273,6 @@ const Header = memo(() => {
                   {showMenu ? <IoCloseOutline /> : <MenuIcon />}
                 </button>
               </li>
-              {/* <li>
-                <Select
-                  value="ru"
-                  data={[
-                    {
-                      value: "ru",
-                      title: "русский",
-                      image: ruFlag,
-                    },
-                    {
-                      value: "en",
-                      title: "english",
-                      image: engFlag,
-                    },
-                  ]}
-                />
-              </li> */}
             </ul>
           </nav>
         </Container>
@@ -348,11 +339,11 @@ const Header = memo(() => {
             </nav>
             <a href="https://yooapp.ru/" target="_blank">
               <p className="gray text-center mt-4 mt-md-5">
-                Разработано на платформе
+                Разработано на платформе YooApp
               </p>
-              <p className="text-center mt-2">
+              {/* <p className="text-center mt-2">
                 <YooApp />
-              </p>
+              </p> */}
             </a>
           </Container>
         </Offcanvas.Body>

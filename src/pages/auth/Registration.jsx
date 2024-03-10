@@ -150,7 +150,7 @@ const Registration = () => {
   const regForm = useMemo(() => (
     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
       <h4 className="main-color text-center fw-6">С возвращением!</h4>
-      <p className="text-center fs-11 mb-5">Вкусные роллы и пицца скучали по тебе</p>
+      {/* <p className="text-center fs-11 mb-5">Вкусные роллы и пицца скучали по тебе</p> */}
       <div className="mb-3">
         {!options.authType || options.authType === "email" ? (
           <Input
@@ -320,8 +320,8 @@ const Registration = () => {
             required: "Примите условия пользовательского соглашения",
           })}
         />
-        <span className="fs-09">
-          Принять условия Пользовательского соглашения
+        <span className="fs-08">
+          Принять условия <a href="/policy">Пользовательского соглашения</a>
         </span>
       </label>
       <Button
@@ -361,7 +361,7 @@ const Registration = () => {
             )}
           </section>
         ) : (
-          <section className="d-none d-lg-block login">
+          <section className="d-none d-lg-flex align-items-center login">
             <div ref={block2} className="login-forms">
               {loginView ? regForm : loginForm}
             </div>

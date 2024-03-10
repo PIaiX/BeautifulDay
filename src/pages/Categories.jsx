@@ -48,8 +48,8 @@ const Categories = () => {
             lg={4}
             className="justify-content-center gx-2 gy-3 g-sm-4"
           >
-            {categories?.length > 0 &&
-              categories.map((obj) => {
+            {categories?.items?.length > 0 &&
+              categories.items.map((obj) => {
                 return (
                   <Col key={obj.id}>
                     <CategoryCard data={obj} />

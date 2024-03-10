@@ -172,7 +172,7 @@ const Product = () => {
                         />
                       </SwiperSlide>
                     </Swiper>
-                    <BtnFav />
+                    {/* <BtnFav /> */}
                   </div>
                   {/* <img
                     src={getImageURL({ path: product.medias, size: "full" })}
@@ -216,7 +216,7 @@ const Product = () => {
                 </Col>
               </Row>
             </Col>
-            <Col
+            {/* <Col
               xs={12}
               lg={3}
               className="d-none d-lg-block mt-3mt-sm-4 mt-md-0"
@@ -245,7 +245,7 @@ const Product = () => {
                   </>
                 )}
               </div>
-            </Col>
+            </Col> */}
           </Row>
         </form>
 

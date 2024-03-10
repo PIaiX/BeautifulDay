@@ -2,7 +2,7 @@ import React from 'react';
 
 const CartIcon = ({className}) => {
   return (
-    <svg className={className} width="1em" height="1em" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={className} width="22px" height="22px" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M22.9543 11.1429H3.04576C2.78017 11.1406 2.51717 11.1954 2.27454 11.3034C2.0319 11.4115 1.81526 11.5703 1.63924 11.7692C1.46321 11.9681 1.3319 12.2025 1.25417 12.4564C1.17643 12.7104 1.15408 12.9781 1.18862 13.2415L2.54433 23.4557C2.60327 23.9054 2.82466 24.3179 3.16676 24.6155C3.50887 24.9131 3.94804 25.0753 4.40148 25.0715H21.5615C22.0149 25.0753 22.4541 24.9131 22.7962 24.6155C23.1383 24.3179 23.3597 23.9054 23.4186 23.4557L24.7743 13.2415C24.8085 12.9812 24.7871 12.7167 24.7115 12.4653C24.6359 12.2139 24.508 11.9814 24.336 11.7831C24.164 11.5848 23.952 11.4253 23.7138 11.3149C23.4756 11.2045 23.2168 11.1459 22.9543 11.1429Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M8.35718 15.7858V20.4286" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M13 15.7858V20.4286" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>

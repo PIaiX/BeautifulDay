@@ -10,6 +10,7 @@ import CatalogIcon from "./svgs/CatalogIcon";
 import FlameIcon from "./svgs/FlameIcon";
 import HomeIcon from "./svgs/HomeIcon";
 import UserIcon from "./svgs/UserIcon";
+import { getImageURL } from "../helpers/all";
 
 const Icon = ({ name }) => {
   const IoIcon = Icons[name];
@@ -111,11 +112,19 @@ const Footer = memo(() => {
           </nav>
         ) : (
           <div className="desktop">
-            <img
-              src="/logo.png"
-              alt={options?.title ?? "YOOAPP"}
-              className="logo"
-            />
+           <img
+            src={
+              options?.logo
+                ? getImageURL({
+                    path: options.logo,
+                    type: "all/web/logo",
+                    size: "full",
+                  })
+                : "/logo.png"
+            }
+            alt={options?.title ?? "YOOAPP"}
+            className="logo"
+          />
 
             <nav className="ms-5 me-auto">
               <ul className="list-unstyled d-flex">
@@ -157,8 +166,8 @@ const Footer = memo(() => {
             </nav>
 
             <a href="https://yooapp.ru" target="_blank">
-              <div>Разработано на платформе</div>
-              <img src={LogoTextWhite} alt="yooapp" className="d-block mt-2" />
+              <div>Разработано на платформе <b>YooApp</b></div>
+              {/* <img src={LogoTextWhite} alt="yooapp" className="d-block mt-2" /> */}
             </a>
           </div>
         )}

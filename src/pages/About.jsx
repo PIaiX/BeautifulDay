@@ -40,6 +40,7 @@ const About = () => {
       />
     );
   }
+  
   return (
     <main>
       <Container>

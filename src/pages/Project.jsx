@@ -154,7 +154,7 @@ const Project = () => {
                         />
                       </SwiperSlide>
                     </Swiper>
-                    <BtnFav />
+                    {/* <BtnFav /> */}
                   </div>
                   {/* <img
                     src={getImageURL({ path: product.medias, size: "full" })}
@@ -179,7 +179,7 @@ const Project = () => {
                       )}
                     </div>
 
-                    {options?.project?.buttons?.length > 0 ? (
+                    {options?.project?.buttons?.length > 0 && (
                       options?.project?.buttons.map((e) => (
                         <Link
                           onClick={() => setShow(true)}
@@ -193,15 +193,6 @@ const Project = () => {
                           {e.title}
                         </Link>
                       ))
-                    ) : (
-                      <ButtonCart
-                        full
-                        product={product}
-                        data={data}
-                        className="btn-primary ms-2 ms-xl-3"
-                      >
-                        Заказать
-                      </ButtonCart>
                     )}
                     <Callback show={show} setShow={setShow} />
                   </div>

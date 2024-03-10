@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import CartItem from "../components/CartItem";
 import Empty from "../components/Empty";
-import { ReactComponent as EmptyCart } from "../components/empty/cart.svg";
+import EmptyCart from "../components/empty/cart.svg";
 import Meta from "../components/Meta";
 import Input from "../components/utils/Input";
 import { customPrice, declination, getCount } from "../helpers/all";
@@ -203,7 +203,7 @@ const Cart = () => {
                 <span className="fw-6">{customPrice(total)}</span>
               </div>
 
-              {/* {options.giftVisible && <Gifts />} */}
+              {options.giftVisible && <Gifts />}
 
               <Link
                 to={

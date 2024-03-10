@@ -1,5 +1,4 @@
-const API_TOKEN = "1lsoqzffdvye3c2m48lpkuhb702jtcmmcldwk";
-const DOMAIN = "dom.yooapp.online";
+const DOMAIN = window.location.hostname;
 const SITE_URL = "https://yooapp.ru";
 const BASE_URL = "https://api.yooapp.ru";
 const ADMIN_URL = "https://admin.yooapp.ru";
@@ -131,7 +130,6 @@ export {
   BASE_URL,
   SITE_URL,
   FILE_URL,
-  API_TOKEN,
   DADATA_URL_GEO,
   DADATA_URL_STREET,
   DADATA_URL_ADDRESS,

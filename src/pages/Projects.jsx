@@ -19,7 +19,6 @@ const Categories = () => {
         if (res?.length > 1) {
           setCategories({ loading: false, items: res });
         } else if (res && res[0]?.id) {
-          console.log(res[0].id);
           return navigate("/category/" + res[0].id);
         }
       })

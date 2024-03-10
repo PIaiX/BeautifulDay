@@ -6,29 +6,60 @@ html {
 :root {
   --h-height: 70px;
   --f-height: 112px;
-  --main-color: #222;
-  --main-color-outline: #22222223;
-  --main-color-active: #22222223;
-  --offer-w: 260px;
+
   @media (max-width: 991.98px) {
-    --h-height: 50px;
+    --h-height: 60px;
     --f-height: 70px;
-    --offer-w: 260px;
   }
   @media (max-width: 767.98px) {
     --f-height: 60px;
-    --offer-w: 250px;
   }
   @media (max-width: 575.98px) {
-    --h-height: 45px;
-    --f-height: 50px;
-    --offer-w: 35vw;
+    --h-height: 60px;
+    --f-height: 60px;
   }
 }
+:root[data-theme="light"] {
+  --main-color: #222;
+  --main-color-outline: #22222223;
+  --main-color-active: #22222223;
+  --font-color: #111;
+  --bs-secondary-color: #444;
+  --bg-main: #fff;
+  --bg-btn: #c5c4c4;
+  --bg-second: #fbfbfb;
+  --hr-color: #2b2831;
+  --gray: #727272;
+  --light-gray: #1e1e1e;
+  --divider: #121212;
+}
 
-$main-font: "Mont";
+:root[data-theme="dark"] {
+  --main-color: #222;
+  --main-color-outline: #22222223;
+  --main-color-active: #22222223;
+  --font-color: #fff;
+  --bs-secondary-color: #777;
+  --bg-main: #131313;
+  --bg-btn: #333;
+  --bg-second: #222;
+  --hr-color: #2b2831;
+  --gray: #727272;
+  --light-gray: #1e1e1e;
+  --divider: #121212;
+}
+$main-font: "Open Sans";
+$radius: 1.25em;
+$green: #00ab55;
+$yellow: #fef8be;
+$black: #212b36;
+$dark: #3f3f3f;
+$dark-gray: #ddd;
+$gray: #c2c2c2;
+$grayish: #ebebeb;
+$transition: 300ms ease-in;
+
 $title-font: "Bartina";
-$radius: 1em;
 
 $red: #e01e00;
 $orange: #ff9d17;
@@ -42,12 +73,8 @@ $info: #faff14;
 $light: #f3f7ff;
 $white: #fff;
 $light-gray: #f4f6f8;
-$gray: #dfe2e5;
-$black-gray: #637381;
-$dark: #434343;
-$black: #1c1c1c;
 
-$transition: 300ms ease-in;
+$black-gray: #637381;
 
 $bp-sm: 575.98px;
 $bp-md: 767.98px;
@@ -582,6 +609,10 @@ label {
 }
 .countInput {
   width: fit-content;
+  svg {
+    color: var(--font-color);
+  }
+  min-height: 39px;
   @include flex();
   @media (max-width: $bp-xl) {
     font-size: 1.15em;
@@ -591,24 +622,28 @@ label {
   }
   input {
     padding: 0px;
-    height: 2em;
-    width: 5em;
+    height: $radius * 1.5;
+    width: $radius * 2;
     text-align: center;
-    border: 1px solid $gray;
     border-radius: $radius;
-    margin: 0px 0.25em;
-    color: var(--main-color);
+    @include lightShadow();
+    margin: 0px $radius * 0.25;
+    @media (max-width: $bp-md) {
+      width: 60px;
+    }
   }
   button {
     padding: 0.3em;
-    background-color: $white;
-    border: 1px solid $gray;
+    background-color: var(--bg-second);
+    border: 1px solid var(--bg-btn);
     border-radius: $radius;
-    color: var(--main-color);
-    height: 2em;
-    width: 2em;
+    color: var(--light-gray);
+    height: $radius * 1.5 !important;
+    width: $radius * 1.5 !important;
     @include flex();
+    @include lightShadow();
     transition: $transition;
+    transition-property: color, background-color, border;
     svg {
       font-size: 0.8em;
     }
@@ -617,9 +652,8 @@ label {
       color: var(--main-color);
     }
     &:active {
-      color: $white;
-      background-color: var(--main-color-active);
-      border: 1px solid var(--main-color-active);
+      color: #fff;
+      opacity: 0.9;
     }
   }
 }
@@ -662,6 +696,21 @@ button {
   @media (max-width: $bp-xl) {
     padding: 0.5em 1.2em;
   }
+  &-40 {
+    @extend .btn;
+    color: var(--main-color);
+    background-color: transparent;
+    border: 1px solid var(--main-color);
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      opacity: 0.9;
+      color: var(--main-color);
+      background-color: transparent;
+      border: 1px solid var(--main-color);
+    }
+  }
   &-primary {
     @extend .btn;
     color: $white;
@@ -670,10 +719,12 @@ button {
     &:hover,
     &:focus,
     &:active,
-    &.active {
+    &.active,
+    &:first-child:active {
+      opacity: 0.9;
       color: $white;
-      background-color: var(--main-color-active);
-      border: 1px solid var(--main-color-active);
+      background-color: var(--main-color);
+      border: 1px solid var(--main-color);
     }
   }
   &-primary-outline {
@@ -684,7 +735,9 @@ button {
     &:hover,
     &:focus,
     &:active,
-    &.active {
+    &.active,
+    &:first-child:active {
+      opacity: 0.9;
       color: var(--main-color);
       background-color: transparent;
       border: 1px solid var(--main-color-active);
@@ -698,7 +751,9 @@ button {
     &:hover,
     &:focus,
     &:active,
-    &.active {
+    &.active,
+    &:first-child:active {
+      opacity: 0.9;
       color: $white;
       background-color: darken($color: $secondary, $amount: 10%);
       border: 1px solid darken($color: $secondary, $amount: 10%);
@@ -712,7 +767,9 @@ button {
     &:hover,
     &:focus,
     &:active,
-    &.active {
+    &.active,
+    &:first-child:active {
+      opacity: 0.9;
       color: $white;
       background-color: darken($color: $success, $amount: 10%);
       border: 1px solid darken($color: $success, $amount: 10%);
@@ -724,16 +781,13 @@ button {
     background-color: $light;
     border: 1px solid $light;
     &:hover,
-    &:focus {
-      color: var(--main-color);
-      background-color: $light;
-      border: 1px solid var(--main-color);
-    }
+    &:focus,
     &:active,
     &.active {
-      color: $white;
-      background-color: var(--main-color);
-      border: 1px solid var(--main-color);
+      opacity: 0.9;
+      color: var(--main-color);
+      background-color: $light;
+      border: 1px solid $light;
     }
   }
   &-info {
@@ -744,7 +798,9 @@ button {
     &:hover,
     &:focus,
     &:active,
-    &.active {
+    &.active,
+    &:first-child:active {
+      opacity: 0.9;
       color: $black;
       background-color: darken($color: $info, $amount: 7%);
       border: 1px solid darken($color: $info, $amount: 7%);
@@ -769,7 +825,9 @@ button {
     @include flex();
     &:hover,
     &:focus,
-    &:active {
+    &:active &.active,
+    &:first-child:active {
+      opacity: 0.9;
       background-color: $black;
       color: $white;
     }
@@ -3336,8 +3394,9 @@ main {
 
 footer {
   height: var(--f-height);
-  background-color: #434343;
-  color: $white;
+  background-color: var(--bg-second);
+
+  color: var(--font-color);
   @media (max-width: $bp-lg) {
     background-color: $white;
     @include shadow();
@@ -3358,7 +3417,7 @@ footer {
     a {
       transition: color $transition;
       &:hover {
-        color: lighten($color: $primary, $amount: 20%);
+        color: var(--main-color);
       }
     }
   }
@@ -4309,11 +4368,12 @@ ACCOUNT
   }
   &-toggler {
     position: absolute;
-    top: 0px;
+    top: 60px;
     right: 0%;
     bottom: 0px;
     z-index: 10;
     width: 38%;
+    border-radius: 30px;
     background-color: var(--main-color);
     background-image: url(images/bg/entrance.jpg);
     background-repeat: no-repeat;
@@ -4392,11 +4452,13 @@ ACCOUNT END
   box-sizing: border-box;
   padding: 13px 20px;
   box-shadow: 0px 0px 2px #919eab1f, 0px 8px 24px -4px #919eab33 !important;
-  border-radius: $radius;
-  color: #000;
-  background-color: #fff;
+  border-radius: 4px;
+  color: var(--font-color);
+  background-color: var(--bg-main) !important;
+  border-left: 4px solid transparent;
   cursor: pointer;
-  font-size: 0.9em;
+  font-weight: 500;
+  font-size: 1em;
   position: relative;
   margin-bottom: 15px;
 }
@@ -4436,19 +4498,19 @@ ACCOUNT END
 }
 
 .notification-info {
-  color: #2f96b4;
+  border-color: #2f96b4;
 }
 
 .notification-success {
-  color: #36b37e;
+  border-color: #36b37e;
 }
 
 .notification-warning {
-  color: #f89406;
+  border-color: #f89406;
 }
 
 .notification-error {
-  color: #bd362f;
+  border-color: #bd362f;
 }
 .delivery {
   min-height: 55px;
@@ -5237,4 +5299,8 @@ ACCOUNT END
       padding: 4px;
     }
   }
+}
+button:focus:not(:focus-visible) {
+  outline: 0;
+  box-shadow: none;
 }

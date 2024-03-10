@@ -91,7 +91,7 @@ function App() {
             );
           }
 
-          if (localStorage.getItem("token")) {
+          if (auth?.token) {
             await checkAuth()
               .then(async (data) => {
                 dispatch(setAuth(true));
