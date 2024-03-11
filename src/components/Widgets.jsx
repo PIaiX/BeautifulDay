@@ -7,6 +7,7 @@ import WidgetSales from "./widget/WidgetSales";
 import WidgetServices from "./widget/WidgetServices";
 import WidgetStories from "./widget/WidgetStories";
 import WidgetPopular from "./widget/WidgetPopular";
+import WidgetCategories from "./widget/WidgetCategories";
 
 const Widgets = memo(({ data }) => {
   return data?.length > 0
@@ -15,6 +16,8 @@ const Widgets = memo(({ data }) => {
           <WidgetServices {...e} />
         ) : e.value == "projects" ? (
           <WidgetProjects {...e} />
+        ) : e.value == "categories" ? (
+          <WidgetCategories {...e} />
         ) : e.value == "contact" ? (
           <WidgetContact {...e} />
         ) : e.value == "popular" ? (

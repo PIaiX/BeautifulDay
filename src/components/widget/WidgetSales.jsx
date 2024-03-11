@@ -12,7 +12,8 @@ const WidgetSales = memo((data) => {
     <section className="sec-6 mt-6">
       <Container>
         <Swiper
-          className="sw-offers"
+          // className="sw-offers"
+          className="py-3 px-3"
           spaceBetween={20}
           slidesPerView={"auto"}
           speed={750}
@@ -34,10 +35,11 @@ const WidgetSales = memo((data) => {
             </SwiperSlide>
           ))}
         </Swiper>
-
-        <Link to="/promo" className="btn btn-40 mt-4 mt-sm-5 mx-auto">
-          Смотреть все акции
-        </Link>
+        {data.items?.length > 1 && (
+          <Link to="/promo" className="btn btn-40 mt-4 mt-sm-5 mx-auto">
+            Смотреть все акции
+          </Link>
+        )}
       </Container>
     </section>
   );

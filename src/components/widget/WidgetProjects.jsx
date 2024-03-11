@@ -25,9 +25,11 @@ const WidgetProjects = memo((data) => {
                 );
               })}
             </Row>
-            <Link to="/projects" className="btn-primary mx-auto mt-4">
-              Показать все
-            </Link>
+            {data.items?.length > 1 && (
+              <Link to="/projects" className="btn-primary mx-auto mt-4">
+                Показать все
+              </Link>
+            )}
           </>
         ) : (
           <Empty

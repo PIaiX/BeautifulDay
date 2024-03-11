@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isConnected: true,
   ip: "0.0.0.0",
+  token: false,
   options: {
     name: "ru.yooapp.app",
     title: "YooApp",
@@ -37,7 +38,9 @@ const settingsSlice = createSlice({
       state.isConnected = action.payload;
     },
     updateOptions: (state, action) => {
-      state.options = action.payload;
+      state = { ...initialState, ...action.payload };
+      console.log(state)
+      return state
     },
     updateIp: (state, action) => {
       state.ip = action.payload;

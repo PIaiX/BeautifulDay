@@ -25,7 +25,7 @@ $api.interceptors.request.use(
     const state = store.getState();
     config.headers.ip = state?.settings?.ip ?? "0.0.0.0";
     config.headers.token = state?.settings?.token
-      ? `API ${state?.settings?.token}`
+      ? `API ${state.settings.token}`
       : false;
     config.headers.device = DEVICE;
     return config;
@@ -43,7 +43,7 @@ $authApi.interceptors.request.use(
     const state = store.getState();
     config.headers.ip = state?.settings?.ip ?? "0.0.0.0";
     config.headers.token = state?.settings?.token
-      ? `API ${state?.settings?.token}`
+      ? `API ${state.settings.token}`
       : false;
     const token = state?.auth?.token ?? false;
 

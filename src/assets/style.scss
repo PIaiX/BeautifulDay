@@ -3081,9 +3081,12 @@ main {
 
 .offer {
   width: 100%;
+  border-radius: $radius;
+  overflow: hidden;
   position: relative;
+  @include shadow();
   // @include shadowF();
-  transition: transform 200ms linear;
+  // transition: transform 200ms linear;
   @media (max-width: $bp-sm) {
     font-size: 11px;
   }
@@ -3091,18 +3094,12 @@ main {
     position: relative;
     z-index: 1;
     width: 100%;
-    height: var(--offer-w);
+    height: 200px;
     object-fit: cover;
-    border-radius: $radius;
   }
-  figcaption {
-    @include absBG(10);
-    color: $white;
-    padding: 2em;
+  &-body {
+    padding: 1em;
     @include flex(column, flex-end, stretch, nowrap);
-    @media (max-width: $bp-xl) {
-      padding: 1em;
-    }
   }
 }
 .sw-offers {

@@ -59,7 +59,7 @@ function App() {
       await getOptions()
         .then(async (res) => {
           if (res?.options) {
-            dispatch(updateOptions(res.options));
+            dispatch(updateOptions({ options: res.options, token: res.token }));
             updateColor(res.options);
             if (res.options.favicon) {
               let link = document.querySelector("link[rel~='icon']");

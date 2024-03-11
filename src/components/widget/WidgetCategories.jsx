@@ -2,9 +2,9 @@ import React, { memo } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Empty from "../Empty";
-import WidgetServiceItem from "./WidgetServiceItem";
+import WidgetCategoryItem from "./WidgetCategoryItem";
 
-const WidgetServices = memo((data) => {
+const WidgetCategories = memo((data) => {
   return (
     <section className="sec-catalog mb-6">
       <Container>
@@ -20,13 +20,13 @@ const WidgetServices = memo((data) => {
               {data.items.map((obj) => {
                 return (
                   <Col key={obj.id}>
-                    <WidgetServiceItem data={obj} />
+                    <WidgetCategoryItem data={obj} />
                   </Col>
                 );
               })}
             </Row>
             {data.items?.length > 1 && (
-              <Link to="/services" className="btn-primary mx-auto mt-4">
+              <Link to="/categories" className="btn-primary mx-auto mt-4">
                 Показать все
               </Link>
             )}
@@ -34,7 +34,7 @@ const WidgetServices = memo((data) => {
         ) : (
           <Empty
             mini
-            text="Проектов нет"
+            text="Категорий нет"
             image={() => <img src="/images/empty-catalog.png" width="30%" />}
           />
         )}
@@ -43,4 +43,4 @@ const WidgetServices = memo((data) => {
   );
 });
 
-export default WidgetServices;
+export default WidgetCategories;
