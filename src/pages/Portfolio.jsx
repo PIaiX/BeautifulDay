@@ -26,14 +26,16 @@ const Portfolio = () => {
 
   const [portfolio, setProduct] = useState({
     loading: true,
-    item: {},
     recommends: [],
   });
-
+  const [medias, setMedias] = useState([]);
+  console.log(medias);
   useLayoutEffect(() => {
     getPortfolioOne(portfolioId)
       .then((res) => {
         setProduct({ ...res, loading: false });
+        res?.medias?.length > 0 &&
+          setMedias(res.medias.sort((a, b) => b.main - a.main));
       })
       .catch(() => setProduct((data) => ({ ...data, loading: false })));
   }, [portfolioId]);
@@ -63,9 +65,9 @@ const Portfolio = () => {
         title={portfolio?.title ?? "Портфолио"}
         description={portfolio?.description}
         image={
-          portfolio?.medias[0]?.media
+          medias[0]?.media
             ? getImageURL({
-                path: portfolio.medias[0].media,
+                path: medias[0].media,
                 size: "full",
                 type: "portfolio",
               })
@@ -98,7 +100,7 @@ const Portfolio = () => {
             slidesPerView={"auto"}
             freeMode={true}
           >
-            {portfolio.medias.map((e) => (
+            {medias.map((e) => (
               <SwiperSlide>
                 <img
                   src={getImageURL({
@@ -121,7 +123,7 @@ const Portfolio = () => {
                 thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
             }}
           >
-            {portfolio.medias.map((e) => (
+            {medias.map((e) => (
               <SwiperSlide>
                 <img
                   src={getImageURL({

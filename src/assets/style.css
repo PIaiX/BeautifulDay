@@ -3074,6 +3074,41 @@ main {
 
 /* Articles END */
 /* Section 6 */
+.portfolio-item {
+  display: block;
+  width: 100%;
+  position: relative;
+  border-radius: 1.25em;
+  overflow: hidden;
+  height: 200px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.06);
+}
+@media (max-width: 575.98px) {
+  .portfolio-item {
+    font-size: 11px;
+  }
+}
+.portfolio-item img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  border-radius: 1.25em;
+  overflow: hidden;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.portfolio-item-body {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  padding: 1em;
+  z-index: 100;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+
 .offer {
   width: 100%;
   border-radius: 1.25em;

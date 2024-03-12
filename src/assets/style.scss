@@ -3078,7 +3078,39 @@ main {
 /* Articles END */
 
 /* Section 6 */
-
+.portfolio-item {
+  display: block;
+  width: 100%;
+  position: relative;
+  border-radius: $radius;
+  overflow: hidden;
+  height: 200px;
+  @include shadow();
+  // @include shadowF();
+  // transition: transform 200ms linear;
+  @media (max-width: $bp-sm) {
+    font-size: 11px;
+  }
+  img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    border-radius: $radius;
+    overflow: hidden;
+    object-fit: cover;
+  }
+  &-body {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    padding: 1em;
+    z-index: 100;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+  }
+}
 .offer {
   width: 100%;
   border-radius: $radius;
