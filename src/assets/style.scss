@@ -3425,23 +3425,21 @@ footer {
   height: var(--f-height);
   background-color: var(--bg-second);
 
-  color: var(--font-color);
   @media (max-width: $bp-lg) {
-    background-color: $white;
+    background-color: var(--bg-second);
     @include shadow();
     position: fixed;
     bottom: -1px;
     left: 0px;
     width: 100%;
-    z-index: 1050;
-    box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.06);
+    z-index: 900;
+    @include shadow();
   }
   .desktop {
     height: 100%;
     @include flex(row, space-between, center, nowrap);
     .logo {
-      max-width: 200px;
-      max-height: 80px;
+      width: 120px;
     }
     a {
       transition: color $transition;
@@ -3459,7 +3457,7 @@ footer {
         a {
           @include flex(row, flex-start, center, nowrap);
           padding: 0.5em;
-          border-radius: 2em;
+          border-radius: $radius * 0.5;
           background-color: transparent;
           max-width: 2.6em;
           height: 2.6em;
@@ -3467,20 +3465,18 @@ footer {
           transition: $transition;
           transition-property: background-color, max-width;
           svg {
-            stroke-width: 1.25px;
             width: 1.6em !important;
             height: 1.6em !important;
-            color: $black-gray;
+            color: var(--font-color);
             transition: color $transition;
           }
           .text {
-            color: $white;
+            color: var(--font-color);
+            // padding: 0 .5em;
             overflow: hidden;
             max-width: 0px;
+            // display: none;
             transition: max-width $transition;
-            span {
-              margin-left: 0.25em;
-            }
           }
           .badge {
             bottom: -3px;
@@ -3500,11 +3496,12 @@ footer {
             background-color: var(--main-color);
             max-width: 130px;
             .badge {
-              background-color: $white;
+              background-color: var(--bg-second);
               color: var(--main-color);
             }
             svg {
-              color: $white;
+              // font-size: 1.2em;
+              color: #fff;
             }
             .text {
               display: block;

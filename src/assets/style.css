@@ -3532,18 +3532,17 @@ main {
 footer {
   height: var(--f-height);
   background-color: var(--bg-second);
-  color: var(--font-color);
 }
 @media (max-width: 991.98px) {
   footer {
-    background-color: #fff;
+    background-color: var(--bg-second);
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.06);
     position: fixed;
     bottom: -1px;
     left: 0px;
     width: 100%;
-    z-index: 1050;
-    box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.06);
+    z-index: 900;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.06);
   }
 }
 footer .desktop {
@@ -3555,8 +3554,7 @@ footer .desktop {
   flex-wrap: nowrap;
 }
 footer .desktop .logo {
-  max-width: 200px;
-  max-height: 80px;
+  width: 120px;
 }
 footer .desktop a {
   transition: color 300ms ease-in;
@@ -3581,7 +3579,7 @@ footer .mobile ul li a {
   align-items: center;
   flex-wrap: nowrap;
   padding: 0.5em;
-  border-radius: 2em;
+  border-radius: 0.625em;
   background-color: transparent;
   max-width: 2.6em;
   height: 2.6em;
@@ -3590,20 +3588,16 @@ footer .mobile ul li a {
   transition-property: background-color, max-width;
 }
 footer .mobile ul li a svg {
-  stroke-width: 1.25px;
   width: 1.6em !important;
   height: 1.6em !important;
-  color: #637381;
+  color: var(--font-color);
   transition: color 300ms ease-in;
 }
 footer .mobile ul li a .text {
-  color: #fff;
+  color: var(--font-color);
   overflow: hidden;
   max-width: 0px;
   transition: max-width 300ms ease-in;
-}
-footer .mobile ul li a .text span {
-  margin-left: 0.25em;
 }
 footer .mobile ul li a .badge {
   bottom: -3px;
@@ -3624,7 +3618,7 @@ footer .mobile ul li a.active {
   max-width: 130px;
 }
 footer .mobile ul li a.active .badge {
-  background-color: #fff;
+  background-color: var(--bg-second);
   color: var(--main-color);
 }
 footer .mobile ul li a.active svg {

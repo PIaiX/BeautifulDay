@@ -40,10 +40,14 @@ const Header = memo(() => {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const [showApp, setShowApp] = useState(false);
-  const [isContacts, setIsContacts] = useState(false);
   const [showCity, setShowCity] = useState(false);
   const count = getCount(cart);
-
+  const cities = affiliate.reduce((o, i) => {
+    if (!o.find((v) => v.options.city == i.options.city)) {
+      o.push(i);
+    }
+    return o;
+  }, []);
   const defaultCityOptions = user?.options ?? null;
   const mainAffiliate =
     affiliate?.length > 0
@@ -424,9 +428,9 @@ const Header = memo(() => {
             aria-label="Close"
             onClick={() => setShowCity(false)}
           ></button>
-          {affiliate?.length > 0 && (
+          {cities?.length > 0 && (
             <Row>
-              {affiliate.map((e, index) => (
+              {cities.map((e, index) => (
                 <Col key={index}>
                   <a
                     onClick={() => {
