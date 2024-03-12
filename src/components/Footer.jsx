@@ -1,16 +1,13 @@
 import React, { memo } from "react";
 import Container from "react-bootstrap/Container";
+import * as Icons from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import LogoTextWhite from "../assets/images/logo-text-white.svg";
+import { getImageURL } from "../helpers/all";
 import useIsMobile from "../hooks/isMobile";
-import * as Icons from "react-icons/io5";
 import CartIcon from "./svgs/CartIcon";
 import CatalogIcon from "./svgs/CatalogIcon";
 import FlameIcon from "./svgs/FlameIcon";
-import HomeIcon from "./svgs/HomeIcon";
-import UserIcon from "./svgs/UserIcon";
-import { getImageURL } from "../helpers/all";
 
 const Icon = ({ name }) => {
   const IoIcon = Icons[name];
@@ -59,14 +56,6 @@ const Footer = memo(() => {
               ) : (
                 <>
                   <li>
-                    <NavLink to="/">
-                      <HomeIcon />
-                      <div className="text">
-                        <span>Главная</span>
-                      </div>
-                    </NavLink>
-                  </li>
-                  <li>
                     <NavLink to="/categories">
                       <CatalogIcon />
                       <div className="text">
@@ -82,22 +71,16 @@ const Footer = memo(() => {
                       </div>
                     </NavLink>
                   </li>
-                  <li>
-                    <NavLink to="/cart">
-                      <CartIcon />
-                      <div className="text">
-                        <span>Корзина</span>
-                      </div>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to={isAuth ? "/account" : "/login"}>
-                      <UserIcon />
-                      <div className="text fs-09">
-                        <span>Аккаунт</span>
-                      </div>
-                    </NavLink>
-                  </li>
+                  {options?.cart && (
+                    <li>
+                      <NavLink to="/cart">
+                        <CartIcon />
+                        <div className="text">
+                          <span>Корзина</span>
+                        </div>
+                      </NavLink>
+                    </li>
+                  )}
                 </>
               )}
               <li>
@@ -112,19 +95,19 @@ const Footer = memo(() => {
           </nav>
         ) : (
           <div className="desktop">
-           <img
-            src={
-              options?.logo
-                ? getImageURL({
-                    path: options.logo,
-                    type: "all/web/logo",
-                    size: "full",
-                  })
-                : "/logo.png"
-            }
-            alt={options?.title ?? "YOOAPP"}
-            className="logo"
-          />
+            <img
+              src={
+                options?.logo
+                  ? getImageURL({
+                      path: options.logo,
+                      type: "all/web/logo",
+                      size: "full",
+                    })
+                  : "/logo.png"
+              }
+              alt={options?.title ?? "YOOAPP"}
+              className="logo"
+            />
 
             <nav className="ms-5 me-auto">
               <ul className="list-unstyled d-flex">
@@ -166,7 +149,9 @@ const Footer = memo(() => {
             </nav>
 
             <a href="https://yooapp.ru" target="_blank">
-              <div>Разработано на платформе <b>YooApp</b></div>
+              <div>
+                Разработано на платформе <b>YooApp</b>
+              </div>
               {/* <img src={LogoTextWhite} alt="yooapp" className="d-block mt-2" /> */}
             </a>
           </div>

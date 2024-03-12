@@ -78,7 +78,7 @@ const Orders = () => {
         image={() => <EmptyOrders />}
         button={
           <Link className="btn-primary" to="/">
-            Перейти в меню
+            Перейти на главную
           </Link>
         }
       />

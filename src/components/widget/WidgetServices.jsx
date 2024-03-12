@@ -34,7 +34,7 @@ const WidgetServices = memo((data) => {
         ) : (
           <Empty
             mini
-            text="Проектов нет"
+            text="Услуг нет"
             image={() => <img src="/images/empty-catalog.png" width="30%" />}
           />
         )}

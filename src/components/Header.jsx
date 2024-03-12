@@ -4,14 +4,11 @@ import { Col, Modal, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import {
-  HiOutlineArrowLeftCircle,
   HiOutlineDevicePhoneMobile,
   HiOutlineHeart,
   HiOutlineShoppingBag,
-  HiOutlineUserCircle,
 } from "react-icons/hi2";
-import { IoLogoWhatsapp } from "react-icons/io";
-import { IoCall, IoClose, IoCloseOutline } from "react-icons/io5";
+import { IoClose, IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import AppStore from "../assets/images/appstore-black.svg";
@@ -25,12 +22,10 @@ import { editDeliveryCheckout } from "../store/reducers/checkoutSlice";
 import DeliveryBar from "./DeliveryBar";
 import ScrollToTop from "./ScrollToTop";
 import AppDownload from "./svgs/AppDownload";
-import CartIcon from "./svgs/CartIcon";
 import MenuDelivery from "./svgs/MenuDelivery";
 import MenuDocs from "./svgs/MenuDocs";
 import MenuIcon from "./svgs/MenuIcon";
 import MenuPhone from "./svgs/MenuPhone";
-import YooApp from "./svgs/YooApp";
 import Select from "./utils/Select";
 
 const Header = memo(() => {

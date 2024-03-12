@@ -18,7 +18,7 @@ const Favorites = () => {
         image={() => <EmptyFavorite />}
         button={
           <Link className="btn-primary" to="/menu">
-            Перейти в меню
+            Перейти на главную
           </Link>
         }
       />

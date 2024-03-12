@@ -68,7 +68,7 @@ const Project = () => {
         image={() => <EmptyCatalog />}
         button={
           <Link className="btn-primary" to="/">
-            Перейти в меню
+            Перейти на главную
           </Link>
         }
       />
@@ -179,7 +179,7 @@ const Project = () => {
                       )}
                     </div>
 
-                    {options?.project?.buttons?.length > 0 && (
+                    {options?.project?.buttons?.length > 0 &&
                       options?.project?.buttons.map((e) => (
                         <Link
                           onClick={() => setShow(true)}
@@ -192,8 +192,7 @@ const Project = () => {
                         >
                           {e.title}
                         </Link>
-                      ))
-                    )}
+                      ))}
                     <Callback show={show} setShow={setShow} />
                   </div>
                 </Col>

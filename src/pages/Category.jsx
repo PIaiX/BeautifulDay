@@ -406,7 +406,7 @@ const Category = () => {
               <Row xs={2} sm={3} xxl={4} className="gx-4 gy-5">
                 {category.item?.products?.items?.length > 0 &&
                   category.item.products.items.map((e) =>
-                    e.type == "dish" || e.type == "product" ? (
+                    !e.type || e.type == "dish" || e.type == "product" ? (
                       <Col>
                         <ProductCard data={e} />
                       </Col>

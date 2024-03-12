@@ -72,7 +72,7 @@ const Product = () => {
         image={() => <EmptyCatalog />}
         button={
           <Link className="btn-primary" to="/">
-            Перейти в меню
+            Перейти на главную
           </Link>
         }
       />
