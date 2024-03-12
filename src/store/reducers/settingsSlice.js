@@ -39,7 +39,6 @@ const settingsSlice = createSlice({
     },
     updateOptions: (state, action) => {
       state = { ...initialState, ...action.payload };
-      console.log(state)
       return state
     },
     updateIp: (state, action) => {

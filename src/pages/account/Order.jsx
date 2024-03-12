@@ -69,7 +69,7 @@ const Order = () => {
       />
     );
   }
-  console.log(status);
+
   return (
     <section>
       <AccountTitleReturn

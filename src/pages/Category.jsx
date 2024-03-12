@@ -45,7 +45,6 @@ const Category = () => {
 
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
-  const categories = useGetCategoriesQuery();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -180,7 +179,7 @@ const Category = () => {
       />
       <section className="category mb-5">
         <Container>
-          {categories?.data?.length > 1 && (
+          {category.item?.categories?.length > 1 && (
             <>
               <NavTop toBack={true} breadcrumbs={true} />
               <Swiper
@@ -207,7 +206,7 @@ const Category = () => {
                   },
                 }}
               >
-                {categories.data.map((obj) => {
+                {category.item.categories.map((obj) => {
                   return (
                     <SwiperSlide key={obj.id}>
                       <CategoryCard data={obj} />

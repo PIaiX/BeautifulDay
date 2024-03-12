@@ -29,7 +29,7 @@ const Portfolio = () => {
     recommends: [],
   });
   const [medias, setMedias] = useState([]);
-  console.log(medias);
+
   useLayoutEffect(() => {
     getPortfolioOne(portfolioId)
       .then((res) => {

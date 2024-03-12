@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CategoryCard from "../components/CategoryCard";
-import { getCategories } from "../services/category";
+import { getCategoryList } from "../services/category";
 import Loader from "../components/utils/Loader";
 import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
 import { Link } from "react-router-dom";
@@ -13,7 +13,7 @@ const Categories = () => {
   const [categories, setCategories] = useState({ loading: true, items: [] });
 
   useEffect(() => {
-    getCategories({ size: 50 })
+    getCategoryList({ size: 50 })
       .then((res) => setCategories({ loading: false, items: res }))
       .catch(() => setBlogs({ loading: false, items: [] }));
   }, []);
