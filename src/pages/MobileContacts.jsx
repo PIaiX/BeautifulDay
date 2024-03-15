@@ -1,8 +1,6 @@
 import React from "react";
 import MobilePromo from "../assets/images/bg/mobilePromo.jpg";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
 import WhatsAppIcon from "../components/svgs/WhatsAppIcon";
 

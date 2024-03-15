@@ -206,21 +206,11 @@ const Cart = () => {
               {options.giftVisible && <Gifts />}
 
               <Link
-                to={
-                  user?.id
-                    ? address?.length === 0 && checkout.delivery == "delivery"
-                      ? "/account/addresses/add"
-                      : "/checkout"
-                    : "/login"
-                }
+                to={user?.id ? "/checkout" : "/login"}
                 className="btn-primary w-100"
               >
                 <span className="fw-4">
-                  {user?.id
-                    ? address?.length === 0 && checkout.delivery == "delivery"
-                      ? "Добавить адрес"
-                      : "Далее"
-                    : "Войти в профиль"}
+                  {user?.id ? "Далее" : "Войти в профиль"}
                 </span>
               </Link>
             </Col>

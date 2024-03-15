@@ -4,16 +4,16 @@ import { Col, Modal, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import {
+  HiOutlineArrowLeftCircle,
   HiOutlineDevicePhoneMobile,
   HiOutlineHeart,
   HiOutlineShoppingBag,
+  HiOutlineUserCircle,
 } from "react-icons/hi2";
-import { IoClose, IoCloseOutline } from "react-icons/io5";
+import { IoLogoWhatsapp } from "react-icons/io";
+import { IoCall, IoClose, IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
-import AppStore from "../assets/images/appstore-black.svg";
-import GooglePlay from "../assets/images/googleplay-black.svg";
-import Phone from "../assets/images/phone.png";
+import { Link } from "react-router-dom";
 import { DADATA_TOKEN, DADATA_URL_GEO } from "../config/api";
 import { getCount, getImageURL } from "../helpers/all";
 import { useGetBannersQuery } from "../services/home";
@@ -26,6 +26,7 @@ import MenuDelivery from "./svgs/MenuDelivery";
 import MenuDocs from "./svgs/MenuDocs";
 import MenuIcon from "./svgs/MenuIcon";
 import MenuPhone from "./svgs/MenuPhone";
+import YooApp from "./svgs/YooApp";
 import Select from "./utils/Select";
 
 const Header = memo(() => {
@@ -40,14 +41,17 @@ const Header = memo(() => {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const [showApp, setShowApp] = useState(false);
+  const [isContacts, setIsContacts] = useState(false);
   const [showCity, setShowCity] = useState(false);
   const count = getCount(cart);
+
   const cities = affiliate.reduce((o, i) => {
     if (!o.find((v) => v.options.city == i.options.city)) {
       o.push(i);
     }
     return o;
   }, []);
+
   const defaultCityOptions = user?.options ?? null;
   const mainAffiliate =
     affiliate?.length > 0
@@ -119,40 +123,42 @@ const Header = memo(() => {
       <header>
         <Container className="h-100">
           <nav className="h-100">
-            <Link to="/">
-              <img
-                src={
-                  options?.logo
-                    ? getImageURL({
-                        path: options.logo,
-                        type: "all/web/logo",
-                        size: "full",
-                      })
-                    : "/logo.png"
-                }
-                alt={options?.title ?? "YOOAPP"}
-                className="logo"
-              />
-              {/* <span className="ms-3 logo-name">
+            <div className="d-flex align-items-center">
+              <Link to="/" className="me-3 me-lg-5">
+                <img
+                  src={
+                    options?.logo
+                      ? getImageURL({
+                          path: options.logo,
+                          type: "all/web/logo",
+                          size: "full",
+                        })
+                      : "/logo.png"
+                  }
+                  alt={options?.title ?? "YOOAPP"}
+                  className="logo"
+                />
+                {/* <span className="ms-3 logo-name">
                 {options?.title ?? "YOOAPP"}
               </span> */}
-            </Link>
-            <ul>
-              {affiliate.length > 0 && (
+              </Link>
+              <ul className="text-menu">
                 <li>
-                  <Link
-                    onClick={() => affiliate?.length > 1 && setShowCity(true)}
-                    className="main-color"
-                  >
-                    {affiliate?.length > 1
-                      ? defaultCityOptions?.city ?? "Выберите город"
-                      : mainAffiliate?.options?.city ?? ""}
-                  </Link>
+                  {cities.length > 0 && (
+                    <Link
+                      onClick={() => cities?.length > 1 && setShowCity(true)}
+                      className="fw-6"
+                    >
+                      {cities?.length > 1
+                        ? defaultCityOptions?.city ?? "Выберите город"
+                        : mainAffiliate?.options?.city ?? ""}
+                    </Link>
+                  )}
                   {!defaultCityOptions?.citySave &&
                     defaultCityOptions?.city && (
                       <div className="no-city">
                         <p className="mb-3">
-                          Ваш город <b>{defaultCityOptions.city}</b>?
+                          Ваш город <b>{defaultCityOptions.city}</b> город?
                         </p>
                         <div className="d-flex align-items-center justify-content-center">
                           <Link
@@ -181,30 +187,62 @@ const Header = memo(() => {
                       </div>
                     )}
                 </li>
-              )}
-            </ul>
+                <li>
+                  <Select
+                    className="fw-5"
+                    data={[
+                      {
+                        value: "delivery",
+                        title: "Доставка",
+                      },
+                      {
+                        value: "pickup",
+                        title: "Самовывоз",
+                      },
+                    ]}
+                    value={delivery}
+                    onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
+                  />
+                </li>
+              </ul>
+            </div>
             <ul className="text-menu d-none d-lg-flex">
               {options?.menu?.length > 0 ? (
                 options.menu.map(
                   (e) =>
                     e?.status && (
                       <li>
-                        <NavLink
+                        <Link
                           to={e?.link ?? e.page}
                           // className={e.type == "dark" ? "btn-primary" : ""}
+                          className="fw-6"
                         >
                           {e.title}
-                        </NavLink>
+                        </Link>
                       </li>
                     )
                 )
               ) : (
                 <>
-                  <li>
-                    <Link to="/categories">Каталог</Link>
+                  {/* <li>
+                    <Link to="/categories" className="fw-6">
+                      Меню
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/promo">Акции</Link>
+                    <Link to="/contact" className="fw-6">
+                      Доставка и оплата
+                    </Link>
+                  </li> */}
+                  <li>
+                    <Link to="/contact" className="fw-6">
+                      Контакты
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/promo" className="fw-6">
+                      Акции
+                    </Link>
                   </li>
                 </>
               )}
@@ -220,19 +258,31 @@ const Header = memo(() => {
                   <span className="ms-1">{mainAffiliate.options.phone[0]}</span>
                 </a>
               )}
+
             <ul className="icons-menu">
-              {options?.cart && (
-                <li className="d-none d-lg-block">
-                  <Link to="/cart" className="position-relative">
-                    <HiOutlineShoppingBag size={25} />
-                    {count > 0 && (
-                      <span className="position-absolute top-100 start-100 translate-middle badge rounded-pill">
-                        {count}
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              )}
+              <li className="d-none d-lg-block">
+                <Link
+                  to={
+                    isAuth
+                      ? user?.status === 0
+                        ? "/activate"
+                        : "/account"
+                      : "/login"
+                  }
+                >
+                  <HiOutlineUserCircle size={25} />
+                </Link>
+              </li>
+              <li className="d-none d-lg-block">
+                <Link to="/cart" className="position-relative">
+                  <HiOutlineShoppingBag size={25} />
+                  {count > 0 && (
+                    <span className="position-absolute top-100 start-100 translate-middle badge rounded-pill">
+                      {count}
+                    </span>
+                  )}
+                </Link>
+              </li>
               {isAuth && (
                 <li className="d-none d-lg-block">
                   <Link to="/account/favorites" className="position-relative">
@@ -245,24 +295,6 @@ const Header = memo(() => {
                   </Link>
                 </li>
               )}
-              <li className="d-none d-lg-block">
-                <Link
-                  className="btn btn-primary"
-                  to={
-                    isAuth
-                      ? user?.status === 0
-                        ? "/activate"
-                        : "/account"
-                      : "/login"
-                  }
-                >
-                  {isAuth
-                    ? user?.status === 0
-                      ? "Активировать"
-                      : "Профиль"
-                    : "Войти"}
-                </Link>
-              </li>
               <li className="d-lg-none">
                 <button
                   type="button"
@@ -272,6 +304,23 @@ const Header = memo(() => {
                   {showMenu ? <IoCloseOutline /> : <MenuIcon />}
                 </button>
               </li>
+              {/* <li>
+                <Select
+                  value="ru"
+                  data={[
+                    {
+                      value: "ru",
+                      title: "русский",
+                      image: ruFlag,
+                    },
+                    {
+                      value: "en",
+                      title: "english",
+                      image: engFlag,
+                    },
+                  ]}
+                />
+              </li> */}
             </ul>
           </nav>
         </Container>
@@ -287,67 +336,126 @@ const Header = memo(() => {
       >
         <Offcanvas.Body>
           <Container className="h-100">
-            {banners?.data?.items?.length > 0 && (
-              <img
-                src={getImageURL({
-                  path: banners.data.items[0].medias,
-                  type: "banner",
-                  size: "full",
-                })}
-                className="menu-offer"
-              />
+            {isContacts ? (
+              <div className="h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <div className="d-flex mb-4">
+                    <button
+                      type="button"
+                      onClick={() => setIsContacts(false)}
+                      className="main-color-60 fs-12 d-flex align-items-center"
+                    >
+                      <HiOutlineArrowLeftCircle className="fs-14" />
+                      <span className="ms-1">Назад</span>
+                    </button>
+                    <h5 className="flex-1 text-center fs-12 fw-6 mb-0 me-5">
+                      Контакты
+                    </h5>
+                  </div>
+                  <h5 className="fs-12 fw-6 mb-4">
+                    ООО “Вкусные решения”, г. Казань
+                  </h5>
+                  <div className="box fs-12">
+                    <ul className="list-unstyled">
+                      <li className="mb-4">
+                        <h6 className="mb-2">Авиастроительный</h6>
+                        <address className="mb-2">
+                          <span className="main-color">•</span> ул. Белинского,
+                          1
+                        </address>
+                        <p className="main-color mt-2">Доставка и самовывоз</p>
+                        <p>08:00 — 00:00</p>
+                        <p className="main-color mt-2">Ресторан</p>
+                        <p>08:00 — 00:00</p>
+                      </li>
+                    </ul>
+                    <button type="button" className="btn-green rounded w-100">
+                      Посмотреть на карте
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <button
+                    type="button"
+                    className="fs-12 btn-6 w-100 rounded justify-content-start mt-3"
+                  >
+                    <IoCall className="fs-15 me-2" />
+                    <span>Позвонить</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="fs-12 btn-secondary w-100 rounded justify-content-start mt-2"
+                  >
+                    <IoLogoWhatsapp className="fs-15 me-2" />
+                    <span>Написать в WhatsApp</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {banners?.data?.items?.length > 0 && (
+                  <img
+                    src={getImageURL({
+                      path: banners.data.items[0].medias,
+                      type: "banner",
+                      size: "full",
+                    })}
+                    alt="Большие пиццы"
+                    className="menu-offer"
+                  />
+                )}
+                <Select
+                  className="my-3"
+                  data={[
+                    {
+                      value: "delivery",
+                      title: "Доставка",
+                    },
+                    {
+                      value: "pickup",
+                      title: "Самовывоз",
+                    },
+                  ]}
+                  value={delivery}
+                  onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
+                />
+                <nav>
+                  <ul>
+                    <li>
+                      <Link to="/contact" onClick={() => setShowMenu(false)}>
+                        <MenuPhone />
+                        <span>Контакты</span>
+                      </Link>
+                    </li>
+                    {/* <li>
+                      <Link to="/contact" onClick={() => setShowMenu(false)}>
+                        <MenuDelivery />
+                        <span>Оплата и доставка</span>
+                      </Link>
+                    </li> */}
+                    <li>
+                      <Link to="/policy" onClick={() => setShowMenu(false)}>
+                        <MenuDocs />
+                        <span>Политика конфиденциальности</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </nav>
+                <a href="https://yooapp.ru/" target="_blank">
+                  <p className="gray text-center mt-4 mt-md-5">
+                    Разработано на платформе
+                  </p>
+                  <p className="text-center mt-2">
+                    <YooApp />
+                  </p>
+                </a>
+              </>
             )}
-            {options?.cart && (
-              <Select
-                className="my-3"
-                data={[
-                  {
-                    value: "delivery",
-                    title: "Доставка",
-                  },
-                  {
-                    value: "pickup",
-                    title: "Самовывоз",
-                  },
-                ]}
-                value={delivery}
-                onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
-              />
-            )}
-            <nav>
-              <ul>
-                <li>
-                  <Link to="/contacts" onClick={() => setShowMenu(false)}>
-                    <MenuPhone />
-                    <span>Контакты</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contacts" onClick={() => setShowMenu(false)}>
-                    <MenuDelivery />
-                    <span>Оплата и доставка</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/policy" onClick={() => setShowMenu(false)}>
-                    <MenuDocs />
-                    <span>Политика конфиденциальности</span>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-            <a href="https://yooapp.ru/" target="_blank">
-              <p className="gray text-center mt-4 mt-md-5">
-                Разработано на платформе YooApp
-              </p>
-              {/* <p className="text-center mt-2">
-                <YooApp />
-              </p> */}
-            </a>
           </Container>
         </Offcanvas.Body>
       </Offcanvas>
-      {options?.appYes && (
+      {/* {options?.appYes && (
         <button
           type="button"
           className="appOffer"
@@ -412,7 +520,7 @@ const Header = memo(() => {
             </button>
           </Container>
         </Offcanvas.Body>
-      </Offcanvas>
+      </Offcanvas> */}
       <Modal
         size="xl"
         centered

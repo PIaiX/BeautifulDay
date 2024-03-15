@@ -30,7 +30,7 @@ const ProductCard = memo(({ data }) => {
       <h6 className="text-center text-md-start">{data.title}</h6>
       {/* <p className="d-none d-md-block text-muted fs-09">{data.description}</p> */}
 
-      <div className='d-flex justify-content-between align-items-center'>
+      <div className="d-flex justify-content-between align-items-center">
         <div className="fs-12">
           {data?.modifiers?.length > 0
             ? "от " + customPrice(price)

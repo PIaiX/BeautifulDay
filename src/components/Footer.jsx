@@ -143,7 +143,7 @@ const Footer = memo(() => {
               <Link to="/policy" className="d-inline-block mt-4 me-4">
                 Политика конфиденциальности
               </Link>
-              <Link to="/contacts" className="d-inline-block mt-4">
+              <Link to="/contact" className="d-inline-block mt-4">
                 Контакты
               </Link>
             </nav>

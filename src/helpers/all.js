@@ -3,7 +3,7 @@ import { FILE_URL } from "../config/api";
 
 const customPrice = (value, currency = true) => {
   if (!value) {
-    return 0 + "\u00A0₽";
+    return "По запросу";
   }
   value = parseInt(value).toLocaleString();
   if (currency) {

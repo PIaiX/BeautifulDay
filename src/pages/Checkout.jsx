@@ -346,24 +346,6 @@ const Checkout = () => {
     );
   }
 
-  if (
-    data?.delivery == "delivery" &&
-    (!Array.isArray(address) || address.length <= 0)
-  ) {
-    return (
-      <Empty
-        text="Адрес не добавлен"
-        desc="Создайте новый адрес для доставки заказа"
-        image={() => <EmptyAddresses />}
-        button={
-          <Link className="btn-primary" to="/account/addresses/add">
-            Добавить адрес
-          </Link>
-        }
-      />
-    );
-  }
-
   if (selectedAffiliate?.status === 0) {
     return (
       <Empty

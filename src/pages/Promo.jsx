@@ -25,7 +25,7 @@ const Promo = () => {
         button={
           <a
             className="btn-primary"
-            onСlick={() => {
+            onClick={() => {
               location.reload();
               return false;
             }}
@@ -40,9 +40,14 @@ const Promo = () => {
     <main>
       <section className="sec-6 pt-4 pt-lg-0 mb-5">
         <Container>
-          <Row xs={2} lg={3} className="g-2 g-sm-3 g-md-4 g-lg-3 g-xl-4">
-            {sales.data.items.map((e, index) => (
-              <Col key={index}>
+          <Row
+            xs={12}
+            md={6}
+            lg={4}
+            className="g-2 g-sm-3 g-md-4 g-lg-3 g-xl-4"
+          >
+            {sales.data.items.map((e) => (
+              <Col lg={4} md={6} key={e.id}>
                 <Offer data={e} />
               </Col>
             ))}

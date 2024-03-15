@@ -18,7 +18,7 @@ import { getProduct } from "../services/product";
 
 // swiper
 import { useSelector } from "react-redux";
-import { FreeMode, Navigation, Thumbs } from "swiper";
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperButtonNext from "../components/utils/SwiperButtonNext";
