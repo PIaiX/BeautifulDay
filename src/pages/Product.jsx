@@ -23,10 +23,12 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperButtonNext from "../components/utils/SwiperButtonNext";
 import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
+import Callback from "../components/modals/Callback";
 
 const Product = () => {
   const [featuresShow, setFeaturesShow] = useState(false);
-  const options = useSelector((state) => state.settings.options);
+  const [showFeedback, setShowFeedback] = useState(false);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const { productId } = useParams();
@@ -204,14 +206,32 @@ const Product = () => {
                         </div>
                       )}
                     </div>
-                    <ButtonCart
-                      full
-                      product={product}
-                      data={data}
-                      className="btn-primary ms-2 ms-xl-3"
-                    >
-                      Заказать
-                    </ButtonCart>
+                    {price > 0 ? (
+                      <ButtonCart
+                        full
+                        product={product}
+                        data={data}
+                        className="btn-primary ms-2 ms-xl-3"
+                      >
+                        Заказать
+                      </ButtonCart>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => setShowFeedback(true)}
+                          type="button"
+                          className="btn-secondary"
+                        >
+                          <HiOutlineShoppingBag className="fs-15" />
+                          <span className="ms-2">Заказать</span>
+                        </button>
+                        <Callback
+                          show={showFeedback}
+                          product={product}
+                          setShow={setShowFeedback}
+                        />
+                      </>
+                    )}
                   </div>
                 </Col>
               </Row>

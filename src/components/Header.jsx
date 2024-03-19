@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState, useTransition } from "react";
 import { Col, Modal, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
@@ -11,7 +11,7 @@ import {
   HiOutlineUserCircle,
 } from "react-icons/hi2";
 import { IoLogoWhatsapp } from "react-icons/io";
-import { IoCall, IoClose, IoCloseOutline } from "react-icons/io5";
+import { IoCall, IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { DADATA_TOKEN, DADATA_URL_GEO } from "../config/api";
@@ -21,12 +21,12 @@ import { setUser } from "../store/reducers/authSlice";
 import { editDeliveryCheckout } from "../store/reducers/checkoutSlice";
 import DeliveryBar from "./DeliveryBar";
 import ScrollToTop from "./ScrollToTop";
-import AppDownload from "./svgs/AppDownload";
 import MenuDelivery from "./svgs/MenuDelivery";
 import MenuDocs from "./svgs/MenuDocs";
 import MenuIcon from "./svgs/MenuIcon";
 import MenuPhone from "./svgs/MenuPhone";
 import YooApp from "./svgs/YooApp";
+import Input from "./utils/Input";
 import Select from "./utils/Select";
 
 const Header = memo(() => {
@@ -44,13 +44,7 @@ const Header = memo(() => {
   const [isContacts, setIsContacts] = useState(false);
   const [showCity, setShowCity] = useState(false);
   const count = getCount(cart);
-
-  const cities = affiliate.reduce((o, i) => {
-    if (!o.find((v) => v.options.city == i.options.city)) {
-      o.push(i);
-    }
-    return o;
-  }, []);
+  const [list, setList] = useState([]);
 
   const defaultCityOptions = user?.options ?? null;
   const mainAffiliate =
@@ -64,7 +58,50 @@ const Header = memo(() => {
         : affiliate.find((e) => e.main)
       : false;
 
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState();
+  const [isPending, startTransition] = useTransition();
+
+  const handleChange = (value) => {
+    setSearchInput(value);
+    startTransition(() => {
+      let searchList = [];
+      Object.values(list).forEach((e) => {
+        e.forEach(
+          (e2) =>
+            e2.options.city.toLowerCase().includes(value.toLowerCase()) &&
+            searchList.push(e2)
+        );
+      });
+      setSearch(searchList);
+    });
+  };
+
   useEffect(() => {
+    if (affiliate?.length > 0) {
+      var data = [];
+
+      affiliate.forEach((e) => {
+        let country = e.options.country.toLowerCase();
+        if (!data[country]) {
+          data[country] = [e];
+        } else {
+          data[country].push(e);
+        }
+      });
+
+      data.sort(function (a, b) {
+        if (a.options.city < b.options.city) {
+          return -1;
+        }
+        if (a.options.city > b.options.city) {
+          return 1;
+        }
+        return 0;
+      });
+
+      setList(data);
+    }
     if (
       affiliate?.length > 1 &&
       !defaultCityOptions?.city &&
@@ -138,18 +175,15 @@ const Header = memo(() => {
                   alt={options?.title ?? "YOOAPP"}
                   className="logo"
                 />
-                {/* <span className="ms-3 logo-name">
-                {options?.title ?? "YOOAPP"}
-              </span> */}
               </Link>
               <ul className="text-menu">
                 <li>
-                  {cities.length > 0 && (
+                  {affiliate.length > 0 && (
                     <Link
-                      onClick={() => cities?.length > 1 && setShowCity(true)}
+                      onClick={() => affiliate?.length > 1 && setShowCity(true)}
                       className="fw-6"
                     >
-                      {cities?.length > 1
+                      {affiliate?.length > 1
                         ? defaultCityOptions?.city ?? "Выберите город"
                         : mainAffiliate?.options?.city ?? ""}
                     </Link>
@@ -187,23 +221,25 @@ const Header = memo(() => {
                       </div>
                     )}
                 </li>
-                <li>
-                  <Select
-                    className="fw-5"
-                    data={[
-                      {
-                        value: "delivery",
-                        title: "Доставка",
-                      },
-                      {
-                        value: "pickup",
-                        title: "Самовывоз",
-                      },
-                    ]}
-                    value={delivery}
-                    onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
-                  />
-                </li>
+                {options?.deliveryView && (
+                  <li>
+                    <Select
+                      className="fw-5"
+                      data={[
+                        {
+                          value: "delivery",
+                          title: "Доставка",
+                        },
+                        {
+                          value: "pickup",
+                          title: "Самовывоз",
+                        },
+                      ]}
+                      value={delivery}
+                      onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
+                    />
+                  </li>
+                )}
               </ul>
             </div>
             <ul className="text-menu d-none d-lg-flex">
@@ -273,17 +309,19 @@ const Header = memo(() => {
                   <HiOutlineUserCircle size={25} />
                 </Link>
               </li>
-              <li className="d-none d-lg-block">
-                <Link to="/cart" className="position-relative">
-                  <HiOutlineShoppingBag size={25} />
-                  {count > 0 && (
-                    <span className="position-absolute top-100 start-100 translate-middle badge rounded-pill">
-                      {count}
-                    </span>
-                  )}
-                </Link>
-              </li>
-              {isAuth && (
+              {options?.cart && (
+                <li className="d-none d-lg-block">
+                  <Link to="/cart" className="position-relative">
+                    <HiOutlineShoppingBag size={25} />
+                    {count > 0 && (
+                      <span className="position-absolute top-100 start-100 translate-middle badge rounded-pill">
+                        {count}
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              )}
+              {/* {isAuth && (
                 <li className="d-none d-lg-block">
                   <Link to="/account/favorites" className="position-relative">
                     <HiOutlineHeart size={25} />
@@ -294,7 +332,7 @@ const Header = memo(() => {
                     )}
                   </Link>
                 </li>
-              )}
+              )} */}
               <li className="d-lg-none">
                 <button
                   type="button"
@@ -405,21 +443,23 @@ const Header = memo(() => {
                     className="menu-offer"
                   />
                 )}
-                <Select
-                  className="my-3"
-                  data={[
-                    {
-                      value: "delivery",
-                      title: "Доставка",
-                    },
-                    {
-                      value: "pickup",
-                      title: "Самовывоз",
-                    },
-                  ]}
-                  value={delivery}
-                  onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
-                />
+                {options?.deliveryView && (
+                  <Select
+                    className="my-3"
+                    data={[
+                      {
+                        value: "delivery",
+                        title: "Доставка",
+                      },
+                      {
+                        value: "pickup",
+                        title: "Самовывоз",
+                      },
+                    ]}
+                    value={delivery}
+                    onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
+                  />
+                )}
                 <nav>
                   <ul>
                     <li>
@@ -428,12 +468,6 @@ const Header = memo(() => {
                         <span>Контакты</span>
                       </Link>
                     </li>
-                    {/* <li>
-                      <Link to="/contact" onClick={() => setShowMenu(false)}>
-                        <MenuDelivery />
-                        <span>Оплата и доставка</span>
-                      </Link>
-                    </li> */}
                     <li>
                       <Link to="/policy" onClick={() => setShowMenu(false)}>
                         <MenuDocs />
@@ -455,118 +489,118 @@ const Header = memo(() => {
           </Container>
         </Offcanvas.Body>
       </Offcanvas>
-      {/* {options?.appYes && (
-        <button
-          type="button"
-          className="appOffer"
-          onClick={() => setShowApp(true)}
-        >
-          <AppDownload />
-        </button>
-      )}
 
-      <Offcanvas
-        className="offcanvas-app"
-        show={showApp}
-        onHide={() => setShowApp(false)}
-        placement={"top"}
-      >
-        <Offcanvas.Body>
-          <Container className="h-100">
-            <section className="sec-4 row">
-              <div className="col-12 col-md-7">
-                <h3>
-                  Заказывать стало <br className="d-lg-none" />
-                  ещё&nbsp;удобнее!
-                </h3>
-                <div className="d-flex align-items-center mb-3 mb-lg-4">
-                  <button
-                    type="button"
-                    className="btn-2 fs-20 py-2 px-3 px-lg-4 me-2 me-md-3"
-                  >
-                    <span className="d-lg-none">—</span>
-                    <span className="d-none d-lg-inline">скидка</span>
-                    <span> 15%</span>
-                  </button>
-                  <p className="fs-16">
-                    на&nbsp;первый заказ <br />
-                    через&nbsp;приложение
-                  </p>
-                </div>
-                <ul className="logotips mb-3 mb-lg-5">
-                  <li>
-                    <a href="/">
-                      <img src={AppStore} alt="App Store" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/">
-                      <img src={GooglePlay} alt="Google Play" />
-                    </a>
-                  </li>
-                </ul>
-                <p>Акция действует при заказе на сумму от 1 000 ₽</p>
-              </div>
-              <div className="d-none d-md-block col-5">
-                <img src={Phone} alt="Phone" className="phone" />
-              </div>
-            </section>
-            <button
-              type="button"
-              onClick={() => setShowApp(false)}
-              className="offcanvas-app-close"
-            >
-              <IoClose />
-            </button>
-          </Container>
-        </Offcanvas.Body>
-      </Offcanvas> */}
       <Modal
-        size="xl"
+        size="lg"
         centered
         className="city"
         show={showCity}
         onHide={() => setShowCity(false)}
       >
         <Modal.Body className="p-4">
-          <img src="/logo.png" className="logo mb-4" />
+          <img
+            src={
+              options?.logo
+                ? getImageURL({
+                    path: options.logo,
+                    type: "all/web/logo",
+                    size: "full",
+                  })
+                : "/logo.png"
+            }
+            alt={options?.title ?? "YOOAPP"}
+            className="logo mb-4"
+          />
+
           <button
             type="button"
             className="btn-close close"
             aria-label="Close"
             onClick={() => setShowCity(false)}
           ></button>
-          {cities?.length > 0 && (
-            <Row>
-              {cities.map((e, index) => (
-                <Col key={index}>
-                  <a
-                    onClick={() => {
-                      dispatch(
-                        setUser({
-                          ...user,
-                          options: {
-                            ...user.options,
-                            citySave: true,
-                            city: e.options.city,
-                          },
-                        })
-                      );
-                      setShowCity(false);
-                    }}
-                    className={
-                      "p-2 fw-6" +
-                      (e.options.city === defaultCityOptions?.city
-                        ? " active"
-                        : "")
-                    }
-                  >
-                    {e.options.city}
-                  </a>
-                </Col>
-              ))}
-            </Row>
-          )}
+          <div>
+            <Input
+              name="search"
+              type="search"
+              placeholder="Поиск..."
+              className="mb-3"
+              onChange={handleChange}
+              value={searchInput}
+            />
+          </div>
+          <div className="search-box">
+            {searchInput.length > 0 && search && search?.length > 0 ? (
+              <Row>
+                {search.map((e, index) => (
+                  <Col md={4} key={index} className="pb-3">
+                    <a
+                      onClick={() => {
+                        dispatch(
+                          setUser({
+                            ...user,
+                            options: {
+                              ...user.options,
+                              citySave: true,
+                              city: e.options.city,
+                            },
+                          })
+                        );
+                        setShowCity(false);
+                      }}
+                      className={
+                        "p-2 fw-6" +
+                        (e.options.city === defaultCityOptions?.city
+                          ? " active"
+                          : "")
+                      }
+                    >
+                      {e.options.city}
+                    </a>
+                  </Col>
+                ))}
+              </Row>
+            ) : (
+              Object.keys(list)?.length > 0 &&
+              Object.keys(list).map((title) => (
+                <>
+                  <h6 className="fw-7 p-2">
+                    {title[0].toUpperCase() + title.slice(1)}
+                  </h6>
+                  {list[title]?.length > 0 && (
+                    <Row>
+                      {list[title].map((e, index) => (
+                        <Col md={4} key={index} className="pb-3">
+                          <a
+                            onClick={() => {
+                              dispatch(
+                                setUser({
+                                  ...user,
+                                  options: {
+                                    ...user.options,
+                                    citySave: true,
+                                    city: e.options.city,
+                                  },
+                                })
+                              );
+                              setShowCity(false);
+                            }}
+                            className={
+                              "p-2 fw-6" +
+                              (e.options.city === defaultCityOptions?.city
+                                ? " active"
+                                : "")
+                            }
+                          >
+                            {e.options.city}
+                          </a>
+                        </Col>
+                      ))}
+                    </Row>
+                  )}
+                </>
+              ))
+            )}
+          </div>
         </Modal.Body>
       </Modal>
       <ScrollToTop count={count} />

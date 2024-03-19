@@ -22,6 +22,7 @@ html {
 :root,
 :root[data-theme="light"] {
   --bg-header: #fff;
+  --bg-header-active: #f7f7f7;
   --main-color: #222;
   --main-color-outline: #22222223;
   --main-color-active: #22222223;
@@ -40,6 +41,7 @@ html {
 
 :root[data-theme="dark"] {
   --bg-header: #222;
+  --bg-header-active: #333;
   --main-color: #222;
   --main-color-outline: #22222223;
   --main-color-active: #83545423;
@@ -762,8 +764,8 @@ button {
     &:first-child:active {
       opacity: 0.9;
       color: $white;
-      background-color: darken($color: $secondary, $amount: 10%);
-      border: 1px solid darken($color: $secondary, $amount: 10%);
+      background-color: var(--main-color);
+      border: 1px solid var(--main-color);
     }
   }
   &-success {
@@ -2561,55 +2563,48 @@ main {
   }
 }
 .product-card-mini {
-  width: 100%;
+  max-width: 100%;
+  background-color: var(--bg-second);
   padding: 1em;
-  border: 1px solid $gray;
-  border-radius: 1em;
+  border-radius: $radius;
   @include flex(row, flex-start, stretch, nowrap);
-  @media (max-width: $bp-xl) {
-    font-size: 0.8em;
-  }
   @media (max-width: $bp-lg) {
-    font-size: 1em;
-  }
-  @media (max-width: $bp-md) {
-    font-size: 0.8em;
-    padding: 0.75em;
+    flex-direction: column;
+    max-width: calc(200px + 2em);
   }
   @media (max-width: $bp-sm) {
-    font-size: 1em;
-    @include flex(column, flex-start, stretch, nowrap);
-    border-radius: 1.5em;
+    max-width: calc(145px + 2em);
   }
   img {
-    --card-mini-w: 100px;
-    @include roundedImg(var(--card-mini-w), $radius, cover);
-    margin-right: 1em;
-    @media (max-width: $bp-xl) {
-      --card-mini-w: 75px;
-    }
-    @media (max-width: $bp-md) {
-      margin-right: 0.75em;
+    --card-mini-w: 130px;
+    @include roundedImg(var(--card-mini-w), $radius, scale-down);
+    margin-right: $radius;
+    @media (max-width: $bp-lg) {
+      --card-mini-w: 200px;
+      margin-right: 0px;
     }
     @media (max-width: $bp-sm) {
-      width: 100%;
-      height: 140px;
-      margin-bottom: 1em;
+      --card-mini-w: 145px;
+      margin-bottom: 10px;
     }
   }
   figcaption {
     flex: 1;
     @include flex(column, space-between, stretch, nowrap);
-    h5 {
+    h6 {
       @media (max-width: $bp-sm) {
-        font-size: 0.9em;
-        @include clamp(2, 1.2em, true);
+        font-weight: 400;
       }
     }
     a {
-      transition: $transition;
+      transition: color $transition;
       &:hover {
         color: var(--main-color);
+      }
+    }
+    @media (max-width: $bp-sm) {
+      button {
+        width: 100%;
       }
     }
   }
@@ -3508,6 +3503,11 @@ footer {
           overflow: hidden;
           transition: $transition;
           transition-property: background-color, max-width;
+          &.active .text {
+            font-size: 0.9em;
+            margin-left: 3px;
+            color: var(--font-color-revers) !important;
+          }
           svg {
             width: 1.6em !important;
             height: 1.6em !important;

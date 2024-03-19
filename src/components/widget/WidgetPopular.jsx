@@ -1,12 +1,14 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { Container } from "react-bootstrap";
 import { FreeMode, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Empty from "../Empty";
 import ProductCardMini from "../ProductCardMini";
 import { Link } from "react-router-dom";
+import Callback from "../modals/Callback";
 
 const WidgetPopular = memo((data) => {
+  const [showFeedback, setShowFeedback] = useState(false);
   if (!data?.items || data?.items?.length === 0) {
     return null;
   }
@@ -22,33 +24,40 @@ const WidgetPopular = memo((data) => {
           </div>
         </div>
         {data?.items?.length > 0 ? (
-          <Swiper
-            className="product-slider"
-            modules={[Navigation, FreeMode]}
-            speed={750}
-            spaceBetween={10}
-            slidesPerView={"auto"}
-            freeMode={true}
-            breakpoints={{
-              576: {
-                slidesPerView: "auto",
-              },
-              768: {
-                slidesPerView: "auto",
-              },
-              992: {
-                slidesPerView: 3,
-              },
-            }}
-          >
-            {data.items.map((obj) => {
-              return (
-                <SwiperSlide key={obj.id}>
-                  <ProductCardMini data={obj} />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
+          <>
+            <Swiper
+              className="product-slider"
+              modules={[Navigation, FreeMode]}
+              speed={750}
+              spaceBetween={10}
+              slidesPerView={"auto"}
+              freeMode={true}
+              breakpoints={{
+                576: {
+                  slidesPerView: "auto",
+                },
+                768: {
+                  slidesPerView: "auto",
+                },
+                992: {
+                  slidesPerView: 3,
+                },
+              }}
+            >
+              {data.items.map((obj) => {
+                return (
+                  <SwiperSlide key={obj.id}>
+                    <ProductCardMini data={obj} onFeedback={setShowFeedback} />
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+            <Callback
+              show={!!showFeedback}
+              product={showFeedback}
+              setShow={setShowFeedback}
+            />
+          </>
         ) : (
           <Empty mini text="Ничего нет" />
         )}

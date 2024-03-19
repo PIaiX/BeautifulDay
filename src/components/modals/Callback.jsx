@@ -7,6 +7,7 @@ import Textarea from "../utils/Textarea";
 import { Col, Row } from "react-bootstrap";
 import { createFeedback } from "../../services/order";
 import { NotificationManager } from "react-notifications";
+import ProductCardMini from "../ProductCardMini";
 
 const Callback = memo(({ show = false, setShow, type, page, product, ip }) => {
   const options = useSelector((state) => state.settings.options);
@@ -47,6 +48,11 @@ const Callback = memo(({ show = false, setShow, type, page, product, ip }) => {
         {options?.feedback?.title ?? "Обратная связь"}
       </Modal.Header>
       <Modal.Body>
+        {product?.id && (
+          <div className="mb-4">
+            <ProductCardMini data={product} preview />
+          </div>
+        )}
         <Row>
           <Col md={6}>
             <Input

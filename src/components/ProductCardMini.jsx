@@ -1,10 +1,11 @@
 import React, { memo } from "react";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
 import { customPrice, customWeight, getImageURL } from "../helpers/all";
 import ButtonCart from "./ButtonCart";
 
-const ProductCardMini = memo(({ data }) => {
+const ProductCardMini = memo(({ data, onFeedback, preview = false }) => {
   var price = data?.price ?? 0;
   if (Array.isArray(data?.modifiers) && data?.modifiers?.length > 0) {
     var price = Math.min(...data.modifiers.map((item) => item.price));
@@ -30,12 +31,26 @@ const ProductCardMini = memo(({ data }) => {
           </p>
         </div>
         <div className="d-flex justify-content-md-between justify-content-center align-items-center">
-          <p className="d-none d-lg-block fw-6">
-            {data?.modifiers?.length > 0
-              ? "от " + customPrice(price)
-              : customPrice(price)}
-          </p>
-          <ButtonCart product={data} />
+          {!preview && (
+            <p className="d-none d-lg-block fw-6">
+              {data?.modifiers?.length > 0
+                ? "от " + customPrice(price)
+                : customPrice(price)}
+            </p>
+          )}
+          {price > 0 && !preview ? (
+            <ButtonCart product={data} />
+          ) : (
+            !preview && (
+              <button
+                onClick={() => onFeedback && onFeedback(data)}
+                type="button"
+                className="btn-secondary"
+              >
+                <HiOutlineShoppingBag className="fs-15" />
+              </button>
+            )
+          )}
         </div>
       </figcaption>
     </figure>

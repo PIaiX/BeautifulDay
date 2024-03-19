@@ -1,22 +1,27 @@
 import React, {
   useCallback,
-  useLayoutEffect,
   useEffect,
+  useLayoutEffect,
   useState,
 } from "react";
 import Accordion from "react-bootstrap/Accordion";
+import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
+import { useForm, useWatch } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CategoryCard from "../components/CategoryCard";
 import Empty from "../components/Empty";
 import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
+import Meta from "../components/Meta";
+import Callback from "../components/modals/Callback";
 import ProductCard from "../components/ProductCard";
+import ProjectItem from "../components/ProjectItem";
 import Filter from "../components/svgs/Filter";
 import PrevIcon from "../components/svgs/PrevIcon";
 import Loader from "../components/utils/Loader";
@@ -26,14 +31,10 @@ import SwiperButtonNext from "../components/utils/SwiperButtonNext";
 import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
 import { childrenArray, getImageURL } from "../helpers/all";
 import { getCategory } from "../services/category";
-import { useGetCategoriesQuery } from "../services/home";
-import { useDispatch, useSelector } from "react-redux";
 import { removeFilter, updateFilter } from "../store/reducers/settingsSlice";
-import { useForm, useWatch } from "react-hook-form";
-import Meta from "../components/Meta";
-import ProjectItem from "../components/ProjectItem";
 
 const Category = () => {
+  const [showFeedback, setShowFeedback] = useState(false);
   const { categoryId } = useParams();
   const filters = useSelector(
     (state) =>
@@ -407,7 +408,7 @@ const Category = () => {
                   category.item.products.items.map((e) =>
                     !e.type || e.type == "dish" || e.type == "product" ? (
                       <Col>
-                        <ProductCard data={e} />
+                        <ProductCard data={e} onFeedback={setShowFeedback} />
                       </Col>
                     ) : (
                       (e.type == "project" || e.type == "service") && (
@@ -420,7 +421,11 @@ const Category = () => {
               </Row>
             </Col>
           </Row>
-
+          <Callback
+            show={!!showFeedback}
+            product={showFeedback}
+            setShow={setShowFeedback}
+          />
           {/* <h5>Загловок для сео</h5>
           <hr />
           <p>

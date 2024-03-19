@@ -5,8 +5,9 @@ import { useSelector } from "react-redux";
 import { customPrice, customWeight, getImageURL } from "../helpers/all";
 import ButtonCart from "./ButtonCart";
 import BtnFav from "./utils/BtnFav";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 
-const ProductCard = memo(({ data }) => {
+const ProductCard = memo(({ data, onFeedback }) => {
   const isAuth = useSelector((state) => state.auth.isAuth);
 
   var price = data.price ?? 0;
@@ -36,7 +37,17 @@ const ProductCard = memo(({ data }) => {
             ? "от " + customPrice(price)
             : customPrice(price)}
         </div>
-        <ButtonCart product={data} />
+        {price > 0 ? (
+          <ButtonCart product={data} />
+        ) : (
+          <button
+            onClick={() => onFeedback && onFeedback(data)}
+            type="button"
+            className="btn-light"
+          >
+            <HiOutlineShoppingBag className="fs-15" />
+          </button>
+        )}
       </div>
     </div>
   );
