@@ -33,14 +33,12 @@ const Header = memo(() => {
   const isAuth = useSelector((state) => state.auth.isAuth);
   const user = useSelector((state) => state.auth.user);
   const cart = useSelector((state) => state.cart.items);
-  const favorite = useSelector((state) => state.favorite.items);
   const affiliate = useSelector((state) => state.affiliate.items);
   const options = useSelector((state) => state.settings.options);
   const delivery = useSelector((state) => state.checkout.delivery);
   const banners = useGetBannersQuery();
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
-  const [showApp, setShowApp] = useState(false);
   const [isContacts, setIsContacts] = useState(false);
   const [showCity, setShowCity] = useState(false);
   const count = getCount(cart);
@@ -86,15 +84,21 @@ const Header = memo(() => {
         if (!data[country]) {
           data[country] = [e];
         } else {
-          data[country].push(e);
+          let isCity = data[country].find(
+            (item) =>
+              item.options.city.toLowerCase() === e.options.city.toLowerCase()
+          );
+          if (!isCity) {
+            data[country].push(e);
+          }
         }
       });
 
       data.sort(function (a, b) {
-        if (a.options.city < b.options.city) {
+        if (a.options.city.toLowerCase() < b.options.city.toLowerCase()) {
           return -1;
         }
-        if (a.options.city > b.options.city) {
+        if (a.options.city.toLowerCase() > b.options.city.toLowerCase()) {
           return 1;
         }
         return 0;
@@ -179,14 +183,16 @@ const Header = memo(() => {
               <ul className="text-menu">
                 <li>
                   {affiliate.length > 0 && (
-                    <Link
+                    <a
                       onClick={() => affiliate?.length > 1 && setShowCity(true)}
                       className="fw-6"
                     >
                       {affiliate?.length > 1
-                        ? defaultCityOptions?.city ?? "Выберите город"
+                        ? defaultCityOptions?.city ??
+                          mainAffiliate?.options?.city ??
+                          "Выберите город"
                         : mainAffiliate?.options?.city ?? ""}
-                    </Link>
+                    </a>
                   )}
                   {!defaultCityOptions?.citySave &&
                     defaultCityOptions?.city && (
@@ -260,16 +266,6 @@ const Header = memo(() => {
                 )
               ) : (
                 <>
-                  {/* <li>
-                    <Link to="/categories" className="fw-6">
-                      Меню
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/contact" className="fw-6">
-                      Доставка и оплата
-                    </Link>
-                  </li> */}
                   <li>
                     <Link to="/contact" className="fw-6">
                       Контакты
@@ -364,7 +360,7 @@ const Header = memo(() => {
         </Container>
       </header>
 
-      <DeliveryBar sum={2500} />
+      <DeliveryBar />
 
       <Offcanvas
         className="offcanvas-menu"

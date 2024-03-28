@@ -1,5 +1,4 @@
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
 import React, {
   useCallback,
   useLayoutEffect,
@@ -7,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./assets/style.min.css";
 import Loader from "./components/utils/Loader";
 import socket from "./config/socket";
 import { convertColor, getImageURL, setCssColor } from "./helpers/all";

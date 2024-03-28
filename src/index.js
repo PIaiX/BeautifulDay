@@ -6,9 +6,11 @@ import App from "./App";
 import moment from "moment";
 import momentRu from "moment/locale/ru";
 import { NotificationContainer } from "react-notifications";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './assets/style.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "swiper/css";
+import "swiper/css/navigation";
 import './assets/fonts/stylesheet.css';
+import "./assets/style.min.css";
 
 moment.updateLocale("ru", momentRu);
 
