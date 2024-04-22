@@ -15,12 +15,19 @@ import Meta from "../../components/Meta";
 import { Button } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
 import { isMobile } from "react-device-detect";
+import { getImageURL } from "../../helpers/all";
 
 const Registration = () => {
   const isAuth = useSelector((state) => state.auth.isAuth);
   const user = useSelector((state) => state.auth.user);
   const options = useSelector((state) => state.settings.options);
-
+  const bgImage = options.auth
+    ? getImageURL({
+        path: options.auth,
+        type: "all/web/auth",
+        size: "full",
+      })
+    : false;
   const navigate = useNavigate();
 
   const [loginView, setLoginView] = useState(true);
@@ -76,12 +83,12 @@ const Registration = () => {
           }
           navigate("/activate");
         })
-        .catch(
-          (err) =>
-            err &&
-            NotificationManager.error(
-              err?.response?.data?.error ?? "Неизвестная ошибка при регистрации"
-            )
+        .catch((error) =>
+          NotificationManager.error(
+            typeof error?.response?.data?.error === "string"
+              ? error.response.data.error
+              : "Неизвестная ошибка"
+          )
         );
     },
     [options]
@@ -149,8 +156,10 @@ const Registration = () => {
 
   const regForm = useMemo(() => (
     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-      <h4 className="main-color text-center fw-6">С возвращением!</h4>
-      {/* <p className="text-center fs-11 mb-5">Вкусные роллы и пицца скучали по тебе</p> */}
+      <h4 className="main-color text-center fw-4">С возвращением!</h4>
+      {/* <p className="text-center fs-11 mb-5">
+        Вкусные роллы и пицца скучали по тебе
+      </p> */}
       <div className="mb-3">
         {!options.authType || options.authType === "email" ? (
           <Input
@@ -225,7 +234,7 @@ const Registration = () => {
 
   const loginForm = useMemo(() => (
     <form className="login-form" onSubmit={handleSubmitReg(onSubmitReg)}>
-      <h4 className="main-color text-center fw-6">Привет, друг!</h4>
+      <h4 className="main-color text-center fw-4">Привет, друг!</h4>
       <p className="text-center fs-11 mb-5">
         Введи данные, чтобы зарегистрироваться
       </p>
@@ -320,8 +329,8 @@ const Registration = () => {
             required: "Примите условия пользовательского соглашения",
           })}
         />
-        <span className="fs-08">
-          Принять условия <a href="/policy">Пользовательского соглашения</a>
+        <span className="fs-09">
+          Принять условия Пользовательского соглашения
         </span>
       </label>
       <Button
@@ -365,7 +374,11 @@ const Registration = () => {
             <div ref={block2} className="login-forms">
               {loginView ? regForm : loginForm}
             </div>
-            <div ref={block1} className="login-toggler">
+            <div
+              ref={block1}
+              className="login-toggler"
+              style={{ backgroundImage: bgImage ? `url(${bgImage})` : null }}
+            >
               <div className="text">
                 <div ref={text1} className="text-1">
                   <h4>Это ваш первый заказ?</h4>
@@ -379,7 +392,7 @@ const Registration = () => {
               <button
                 type="button"
                 onClick={handleClick}
-                className="btn-light mx-auto mt-4"
+                className="btn-40 rounded-3 mx-auto mt-4"
               >
                 {loginView ? <span>Регистрация</span> : <span>Войти</span>}
               </button>

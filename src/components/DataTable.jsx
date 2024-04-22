@@ -24,6 +24,7 @@ const DataTable = React.memo(
     lite,
     headClassName = "",
     paramsValue,
+    renderItem = false,
   }) => {
     const [selected, setSelected] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams(paramsValue);
@@ -62,6 +63,135 @@ const DataTable = React.memo(
       setSelected([]);
     }, [data]);
 
+    const footerView = useMemo(() => {
+      return footer ? (
+        <Card.Footer>{footer}</Card.Footer>
+      ) : (
+        pagination && (
+          <Card.Footer className="px-2 w-100 border-top pt-4 fs-08 d-flex justify-content-center align-items-center sticky pagination">
+            <button
+              className="me-2 px-2 btn btn-light"
+              onClick={() => setSearchParams(searchParams.delete("page"))}
+            >
+              <HiChevronDoubleLeft
+                size={16}
+                className={
+                  Number(pagination.currentPage) <= 1
+                    ? "text-muted"
+                    : "text-dark"
+                }
+              />
+            </button>
+            <button
+              className="px-2 btn btn-light"
+              onClick={() => {
+                if (Number(pagination.currentPage) >= 3) {
+                  searchParams.set("page", Number(pagination.currentPage) - 1);
+                } else {
+                  searchParams.delete("page");
+                }
+                setSearchParams(searchParams);
+              }}
+            >
+              <HiChevronLeft
+                size={16}
+                className={
+                  Number(pagination.currentPage) <= 1
+                    ? "text-muted"
+                    : "text-dark"
+                }
+              />
+            </button>
+            <span className="mx-3">
+              {pagination.currentPage} из {pagination.totalPages}
+            </span>
+            <button
+              className="me-2 px-2 btn btn-light"
+              onClick={() => {
+                if (
+                  Number(pagination.currentPage) < Number(pagination.totalPages)
+                ) {
+                  searchParams.set("page", Number(pagination.currentPage) + 1);
+                  setSearchParams(searchParams);
+                }
+              }}
+            >
+              <HiChevronRight
+                size={16}
+                className={
+                  Number(pagination.currentPage) >=
+                  Number(pagination.totalPages)
+                    ? "text-muted"
+                    : "text-dark"
+                }
+              />
+            </button>
+            <button
+              className="px-2 btn btn-light"
+              onClick={() => {
+                if (
+                  Number(pagination.currentPage) < Number(pagination.totalPages)
+                ) {
+                  searchParams.set("page", pagination.totalPages);
+                  setSearchParams(searchParams);
+                }
+              }}
+            >
+              <HiChevronDoubleRight
+                size={16}
+                className={
+                  Number(pagination.currentPage) >=
+                  Number(pagination.totalPages)
+                    ? "text-muted"
+                    : "text-dark"
+                }
+              />
+            </button>
+          </Card.Footer>
+        )
+      );
+    }, [pagination]);
+
+    if (renderItem) {
+      const body = useMemo(() => {
+        if (!data || data?.length === 0) {
+          return (
+            <div className="w-100 d-flex flex-column align-items-center justify-content-center">
+              <svg
+                className="mb-3"
+                width="50"
+                height="50"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  opacity="0.32"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M12 22.5C17.799 22.5 22.5 17.799 22.5 12C22.5 6.20101 17.799 1.5 12 1.5C6.20101 1.5 1.5 6.20101 1.5 12C1.5 17.799 6.20101 22.5 12 22.5ZM12 18.3C15.4794 18.3 18.3 15.4794 18.3 12C18.3 8.52061 15.4794 5.7 12 5.7C8.52061 5.7 5.7 8.52061 5.7 12C5.7 15.4794 8.52061 18.3 12 18.3Z"
+                  fill="#999"
+                />
+                <path
+                  d="M18.6028 3.01136C19.2179 2.39628 20.2151 2.39628 20.8302 3.01136C21.4453 3.62643 21.4453 4.62367 20.8302 5.23874L5.2385 20.8304C4.62342 21.4455 3.62619 21.4455 3.01111 20.8304C2.39604 20.2154 2.39604 19.2181 3.01111 18.6031L18.6028 3.01136Z"
+                  fill="#999"
+                />
+              </svg>
+              <h5>{emptyText ?? "Ничего не найдено"}</h5>
+            </div>
+          );
+        }
+        return data && data.map((item, index) => renderItem(item, index));
+      }, [data]);
+
+      return (
+        <>
+          {body}
+          {footerView}
+        </>
+      );
+    }
+
     const head = useMemo(() => {
       return (
         <Row className={"head gx-0 " + headClassName}>
@@ -85,7 +215,7 @@ const DataTable = React.memo(
               <Col
                 style={width && { maxWidth: width }}
                 md={size}
-                className={['px-2', size == "auto" && "col-auto", optionAlign]}
+                className={["px-2", size == "auto" && "col-auto", optionAlign]}
                 key={index}
               >
                 {name}
@@ -139,7 +269,11 @@ const DataTable = React.memo(
                     <Col
                       md={size}
                       style={width && { maxWidth: width }}
-                      className={['px-2', size == "auto" && "col-auto", optionAlign]}
+                      className={[
+                        "px-2",
+                        size == "auto" && "col-auto",
+                        optionAlign,
+                      ]}
                     >
                       {openDesc ? (
                         <a
@@ -180,94 +314,6 @@ const DataTable = React.memo(
         ))
       );
     }, [data, selected]);
-
-    const footerView = useMemo(() => {
-      return footer ? (
-        <Card.Footer>{footer}</Card.Footer>
-      ) : (
-        pagination && (
-          <Card.Footer className="px-2 fs-08 d-flex justify-content-end align-items-center sticky pagination">
-            <span className="me-4">
-              Страница {pagination.currentPage} из {pagination.totalPages}
-            </span>
-            <button
-              className="me-2"
-              onClick={() => setSearchParams(searchParams.delete("page"))}
-            >
-              <HiChevronDoubleLeft
-                size={16}
-                className={
-                  Number(pagination.currentPage) <= 1
-                    ? "text-muted"
-                    : "text-dark"
-                }
-              />
-            </button>
-            <button
-              className="me-4"
-              onClick={() => {
-                if (Number(pagination.currentPage) >= 3) {
-                  searchParams.set("page", Number(pagination.currentPage) - 1);
-                } else {
-                  searchParams.delete("page");
-                }
-                setSearchParams(searchParams);
-              }}
-            >
-              <HiChevronLeft
-                size={16}
-                className={
-                  Number(pagination.currentPage) <= 1
-                    ? "text-muted"
-                    : "text-dark"
-                }
-              />
-            </button>
-            <button
-              className="me-2"
-              onClick={() => {
-                if (
-                  Number(pagination.currentPage) < Number(pagination.totalPages)
-                ) {
-                  searchParams.set("page", Number(pagination.currentPage) + 1);
-                  setSearchParams(searchParams);
-                }
-              }}
-            >
-              <HiChevronRight
-                size={16}
-                className={
-                  Number(pagination.currentPage) >=
-                  Number(pagination.totalPages)
-                    ? "text-muted"
-                    : "text-dark"
-                }
-              />
-            </button>
-            <button
-              onClick={() => {
-                if (
-                  Number(pagination.currentPage) < Number(pagination.totalPages)
-                ) {
-                  searchParams.set("page", pagination.totalPages);
-                  setSearchParams(searchParams);
-                }
-              }}
-            >
-              <HiChevronDoubleRight
-                size={16}
-                className={
-                  Number(pagination.currentPage) >=
-                  Number(pagination.totalPages)
-                    ? "text-muted"
-                    : "text-dark"
-                }
-              />
-            </button>
-          </Card.Footer>
-        )
-      );
-    }, [pagination]);
 
     return (
       <Card className={"custom-table" + (lite ? " lite" : "")}>

@@ -1739,6 +1739,21 @@ main {
         height: 140px;
       }
     }
+    .big {
+      height: 380px;
+      @media (max-width: $bp-xxl) {
+        height: 360px;
+      }
+      @media (max-width: $bp-lg) {
+        height: 250px;
+      }
+      @media (max-width: $bp-md) {
+        height: 200px;
+      }
+      @media (max-width: $bp-sm) {
+        height: 140px;
+      }
+    }
   }
 }
 .swiper-stories {
@@ -1754,7 +1769,7 @@ main {
   .swiper-button-next,
   .swiper-button-prev {
     color: hsla(0, 0%, 100%, 0.87);
-    top: 0px;
+    top: 1.5rem;
     bottom: 0px;
     height: 100%;
     width: 8%;
@@ -2040,6 +2055,11 @@ main {
   }
   &-topSlider {
     .category-card {
+      a {
+        &.active {
+          color: $primary !important;
+        }
+      }
       img {
         height: 170px;
         border-radius: $radius * 0.7;
@@ -2056,20 +2076,26 @@ main {
     }
   }
   .subcategories-slider {
-    width: 60%;
     margin: 0px;
     @media (max-width: $bp-md) {
       width: 100%;
       margin-bottom: 1em;
     }
-    .swiper-slide {
+
+    a {
+      margin-bottom: 7px;
+      margin-right: 7px;
       width: fit-content;
-      a {
-        @include flex();
-        padding: 0.4em 1.2em;
-        border: 1px solid $secondary-light;
-        border-radius: 1.5em;
-        height: 100%;
+      display: inline-block;
+      padding: 0.4em 1.2em;
+      font-size: 14px;
+      border: 1px solid $secondary-light;
+      border-radius: 1.5em;
+      height: 100%;
+      &.active {
+        border: 1px solid $secondary;
+        background-color: $secondary !important;
+        color: #fff !important;
       }
     }
   }

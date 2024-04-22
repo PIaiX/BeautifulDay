@@ -23,7 +23,7 @@ const Callback = memo(({ show = false, setShow, type, page, product, ip }) => {
     defaultValues: {
       type,
       page,
-      product,
+      product: Array.isArray(product) ? product : [product],
       ip,
     },
   });

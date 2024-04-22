@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { getImageURL } from "../helpers/all";
 
 const CategoryCard = memo(({ data }) => {
@@ -11,9 +11,9 @@ const CategoryCard = memo(({ data }) => {
       {image && <img src={image} alt={data.title} />}
       <figcaption>
         <h6>
-          <Link to={`/category/${data.id}`} className="stretched-link">
+          <NavLink to={`/category/${data.id}`} className="stretched-link">
             {data.title}
-          </Link>
+          </NavLink>
         </h6>
       </figcaption>
     </figure>

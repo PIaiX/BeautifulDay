@@ -12,10 +12,11 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import Row from "react-bootstrap/Row";
 import { useForm, useWatch } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, NavLink, useParams, useSearchParams } from "react-router-dom";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CategoryCard from "../components/CategoryCard";
+import DataTable from "../components/DataTable";
 import Empty from "../components/Empty";
 import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
 import Meta from "../components/Meta";
@@ -34,6 +35,7 @@ import { getCategory } from "../services/category";
 import { removeFilter, updateFilter } from "../store/reducers/settingsSlice";
 
 const Category = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [showFeedback, setShowFeedback] = useState(false);
   const { categoryId } = useParams();
   const filters = useSelector(
@@ -71,17 +73,17 @@ const Category = () => {
   const data = useWatch({ control });
 
   const onLoad = useCallback(() => {
-    getCategory({ ...data, id: categoryId })
+    getCategory({ page: searchParams.get("page"), ...data, id: categoryId })
       .then((res) => {
         res.params = childrenArray(res.params, "id", "parentId");
         setCategory({ loading: false, item: res });
       })
       .catch(() => setCategory((data) => ({ ...data, loading: false })));
-  }, [categoryId, data]);
+  }, [categoryId, data, searchParams]);
 
   useLayoutEffect(() => {
     onLoad();
-  }, [categoryId]);
+  }, [categoryId, data?.sort, searchParams.get("page")]);
 
   useEffect(() => {
     dispatch(updateFilter({ ...data, categoryId }));
@@ -182,7 +184,7 @@ const Category = () => {
         <Container>
           {category.item?.categories?.length > 1 && (
             <>
-              <NavTop toBack={true} breadcrumbs={true} />
+              <NavTop toBack={false} breadcrumbs={true} />
               <Swiper
                 className="category-topSlider mb-5"
                 spaceBetween={10}
@@ -235,11 +237,11 @@ const Category = () => {
                       <button
                         type="button"
                         onClick={handleClose}
-                        className="d-flex fs-15"
+                        className="d-flex d-md-none fs-15 me-2"
                       >
                         <PrevIcon className="svgSW" />
                       </button>
-                      <h5 className="ms-2 mb-0">Фильтры</h5>
+                      <h5 className="mb-0">Фильтры</h5>
                       <button
                         type="reset"
                         className="ms-auto"
@@ -254,17 +256,18 @@ const Category = () => {
                         очистить
                       </button>
                     </div>
-
-                    <fieldset>
-                      <legend>Цена, ₽</legend>
-                      <MultyRangeCustom
-                        minRange={category.item?.min ?? 0}
-                        maxRange={category.item?.max ?? 100}
-                        valueMin={data?.min ?? category.item?.min ?? 0}
-                        valueMax={data?.max ?? category.item?.max ?? 100}
-                        onChange={(e) => e && reset({ ...data, ...e })}
-                      />
-                    </fieldset>
+                    {category.item?.min > 0 && category.item?.max > 0 && (
+                      <fieldset>
+                        <legend>Цена, ₽</legend>
+                        <MultyRangeCustom
+                          minRange={category.item?.min ?? 0}
+                          maxRange={category.item?.max ?? 100}
+                          valueMin={data?.min ?? category.item?.min ?? 0}
+                          valueMax={data?.max ?? category.item?.max ?? 100}
+                          onChange={(e) => e && reset({ ...data, ...e })}
+                        />
+                      </fieldset>
+                    )}
                     <Accordion defaultActiveKey="0">
                       {category.item?.params?.length > 0 &&
                         category.item?.params.map((e) => {
@@ -350,30 +353,19 @@ const Category = () => {
               </Offcanvas>
             </Col>
             <Col lg={9}>
-              <div className="d-md-flex justify-content-between align-items-stretch mb-5">
-                {category?.item?.child?.length > 0 && (
-                  <Swiper
-                    className="subcategories-slider"
-                    spaceBetween={10}
-                    slidesPerView={"auto"}
-                    speed={750}
-                    breakpoints={{
-                      576: {
-                        spaceBetween: 15,
-                      },
-                      992: {
-                        spaceBetween: 20,
-                      },
-                    }}
-                  >
-                    {category.item.child.map((e) => (
-                      <SwiperSlide>
-                        <Link to={"/category/" + e.id}>{e.title}</Link>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                )}
-                <div className="d-flex">
+              <div className="d-md-flex justify-content-between mb-5">
+                <div>
+                  {category?.item?.child?.length > 0 && (
+                    <div className="subcategories-slider">
+                      {category.item.child
+                        .filter((e) => e.productCount > 0)
+                        .map((e) => (
+                          <NavLink to={"/category/" + e.id}>{e.title}</NavLink>
+                        ))}
+                    </div>
+                  )}
+                </div>
+                <div>
                   <select className="flex-1" {...register("sort")}>
                     <option value="">Сортировать по</option>
                     <option value="new">Новое</option>
@@ -404,8 +396,10 @@ const Category = () => {
                   />
                 ))}
               <Row xs={2} sm={3} xxl={4} className="gx-4 gy-5">
-                {category.item?.products?.items?.length > 0 &&
-                  category.item.products.items.map((e) =>
+                <DataTable
+                  data={category.item.products.items}
+                  pagination={category.item.products.pagination}
+                  renderItem={(e) =>
                     !e.type || e.type == "dish" || e.type == "product" ? (
                       <Col>
                         <ProductCard data={e} onFeedback={setShowFeedback} />
@@ -417,7 +411,8 @@ const Category = () => {
                         </Col>
                       )
                     )
-                  )}
+                  }
+                />
               </Row>
             </Col>
           </Row>
