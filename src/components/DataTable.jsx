@@ -7,8 +7,9 @@ import {
   HiChevronRight,
 } from "react-icons/hi2";
 import { IoChevronDownOutline, IoChevronUpOutline } from "react-icons/io5";
-
+import { ReactComponent as EmptyCatalog } from "./empty/catalog.svg";
 import { useSearchParams } from "react-router-dom";
+import Empty from "./Empty";
 
 const DataTable = React.memo(
   ({
@@ -24,6 +25,7 @@ const DataTable = React.memo(
     lite,
     headClassName = "",
     paramsValue,
+    emptyText = false,
     renderItem = false,
   }) => {
     const [selected, setSelected] = useState([]);
@@ -156,29 +158,12 @@ const DataTable = React.memo(
       const body = useMemo(() => {
         if (!data || data?.length === 0) {
           return (
-            <div className="w-100 d-flex flex-column align-items-center justify-content-center">
-              <svg
-                className="mb-3"
-                width="50"
-                height="50"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  opacity="0.32"
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M12 22.5C17.799 22.5 22.5 17.799 22.5 12C22.5 6.20101 17.799 1.5 12 1.5C6.20101 1.5 1.5 6.20101 1.5 12C1.5 17.799 6.20101 22.5 12 22.5ZM12 18.3C15.4794 18.3 18.3 15.4794 18.3 12C18.3 8.52061 15.4794 5.7 12 5.7C8.52061 5.7 5.7 8.52061 5.7 12C5.7 15.4794 8.52061 18.3 12 18.3Z"
-                  fill="#999"
-                />
-                <path
-                  d="M18.6028 3.01136C19.2179 2.39628 20.2151 2.39628 20.8302 3.01136C21.4453 3.62643 21.4453 4.62367 20.8302 5.23874L5.2385 20.8304C4.62342 21.4455 3.62619 21.4455 3.01111 20.8304C2.39604 20.2154 2.39604 19.2181 3.01111 18.6031L18.6028 3.01136Z"
-                  fill="#999"
-                />
-              </svg>
-              <h5>{emptyText ?? "Ничего не найдено"}</h5>
-            </div>
+            <Empty
+              mini
+              text="Ничего нет"
+              desc="Контент уже скоро появится"
+              image={() => <EmptyCatalog />}
+            />
           );
         }
         return data && data.map((item, index) => renderItem(item, index));

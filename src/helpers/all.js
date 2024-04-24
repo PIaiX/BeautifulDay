@@ -25,7 +25,7 @@ const getImageURL = ({ path = "", size = "mini", type = "product" }) => {
     } else {
       return FILE_URL + "/" + type + "/" + path;
     }
-  } else if (!type || type == "product" || type == "sale") {
+  } else if (!type || type == "product" || type == "category" || type == "sale") {
     return "/images/empty-product-image.png";
   } else if (type == "user") {
     return "/images/avatar-full.png";

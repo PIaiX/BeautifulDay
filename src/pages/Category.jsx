@@ -73,6 +73,7 @@ const Category = () => {
   const data = useWatch({ control });
 
   const onLoad = useCallback(() => {
+    setCategory((prev) => ({ ...prev, loading: true }));
     getCategory({ page: searchParams.get("page"), ...data, id: categoryId })
       .then((res) => {
         res.params = childrenArray(res.params, "id", "parentId");
@@ -382,20 +383,12 @@ const Category = () => {
                   </button>
                 </div>
               </div>
-              {!Array.isArray(category.item?.products?.items) ||
-                (category.item.products.items.length <= 0 && (
-                  <Empty
-                    text="Ничего нет"
-                    desc="Контент уже скоро появится"
-                    image={() => <EmptyCatalog />}
-                    button={
-                      <Link className="btn-primary" to="/">
-                        Перейти на главную
-                      </Link>
-                    }
-                  />
-                ))}
-              <Row xs={2} sm={3} xxl={4} className="gx-4 gy-5">
+              <Row
+                xs={2}
+                sm={3}
+                xxl={4}
+                className="gx-4 gy-5 justify-content-center"
+              >
                 <DataTable
                   data={category.item.products.items}
                   pagination={category.item.products.pagination}

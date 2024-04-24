@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useSelector } from "react-redux";
-import { customPrice, customWeight, getImageURL } from "../helpers/all";
+import { customPrice, getImageURL } from "../helpers/all";
 import ButtonCart from "./ButtonCart";
 import BtnFav from "./utils/BtnFav";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
@@ -28,7 +28,9 @@ const ProductCard = memo(({ data, onFeedback }) => {
         {isAuth && <BtnFav product={data} />}
       </div>
 
-      <h6 className="text-center text-md-start">{data.title}</h6>
+      <h6 className="text-center text-md-start product-item-title">
+        {data.title}
+      </h6>
       {/* <p className="d-none d-md-block text-muted fs-09">{data.description}</p> */}
 
       <div className="d-flex justify-content-between align-items-center">

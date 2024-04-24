@@ -5459,3 +5459,8 @@ button:focus:not(:focus-visible) {
   outline: 0;
   box-shadow: none;
 }
+
+.product-item-title {
+  display: block;
+  @include clamp(2, 1.8em, true);
+}

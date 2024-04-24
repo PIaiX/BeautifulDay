@@ -6112,4 +6112,14 @@ ACCOUNT END
 button:focus:not(:focus-visible) {
   outline: 0;
   box-shadow: none;
+}
+
+.product-item-title {
+  display: block;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.8em;
+  height: 3.6em;
 }/*# sourceMappingURL=style.css.map */
