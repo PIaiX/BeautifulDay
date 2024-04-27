@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import CheckoutProduct from "../components/CheckoutProduct";
 import Empty from "../components/Empty";
-import { ReactComponent as EmptyAddresses } from "../components/empty/address.svg";
 import { ReactComponent as EmptyAuth } from "../components/empty/auth.svg";
 import { ReactComponent as EmptyCart } from "../components/empty/cart.svg";
 import { ReactComponent as EmptyWork } from "../components/empty/work.svg";
@@ -481,9 +480,9 @@ const Checkout = () => {
                   <div className="mb-4">
                     <Input
                       label="Номер телефона"
-                      type="custom"
+                      // type="custom"
                       name="phone"
-                      mask="+7(999)999-99-99"
+                      // mask="+7(999)999-99-99"
                       keyboardType="phone-pad"
                       control={control}
                       placeholder="Введите номер телефона"

@@ -13,7 +13,7 @@ const Input = memo(
     type,
     label,
     className,
-    mask = false,
+    mask = undefined,
     defaultValue,
     placeholder,
     name,
@@ -26,6 +26,7 @@ const Input = memo(
     errors,
   }) => {
     const [visible, setVisibility] = useState(false);
+
     return (
       <>
         <div
@@ -64,13 +65,13 @@ const Input = memo(
                 {visible ? <Eye /> : <CloseEye />}
               </button>
             </div>
-          ) : mask ? (
+          ) : mask?.length > 0 ? (
             <ReactInputMask
               onClick={onClick}
               onFocus={onFocus}
               readOnly={readOnly}
               autoFocus={autoFocus}
-              mask={mask}
+              mask={mask || undefined}
               type={type}
               required
               defaultValue={defaultValue}
