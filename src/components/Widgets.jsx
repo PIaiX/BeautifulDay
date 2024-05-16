@@ -12,23 +12,23 @@ import WidgetCategories from "./widget/WidgetCategories";
 const Widgets = memo(({ data }) => {
   return data?.length > 0
     ? data.map((e) =>
-        e.value == "services" ? (
+        e?.value == "services" ? (
           <WidgetServices {...e} />
-        ) : e.value == "projects" ? (
+        ) : e?.value == "projects" ? (
           <WidgetProjects {...e} />
-        ) : e.value == "categories" ? (
+        ) : e?.value == "categories" ? (
           <WidgetCategories {...e} />
-        ) : e.value == "contact" ? (
+        ) : e?.value == "contact" ? (
           <WidgetContact {...e} />
-        ) : e.value == "popular" ? (
+        ) : e?.value == "popular" ? (
           <WidgetPopular {...e} />
-        ) : e.value == "stories" ? (
+        ) : e?.value == "stories" ? (
           <WidgetStories {...e} />
-        ) : e.value == "sales" ? (
+        ) : e?.value == "sales" ? (
           <WidgetSales {...e} />
-        ) : e.value == "banners" ? (
+        ) : e?.value == "banners" ? (
           <WidgetBanners {...e} />
-        ) : e.value == "blogs" ? (
+        ) : e?.value == "blogs" ? (
           <WidgetBlogs {...e} />
         ) : null
       )
