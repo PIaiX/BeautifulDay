@@ -2375,9 +2375,10 @@ main {
     img {
       width: 100%;
       height: 180px;
-      object-fit: cover;
+      object-fit: contain;
       object-position: center;
       border-radius: $radius * 0.7;
+      background-color: var(--bg-second);
       @media (max-width: $bp-xxl) {
         height: 230px;
       }
@@ -2510,17 +2511,18 @@ main {
         height: 90px;
         img {
           width: 100%;
-          @include roundedImg(90px, $radius * 0.5, cover);
-          background-color: $white;
-          border: 1px solid $light-gray;
+          @include roundedImg(90px, $radius * 0.5, contain);
+          background-color: var(--bg-second);
+          border: 1px solid var(--bg-btn);
         }
       }
     }
     .mainSlider {
       flex: 1;
       img {
-        @include roundedImg(var(--img), $radius, cover);
+        @include roundedImg(var(--img), $radius, contain);
         width: 100%;
+        background-color: var(--bg-second);
       }
     }
     .btn-fav {

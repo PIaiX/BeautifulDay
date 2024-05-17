@@ -3,7 +3,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import ProductCard from "../components/ProductCard";
-import BtnFav from "../components/utils/BtnFav";
+// import BtnFav from "../components/utils/BtnFav";
 
 // icons & images
 import { Link, useParams } from "react-router-dom";
@@ -17,7 +17,6 @@ import { customPrice, getImageURL } from "../helpers/all";
 import { getProduct } from "../services/product";
 
 // swiper
-import { useSelector } from "react-redux";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -140,16 +139,19 @@ const Product = () => {
                       slidesPerView={"auto"}
                       freeMode={true}
                     >
-                      <SwiperSlide>
-                        <img
-                          src={getImageURL({
-                            path: product.medias,
-                            size: "full",
-                          })}
-                          alt={product.title}
-                          className="productPage-img"
-                        />
-                      </SwiperSlide>
+                      {product.medias?.length > 0 &&
+                        product.medias.map((e) => (
+                          <SwiperSlide>
+                            <img
+                              src={getImageURL({
+                                path: e.media,
+                                size: "full",
+                              })}
+                              alt={product.title}
+                              className="productPage-img"
+                            />
+                          </SwiperSlide>
+                        ))}
                     </Swiper>
                     <Swiper
                       className="mainSlider"
@@ -163,16 +165,19 @@ const Product = () => {
                             : null,
                       }}
                     >
-                      <SwiperSlide>
-                        <img
-                          src={getImageURL({
-                            path: product.medias,
-                            size: "full",
-                          })}
-                          alt={product.title}
-                          className="productPage-img"
-                        />
-                      </SwiperSlide>
+                      {product.medias?.length > 0 &&
+                        product.medias.map((e) => (
+                          <SwiperSlide>
+                            <img
+                              src={getImageURL({
+                                path: e.media,
+                                size: "full",
+                              })}
+                              alt={product.title}
+                              className="productPage-img"
+                            />
+                          </SwiperSlide>
+                        ))}
                     </Swiper>
                     {/* <BtnFav /> */}
                   </div>
