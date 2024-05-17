@@ -653,7 +653,7 @@ button {
   color: inherit;
 }
 
-.btn, .btn-aqua, .btn-info, .btn-light, .btn-success, .btn-secondary, .btn-primary-outline, .btn-primary, .btn-40 {
+.btn, .btn-aqua, .btn-info, .btn-light, .btn-success, .btn-secondary, .btn-primary-outline, .btn-primary, .btn-40, .btn-40-light {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -669,9 +669,19 @@ button {
   border-radius: 1.875em;
 }
 @media (max-width: 1199.98px) {
-  .btn, .btn-aqua, .btn-info, .btn-light, .btn-success, .btn-secondary, .btn-primary-outline, .btn-primary, .btn-40 {
+  .btn, .btn-aqua, .btn-info, .btn-light, .btn-success, .btn-secondary, .btn-primary-outline, .btn-primary, .btn-40, .btn-40-light {
     padding: 0.5em 1.2em;
   }
+}
+.btn-40-light {
+  color: #fff;
+  background-color: transparent;
+  border: 1px solid #fff;
+}
+.btn-40-light:hover, .btn-40-light:focus, .btn-40-light:active, .btn-40-light.active {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid #fff;
 }
 .btn-40 {
   color: var(--main-color);
@@ -785,7 +795,7 @@ button {
   background-color: #47bacd;
   color: #fff;
 }
-.btn[disabled], [disabled].btn-40, [disabled].btn-primary, [disabled].btn-primary-outline, [disabled].btn-secondary, [disabled].btn-success, [disabled].btn-light, [disabled].btn-info, [disabled].btn-aqua {
+.btn[disabled], [disabled].btn-40-light, [disabled].btn-40, [disabled].btn-primary, [disabled].btn-primary-outline, [disabled].btn-secondary, [disabled].btn-success, [disabled].btn-light, [disabled].btn-info, [disabled].btn-aqua {
   background-color: #f4f6f8;
   border: 1px solid #f4f6f8;
   color: #637381;
@@ -2917,31 +2927,10 @@ main {
 
 .article-card img {
   width: 100%;
-  height: 260px;
   -o-object-fit: cover;
      object-fit: cover;
   border-radius: 1em;
   margin-bottom: 1em;
-}
-@media (max-width: 1199.98px) {
-  .article-card img {
-    height: 290px;
-  }
-}
-@media (max-width: 991.98px) {
-  .article-card img {
-    height: 200px;
-  }
-}
-@media (max-width: 767.98px) {
-  .article-card img {
-    height: 170px;
-  }
-}
-@media (max-width: 575.98px) {
-  .article-card img {
-    height: 140px;
-  }
 }
 .article-card figcaption {
   font-size: 1.1em;

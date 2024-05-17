@@ -708,6 +708,20 @@ button {
   @media (max-width: $bp-xl) {
     padding: 0.5em 1.2em;
   }
+  &-40-light {
+    @extend .btn;
+    color: #fff;
+    background-color: transparent;
+    border: 1px solid #fff;
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      color: #fff;
+      background-color: rgba($color: #fff, $alpha: 0.1);
+      border: 1px solid #fff;
+    }
+  }
   &-40 {
     @extend .btn;
     color: var(--main-color);
@@ -3014,22 +3028,22 @@ main {
 .article-card {
   img {
     width: 100%;
-    height: 260px;
+    // height: 260px;
     object-fit: cover;
     border-radius: 1em;
     margin-bottom: 1em;
-    @media (max-width: $bp-xl) {
-      height: 290px;
-    }
-    @media (max-width: $bp-lg) {
-      height: 200px;
-    }
-    @media (max-width: $bp-md) {
-      height: 170px;
-    }
-    @media (max-width: $bp-sm) {
-      height: 140px;
-    }
+    // @media (max-width: $bp-xl) {
+    //   height: 290px;
+    // }
+    // @media (max-width: $bp-lg) {
+    //   height: 200px;
+    // }
+    // @media (max-width: $bp-md) {
+    //   height: 170px;
+    // }
+    // @media (max-width: $bp-sm) {
+    //   height: 140px;
+    // }
   }
   figcaption {
     font-size: 1.1em;
