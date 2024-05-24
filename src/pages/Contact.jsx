@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { HiOutlineDevicePhoneMobile } from "react-icons/hi2";
 import { YMaps, Map, Placemark, Polygon } from "@pbe/react-yandex-maps";
 import { useSelector } from "react-redux";
 import { ReactComponent as EmptyWork } from "../components/empty/work.svg";
@@ -21,7 +20,7 @@ const Contact = () => {
       : affiliate[0] ?? false
   );
 
-  if (!mainAffiliate || !mainAffiliate?.phone?.length > 0) {
+  if (!mainAffiliate) {
     return (
       <Empty
         text="В данный момент контактов нет"
@@ -44,21 +43,17 @@ const Contact = () => {
 
   return (
     <main>
-      <section className="sec-7 mb-5">
+      <section className="sec-contact mb-5">
         <Container>
           <Row>
             <Col md={4}>
               <div className="box">
-                <div className="d-flex align-items-baseline mb-5">
+                <div className="d-flex align-items-baseline mb-2">
                   <h1 className="mb-0">Контакты</h1>
-                  <h5 className="mb-0">
-                    <span className="mx-3">•</span>
-                    {mainAffiliate.options.city}
-                  </h5>
                 </div>
 
-                <h6 className="mb-3">{mainAffiliate.full}</h6>
-                {mainAffiliate?.phone[0] && (
+                {/* <h6 className="mb-3">{mainAffiliate.full}</h6> */}
+                {/* {mainAffiliate?.phone && mainAffiliate?.phone[0] && (
                   <>
                     <p className="mb-3">
                       <a href={"tel:" + mainAffiliate.phone[0]}>
@@ -88,38 +83,40 @@ const Contact = () => {
                       Позвонить
                     </a>
                   </>
-                )}
+                )} */}
 
-                <ul className="list-unstyled mt-4">
+                <ul className="list-unstyled">
                   {affiliate.map((e) => (
-                    <li>
-                      <a onClick={() => setMainAffiliate(e)}>
+                    <a
+                      onClick={() => setMainAffiliate(e)}
+                      className={mainAffiliate.id === e.id ? "active" : ""}
+                    >
+                      <li key={e.id}>
                         <h6 className="mb-2">{e.full}</h6>
-
-                        {e?.options?.work &&
+                        {e?.options?.work?.length > 0 &&
                         e.options.work[moment().weekday()]?.start &&
                         e.options.work[moment().weekday()]?.end ? (
                           <>
-                            <p className="main-color mt-2 mb-1">
+                            <p className="main-color m-0">
                               Доставка и самовывоз
                             </p>
-                            <p className="mb-3">{`Работает с ${
+                            <p className="mb-2">{`Работает с ${
                               e.options.work[moment().weekday()].start
                             } до ${e.options.work[moment().weekday()].end}`}</p>
                           </>
                         ) : null}
 
-                        {e?.phone[0] && (
-                          <>
-                            <p className="main-color mt-2 mb-1">
-                              Номер телефона
-                            </p>
-                            <p className="mb-3">{e.phone[0]}</p>
-                          </>
+                        {e?.phone && e?.phone[0] && (
+                          <p className="mb-2 mt-0 fw-5">{e.phone[0]}</p>
                         )}
-                      </a>
-                      {e?.desc && <p className="white-space-break">{e.desc}</p>}
-                    </li>
+
+                        {e?.desc && (
+                          <p className="white-space-break m-0 fs-08 text-muted">
+                            {e.desc}
+                          </p>
+                        )}
+                      </li>
+                    </a>
                   ))}
                 </ul>
               </div>
@@ -144,24 +141,23 @@ const Contact = () => {
                       {affiliate?.length > 0 &&
                         affiliate.map((e) => (
                           <Placemark
-                            options={{
-                              iconLayout: "default#image",
-                              iconImageHref: "imgs/marker.png",
-                              iconImageSize: [38, 54],
-                            }}
+                            options={
+                              mainAffiliate.id === e.id
+                                ? {
+                                    iconLayout: "default#image",
+                                    iconImageHref: "/images/marker.png",
+                                    iconImageSize: [38, 54],
+                                  }
+                                : {
+                                    iconLayout: "default#image",
+                                    iconImageHref: "/images/marker-gray.png",
+                                    iconImageSize: [38, 54],
+                                  }
+                            }
                             geometry={[
                               e.options.coordinates.lat,
                               e.options.coordinates.lon,
                             ]}
-                            properties={{
-                              balloonContentBody: [
-                                "<address className='my-info'>",
-                                "<div className='my-info-body'>",
-                                `<h6 className='mb-0 fw-6'>${e.full}</h6>`,
-                                "</div>",
-                                "</address>",
-                              ].join(""),
-                            }}
                           />
                         ))}
 
@@ -186,34 +182,41 @@ const Contact = () => {
                                 opacity: 0.3,
                                 strokeWidth: 2,
                                 strokeStyle: "solid",
+                                visible: true,
                               }}
                               properties={{
-                                balloonContentBody: [
-                                  "<address className='my-info'>",
-                                  "<div className='my-info-body'>",
-                                  `<h6 className='mb-0 fw-6'>${e.title}</h6>`,
-                                  e.desc && `<p>${e.desc}</p>`,
-                                  e.minPrice > 0
-                                    ? `<p>Минимальная сумма заказа ${customPrice(
-                                        e.minPrice
-                                      )}</p>`
-                                    : "",
-                                  e.priceFree > 0
-                                    ? `<p>Бесплатная доставка от ${customPrice(
-                                        e.priceFree
-                                      )}</p>`
-                                    : "",
-                                  e.price > 0
-                                    ? `<p>Стоимость доставки ${customPrice(
-                                        e.price
-                                      )}</p>`
-                                    : "",
-                                  e.time > 0
-                                    ? `<p>Время доставки от ${e.time} мин</p>`
-                                    : "",
-                                  "</div>",
-                                  "</address>",
-                                ].join(""),
+                                balloonContent: `<address class='my-info'>
+                              <div class='my-info-body'>
+                              <h6 class='mb-0 fw-6'>${e.title}</h6>
+                              ${e.desc ? `<p>${e.desc}</p>` : ""}
+                              ${
+                                e.minPrice > 0
+                                  ? `<p>Минимальная сумма заказа ${customPrice(
+                                      e.minPrice
+                                    )}</p>`
+                                  : ""
+                              }
+                              ${
+                                e.priceFree > 0
+                                  ? `<p>Бесплатная доставка от ${customPrice(
+                                      e.priceFree
+                                    )}</p>`
+                                  : ""
+                              }
+                              ${
+                                e.price > 0
+                                  ? `<p>Стоимость доставки ${customPrice(
+                                      e.price
+                                    )}</p>`
+                                  : ""
+                              }
+                              ${
+                                e.time > 0
+                                  ? `<p>Время доставки от ${e.time} мин</p>`
+                                  : ""
+                              }
+                              </div>
+                              </address>`,
                               }}
                             />
                           );

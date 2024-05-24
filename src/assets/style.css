@@ -3387,50 +3387,61 @@ main {
   }
 }
 
-/* Section 6 END */
-.sec-7 .box {
+.sec-contact .box {
+  box-shadow: none;
+  height: 700px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
   flex-wrap: nowrap;
+  background-color: var(--bg-second);
+  border-radius: 1.25em;
+  font-size: 1.2em;
+  padding: 1.6em;
+  transition: 0.2s;
 }
-.sec-7 ul {
+.sec-contact ul {
   flex: 1;
   overflow: auto;
   scrollbar-color: #f4f6f8 transparent;
   scrollbar-width: thin;
 }
-.sec-7 ul::-webkit-scrollbar {
+.sec-contact ul::-webkit-scrollbar {
   width: 5px;
   height: 5px;
   background-color: #fff;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.06);
 }
-.sec-7 ul::-webkit-scrollbar:hover, .sec-7 ul::-webkit-scrollbar:active {
+.sec-contact ul::-webkit-scrollbar:hover, .sec-contact ul::-webkit-scrollbar:active {
   background: rgba(254, 84, 94, 0.05);
 }
-.sec-7 ul::-webkit-scrollbar-thumb {
+.sec-contact ul::-webkit-scrollbar-thumb {
   background-color: #dfe2e5;
   border-radius: 5px;
   -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
-.sec-7 ul::-webkit-scrollbar-thumb:hover, .sec-7 ul::-webkit-scrollbar-thumb:active {
+.sec-contact ul::-webkit-scrollbar-thumb:hover, .sec-contact ul::-webkit-scrollbar-thumb:active {
   background: rgba(254, 84, 94, 0.15);
 }
-.sec-7 ul::-webkit-scrollbar-button:vertical:start:decrement, .sec-7 ul::-webkit-scrollbar-button:vertical:end:increment, .sec-7 ul::-webkit-scrollbar-button:horizontal:start:decrement, .sec-7 ul::-webkit-scrollbar-button:horizontal:end:increment {
+.sec-contact ul::-webkit-scrollbar-button:vertical:start:decrement, .sec-contact ul::-webkit-scrollbar-button:vertical:end:increment, .sec-contact ul::-webkit-scrollbar-button:horizontal:start:decrement, .sec-contact ul::-webkit-scrollbar-button:horizontal:end:increment {
   display: none;
 }
-.sec-7 ul li {
-  border: 1px solid #f3f7ff;
-  padding: 1em;
-  border-radius: 1em;
+.sec-contact ul .active {
+  border-radius: 1.25em;
+  display: block;
+  color: var(--main-color);
+  background-color: var(--main-color-outline);
+  padding-left: 25px;
 }
-.sec-7 ul li:not(:first-child) {
-  margin-top: 1em;
+.sec-contact ul .active li {
+  border-bottom: none !important;
 }
-.sec-7 .map {
+.sec-contact ul li {
+  padding: 1em 0px;
+}
+.sec-contact .map {
   border-radius: 1.25em;
   overflow: hidden;
   -webkit-backface-visibility: hidden;
@@ -3444,27 +3455,7 @@ main {
   flex-wrap: nowrap;
   height: 700px;
 }
-@media (max-width: 1399.98px) {
-  .sec-7 .map {
-    height: 600px;
-  }
-}
-@media (max-width: 1199.98px) {
-  .sec-7 .map {
-    height: 500px;
-  }
-}
-@media (max-width: 767.98px) {
-  .sec-7 .map {
-    height: 400px;
-  }
-}
-@media (max-width: 575.98px) {
-  .sec-7 .map {
-    height: 300px;
-  }
-}
-.sec-7 .map img {
+.sec-contact .map img {
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
