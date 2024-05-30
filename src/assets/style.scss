@@ -1817,8 +1817,8 @@ main {
   img {
     display: block;
     margin: 0 auto 0px;
-    width: 100%;
-    height: 100%;
+    height: 155px;
+    width: 155px;
     border-radius: 100%;
     object-fit: cover;
     background-color: var(--bg-main);
@@ -1826,6 +1826,26 @@ main {
     border: 3px solid var(--main-color);
     @media (max-width: $bp-md) {
       border-width: 2px;
+    }
+    @media (max-width: $bp-xxl) {
+      height: 155px;
+      width: 155px;
+    }
+    @media (max-width: $bp-xl) {
+      height: 140px;
+      width: 140px;
+    }
+    @media (max-width: $bp-lg) {
+      height: 130px;
+      width: 130px;
+    }
+    @media (max-width: $bp-md) {
+      height: 120px;
+      width: 120px;
+    }
+    @media (max-width: $bp-sm) {
+      height: 90px;
+      width: 90px;
     }
   }
   &.square {
@@ -3391,7 +3411,7 @@ main {
     border-radius: 1.25em;
     font-size: 1.2em;
     padding: 1.6em;
-    transition: .2s;
+    transition: 0.2s;
   }
   ul {
     flex: 1;
