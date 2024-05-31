@@ -1811,14 +1811,17 @@ main {
     left: 0 !important;
   }
 }
-
+.swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after {
+  color: #333 !important;
+}
 .story {
   cursor: pointer;
   img {
     display: block;
     margin: 0 auto 0px;
-    height: 155px;
-    width: 155px;
+    height: 145px;
+    width: 145px;
     border-radius: 100%;
     object-fit: cover;
     background-color: var(--bg-main);
@@ -1828,24 +1831,24 @@ main {
       border-width: 2px;
     }
     @media (max-width: $bp-xxl) {
-      height: 155px;
-      width: 155px;
+      height: 145px;
+      width: 145px;
     }
     @media (max-width: $bp-xl) {
       height: 140px;
       width: 140px;
     }
     @media (max-width: $bp-lg) {
-      height: 130px;
-      width: 130px;
-    }
-    @media (max-width: $bp-md) {
       height: 120px;
       width: 120px;
     }
+    @media (max-width: $bp-md) {
+      height: 110px;
+      width: 110px;
+    }
     @media (max-width: $bp-sm) {
-      height: 90px;
-      width: 90px;
+      height: 20vw;
+      width: 20vw;
     }
   }
   &.square {
@@ -1940,12 +1943,6 @@ main {
           &::after {
             font-size: 20px;
           }
-          // &-prev {
-          //   left: -1.25em;
-          // }
-          // &-next {
-          //   right: -1.25em;
-          // }
         }
         .swiper-scrollbar {
           position: absolute;

@@ -1915,14 +1915,19 @@ main {
   left: 0 !important;
 }
 
+.swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after {
+  color: #333 !important;
+}
+
 .story {
   cursor: pointer;
 }
 .story img {
   display: block;
   margin: 0 auto 0px;
-  height: 155px;
-  width: 155px;
+  height: 145px;
+  width: 145px;
   border-radius: 100%;
   -o-object-fit: cover;
      object-fit: cover;
@@ -1937,8 +1942,8 @@ main {
 }
 @media (max-width: 1399.98px) {
   .story img {
-    height: 155px;
-    width: 155px;
+    height: 145px;
+    width: 145px;
   }
 }
 @media (max-width: 1199.98px) {
@@ -1949,20 +1954,20 @@ main {
 }
 @media (max-width: 991.98px) {
   .story img {
-    height: 130px;
-    width: 130px;
-  }
-}
-@media (max-width: 767.98px) {
-  .story img {
     height: 120px;
     width: 120px;
   }
 }
+@media (max-width: 767.98px) {
+  .story img {
+    height: 110px;
+    width: 110px;
+  }
+}
 @media (max-width: 575.98px) {
   .story img {
-    height: 90px;
-    width: 90px;
+    height: 20vw;
+    width: 20vw;
   }
 }
 .story.square img {
