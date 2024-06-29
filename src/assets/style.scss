@@ -3723,7 +3723,6 @@ ACCOUNT
     }
   }
   .box {
-    border: 1px solid $gray;
     background-color: $white;
     border-radius: $radius;
     &-blue {
@@ -5496,4 +5495,7 @@ button:focus:not(:focus-visible) {
 .product-item-title {
   display: block;
   @include clamp(2, 1.8em, true);
+}
+.desc{
+  @include clamp(2, 1.3em, true);
 }

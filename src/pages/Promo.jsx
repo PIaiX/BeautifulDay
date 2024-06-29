@@ -16,7 +16,7 @@ const Promo = () => {
     return <Loader full />;
   }
 
-  if (!Array.isArray(sales.data.items) || sales.data.items.length <= 0) {
+  if (!Array.isArray(sales?.data?.items) || sales?.data?.items?.length <= 0) {
     return (
       <Empty
         text="Нет акций"
@@ -46,7 +46,7 @@ const Promo = () => {
             lg={4}
             className="g-2 g-sm-3 g-md-4 g-lg-3 g-xl-4"
           >
-            {sales.data.items.map((e) => (
+            {sales?.data?.items?.length > 0 && sales.data.items.map((e) => (
               <Col lg={4} md={6} key={e.id}>
                 <Offer data={e} />
               </Col>

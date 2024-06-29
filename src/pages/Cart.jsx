@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import NavTop from "../components/utils/NavTop";
 // import Gifts from "../components/utils/Gifts";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { NotificationManager } from "react-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -15,7 +15,7 @@ import Meta from "../components/Meta";
 import Input from "../components/utils/Input";
 import { customPrice, declination, getCount } from "../helpers/all";
 import { useTotalCart } from "../hooks/useCart";
-import { deleteCart } from "../services/cart";
+import { deleteCart, getCart } from "../services/cart";
 import { isPromo } from "../services/promo";
 import { cartDeletePromo } from "../store/reducers/cartSlice";
 
@@ -23,14 +23,17 @@ const Cart = () => {
   const user = useSelector((state) => state.auth.user);
   const cart = useSelector((state) => state.cart.items);
   const promo = useSelector((state) => state.cart.promo);
-  const checkout = useSelector((state) => state.checkout);
+  const stateDelivery = useSelector((state) => state.stateDelivery);
+  const pointSwitch = useSelector((state) => state.checkout?.data?.pointSwitch);
   const address = useSelector((state) => state.address.items);
   const options = useSelector((state) => state.settings.options);
-  const pointSwitch = useSelector((state) => state.checkout.data.pointSwitch);
+  const [data, setData] = useState({ loading: true });
   const {
     total = 0,
+    totalNoDelivery = 0,
     price = 0,
-    delivery,
+    discount = 0,
+    person = 0,
     pointAccrual,
     pickupDiscount,
     pointCheckout,
@@ -49,37 +52,52 @@ const Cart = () => {
       promo: promo?.name ? promo.name : "",
     },
   });
-
+  const form = useWatch({ control });
   const count = getCount(cart);
 
   const dispatch = useDispatch();
 
   const onPromo = useCallback(
-    (e) => {
-      (e?.promo?.length > 0 || promo?.name?.length > 0) &&
+    async (e) => {
+      if (e?.promo?.length > 0 || promo?.name?.length > 0) {
         isPromo({
           promo: e?.promo ? e.promo : promo?.name ? promo.name : "",
-          delivery: checkout.delivery,
+          delivery: stateDelivery,
+          total,
         })
-          .then(({ data }) => data?.promo && dispatch(cartPromo(data.promo)))
+          .then((res) => {
+            dispatch(cartPromo(res));
+            if (res?.product?.id) {
+              dispatch(updateCart({ ...res.product, cart: { count: 1 } }));
+            }
+          })
           .catch((error) => {
             dispatch(cartDeletePromo());
             NotificationManager.error(
               typeof error?.response?.data?.error === "string"
-                ? err.response.data.error
+                ? error.response.data.error
                 : "Такого промокода не существует"
             );
           });
+      }
     },
-    [promo, checkout.delivery]
+    [promo, stateDelivery, total]
   );
 
   useEffect(() => {
-    if (promo?.name) {
-      onPromo();
+    if (!promo) {
       setValue("promo", "");
     }
-  }, [checkout.delivery, promo]);
+  }, [promo]);
+
+  useEffect(() => {
+    getCart()
+      .then((res) => setData({ loading: false, ...res }))
+      .catch((err) => {
+        setData({ ...data, loading: false });
+      });
+  }, []);
+
 
   if (!Array.isArray(cart) || cart.length <= 0) {
     return (
@@ -169,12 +187,10 @@ const Cart = () => {
                 <span>{customPrice(price)}</span>
               </div>
 
-              {checkout.delivery == "delivery" && (
+              {discount > 0 && (
                 <div className="d-flex justify-content-between my-2">
-                  <span>Доставка</span>
-                  <span className="text-success">
-                    {delivery > 0 ? "+" + customPrice(delivery) : "Бесплатно"}
-                  </span>
+                  <span>Скидка</span>
+                  <span className="text-success">-{customPrice(discount)}</span>
                 </div>
               )}
               {pickupDiscount > 0 && (
@@ -199,9 +215,10 @@ const Cart = () => {
               )}
               <hr className="my-3" />
               <div className="d-flex justify-content-between mb-5">
-                <span className="fw-6 fs-11">Итоговая сумма</span>
-                <span className="fw-6">{customPrice(total)}</span>
+                <span className="fw-7 fs-11">Итоговая сумма</span>
+                <span className="fw-7">{customPrice(totalNoDelivery)}</span>
               </div>
+
 
               {options.giftVisible && <Gifts />}
 

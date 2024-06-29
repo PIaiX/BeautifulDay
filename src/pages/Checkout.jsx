@@ -82,11 +82,12 @@ const Checkout = () => {
   const isAuth = useSelector((state) => state.auth.isAuth);
   const user = useSelector((state) => state.auth.user);
   const cart = useSelector((state) => state.cart.items);
-  const promo = useSelector((state) => state.cart.promo);
-  const zone = useSelector((state) => state.cart.zone);
+  const promo = useSelector((state) => state.cart?.promo);
+  const zone = useSelector((state) => state.cart?.zone);
   const checkout = useSelector((state) => state.checkout);
   const address = useSelector((state) => state.address.items);
   const affiliate = useSelector((state) => state.affiliate.items);
+  const selectedAffiliate = useSelector((state) => state.affiliate?.active);
   const options = useSelector((state) => state.settings.options);
 
   const {
@@ -97,17 +98,8 @@ const Checkout = () => {
     pointAccrual,
     pickupDiscount,
     pointCheckout,
+    totalNoDelivery = 0,
   } = useTotalCart();
-
-  const selectedAffiliate =
-    affiliate?.length > 0
-      ? affiliate.find(
-          (e) =>
-            (checkout.delivery == "delivery" &&
-              e.id == zone?.data?.affiliateId) ||
-            (checkout.delivery == "pickup" && e.main)
-        )
-      : false;
 
   const [end, setEnd] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -137,7 +129,7 @@ const Checkout = () => {
       comment: checkout?.data?.comment ?? "",
 
       address: address ? address.find((e) => e.main) : false,
-      affiliateId: affiliate ? affiliate.find((e) => e.main)?.id : false,
+      affiliateId: selectedAffiliate?.id ? selectedAffiliate.id : false,
 
       // Сохранение адреса по умолчанию
       save: checkout?.data?.save ?? false,
@@ -178,9 +170,11 @@ const Checkout = () => {
   const data = useWatch({ control });
 
   const isValidBtn = () =>
+    isLoading ||
     !isValid ||
     !user?.id ||
-    (checkout.delivery === "delivery" && zone?.data?.minPrice > price);
+    (checkout.delivery === "delivery" &&
+      zone?.data?.minPrice > totalNoDelivery);
 
   useLayoutEffect(() => {
     if (isAuth && user?.status === 0) {
@@ -202,8 +196,10 @@ const Checkout = () => {
   useEffect(() => {
     if (!end && isAuth) {
       setValue("name", user.firstName);
-      setValue("phone", user.phone);
-      setValue("phoneReg", user.phone);
+      if (user.phone) {
+        setValue("phone", user.phone);
+        setValue("phoneReg", user.phone);
+      }
       trigger();
     }
   }, [user, end]);
@@ -259,8 +255,27 @@ const Checkout = () => {
     }
   }, [address]);
 
+  useEffect(() => {
+    if (selectedAffiliate?.id && checkout.delivery == "pickup") {
+      setValue("affiliateId", selectedAffiliate.id);
+    }
+  }, [selectedAffiliate]);
+
   const onSubmit = useCallback(
     (data) => {
+      if (data.serving) {
+        if (
+          !isWork(
+            selectedAffiliate.options.work[moment(data.serving).weekday()]
+              .start,
+            selectedAffiliate.options.work[moment(data.serving).weekday()].end,
+            data.serving
+          )
+        ) {
+          NotificationManager.error("Нельзя заказать на данное время");
+        }
+      }
+
       if (data.delivery == "delivery") {
         if (!data.address) {
           return NotificationManager.error("Добавьте адрес доставки");
@@ -493,7 +508,7 @@ const Checkout = () => {
                     />
                   </div>
                 </Col>
-                <Col md={12}>
+                {/* <Col md={12}>
                   <div className="mb-4">
                     <p className="mb-2 fs-09">Кол-во персон</p>
                     <CountInput
@@ -502,8 +517,8 @@ const Checkout = () => {
                       onChange={(e) => setValue("person", e)}
                     />
                   </div>
-                </Col>
-                <Col md={6}>
+                </Col> */}
+                {/* <Col md={6}>
                   <div className="mb-4">
                     <Input
                       label="Время подачи"
@@ -530,7 +545,7 @@ const Checkout = () => {
                       }}
                     />
                   </div>
-                </Col>
+                </Col> */}
                 <Col md={12}>
                   <div className="mb-4">
                     <p className="mb-2 fs-09">Способ оплаты</p>

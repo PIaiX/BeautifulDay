@@ -3,18 +3,11 @@ import { $authApi } from "./index";
 import { apiRoutes } from "../config/api";
 import { resetCart, updateCartSync } from "../store/reducers/cartSlice";
 
-const getCart = createAsyncThunk("cart", async (payloads, thunkAPI) => {
-  const isAuth = thunkAPI.getState()?.auth?.isAuth;
+const getCart = async () => {
+  const response = await $api.get(apiRoutes.CART)
+  return response?.data
+}
 
-  if (isAuth) {
-    try {
-      const response = await $authApi.get(apiRoutes.CART, { params: payloads });
-      return response?.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-});
 
 const updateCart = createAsyncThunk(
   "cart/update",

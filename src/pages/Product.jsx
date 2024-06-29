@@ -24,6 +24,23 @@ import SwiperButtonNext from "../components/utils/SwiperButtonNext";
 import SwiperButtonPrev from "../components/utils/SwiperButtonPrev";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Callback from "../components/modals/Callback";
+import { useSelector } from "react-redux";
+
+const groupByCategoryIdToArray = (modifiers) => {
+  const grouped = modifiers.reduce((acc, modifier) => {
+    const { categoryId } = modifier;
+    if (!acc[categoryId]) {
+      acc[categoryId] = [];
+    }
+    acc[categoryId].push(modifier);
+    return acc;
+  }, {});
+
+  return Object.keys(grouped).map((key, index) => ({
+    categoryId: key ?? index,
+    modifiers: grouped[key].sort((a, b) => a?.price - b?.price),
+  }));
+};
 
 const Product = () => {
   const [featuresShow, setFeaturesShow] = useState(false);
@@ -31,75 +48,146 @@ const Product = () => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const { productId } = useParams();
+  const multiBrand = useSelector((state) => state.settings.options.multiBrand);
+  const title = useSelector((state) => state.settings.options?.title);
+  const selectedAffiliate = useSelector((state) => state.affiliate.active);
+  const [isRemove, setIsRemove] = useState(false);
+
+  const productEnergyVisible = useSelector(
+    (state) => state.settings.options.productEnergyVisible
+  );
 
   const [product, setProduct] = useState({
     loading: true,
     item: {},
-    recommends: [],
   });
 
-  var [data, setData] = useState({
+  const [data, setData] = useState({
     cart: {
       data: {
-        modifiers: {},
+        modifiers: [],
         additions: [],
         wishes: [],
       },
     },
   });
 
-  useLayoutEffect(() => {
-    getProduct(productId)
+  const [prices, setPrices] = useState({
+    price: 0,
+    discount: 0,
+  });
+
+  const onLoad = () => {
+    getProduct({
+      id: productId,
+      affiliateId: selectedAffiliate?.id ?? false,
+      view: multiBrand,
+      type: "site",
+    })
       .then((res) => {
-        setProduct({ ...res, loading: false });
-        data.cart.data.modifiers =
+        const modifiers =
           res?.modifiers?.length > 0
-            ? res.modifiers.find((e) => e.main)
-            : false;
+            ? groupByCategoryIdToArray(res.modifiers)
+            : [];
+        setProduct({
+          loading: false,
+          item: {
+            ...res,
+            modifiers: modifiers,
+          },
+        });
+
+        data.cart.data.modifiers =
+          modifiers?.length > 0 ? modifiers.map((e) => e.modifiers[0]) : [];
         setData(data);
       })
       .catch(() => setProduct((data) => ({ ...data, loading: false })));
-  }, [productId]);
+  };
+
+  useLayoutEffect(() => {
+    onLoad();
+  }, [productId, selectedAffiliate]);
+
+  useLayoutEffect(() => {
+    if (product.item) {
+      let price = 0;
+      let discount = 0;
+      if (data.cart.data?.modifiers?.length > 0) {
+        if (product.item?.options?.modifierPriceSum) {
+          price +=
+            data.cart.data.modifiers.reduce(
+              (sum, item) => sum + item.price,
+              0
+            ) + product.item.price;
+        } else {
+          price += data.cart.data.modifiers.reduce(
+            (sum, item) => sum + item.price,
+            0
+          );
+        }
+      } else {
+        price += product.item.price;
+      }
+
+      if (data.cart.data?.modifiers?.length > 0) {
+        if (product.item?.options?.modifierPriceSum) {
+          discount +=
+            data.cart.data.modifiers.reduce(
+              (sum, item) => sum + item.discount,
+              0
+            ) + product.item.discount;
+        } else {
+          discount += data.cart.data.modifiers.reduce(
+            (sum, item) => sum + item.discount,
+            0
+          );
+        }
+      } else {
+        discount += product.item.discount;
+      }
+
+      if (data.cart.data?.additions?.length > 0) {
+        price += data.cart.data.additions.reduce(
+          (sum, item) => sum + item.price,
+          0
+        );
+      }
+      setPrices({ price, discount });
+    }
+  }, [data, product.item]);
 
   if (product?.loading) {
     return <Loader full />;
   }
 
-  if (!product?.id) {
+  if (!product?.item?.id) {
     return (
       <Empty
-        text="Такого товара нет"
-        desc="Возможно вы перепутали ссылку"
+        text={"Такого товара нет"}
+        desc={"Возможно вы перепутали ссылку"}
         image={() => <EmptyCatalog />}
         button={
           <Link className="btn-primary" to="/">
-            Перейти на главную
+            {"Перейти в меню"}
           </Link>
         }
       />
     );
   }
-  const price = data?.cart?.data?.modifiers?.price
-    ? data.cart.data.modifiers.price
-    : product?.modifiers?.length > 0 && Array.isArray(product.modifiers)
-    ? Math.min(...product.modifiers.map((item) => item.price))
-    : product?.item?.modifiers?.price ?? product?.price ?? 0;
-
-  const discount = data?.cart?.data?.modifiers?.discount
-    ? data.cart.data.modifiers.discount
-    : product?.modifiers?.length > 0 && Array.isArray(product.modifiers)
-    ? Math.min(...product.modifiers.map((item) => item.discount))
-    : product?.modifiers?.discount ?? product?.discount ?? 0;
 
   return (
     <main>
       <Meta
-        title={product?.title ?? "Товар"}
-        description={product?.description}
+        title={`${
+          selectedAffiliate?.title ? selectedAffiliate?.title : title
+        } — ${product?.item?.title}`}
+        description={`${
+          selectedAffiliate?.title ? selectedAffiliate?.title : title
+        } — ${product?.item?.title}`}
         image={
-          product?.medias[0]?.media
+          product?.item?.medias[0]?.media
             ? getImageURL({
-                path: product.medias[0].media,
+                path: product.item.medias[0].media,
                 size: "full",
                 type: "product",
               })
@@ -111,13 +199,13 @@ const Product = () => {
           toBack={true}
           breadcrumbs={[
             {
-              title: product?.category?.title ?? "Нет категории",
-              link: product?.category?.id
-                ? "/category/" + product.category.id
+              title: product.item?.category?.title ?? "Нет категории",
+              link: product.item?.category?.id
+                ? "/category/" + product.item.category.id
                 : "/menu",
             },
             {
-              title: product?.title ?? "Нет названия",
+              title: product.item?.title ?? "Нет названия",
             },
           ]}
         />
@@ -147,7 +235,7 @@ const Product = () => {
                                 path: e.media,
                                 size: "full",
                               })}
-                              alt={product.title}
+                              alt={product.item.title}
                               className="productPage-img"
                             />
                           </SwiperSlide>
@@ -165,15 +253,15 @@ const Product = () => {
                             : null,
                       }}
                     >
-                      {product.medias?.length > 0 &&
-                        product.medias.map((e) => (
+                      {product.item.medias?.length > 0 &&
+                        product.item.medias.map((e) => (
                           <SwiperSlide>
                             <img
                               src={getImageURL({
                                 path: e.media,
                                 size: "full",
                               })}
-                              alt={product.title}
+                              alt={product.item.title}
                               className="productPage-img"
                             />
                           </SwiperSlide>
@@ -189,32 +277,92 @@ const Product = () => {
                 </Col>
                 <Col className="d-flex flex-column justify-content-between">
                   <div>
-                    <h1>{product.title}</h1>
-                    {product.code && <p>Артикул: {product.code}</p>}
+                    <h1>{product.item.title}</h1>
+                    {product.item.code && <p>Артикул: {product.item.code}</p>}
                   </div>
 
-                  {/* <div className='productPage-price'>
-                    <div>
-                      <div className='fs-12'>650 ₽</div>
-                      <div className='gray fs-09 text-decoration-line-through'> 650 </div>
-                    </div>
-                    <button type='button' className='btn-primary ms-2 ms-xl-3'>Заказать</button>
-                    <CountInput className="ms-2 ms-xl-4"/>
-                  </div> */}
+                  {product?.item?.modifiers?.length > 0 &&
+                    product.item.modifiers.map((modifier) => (
+                      <>
+                        {modifier.modifiers?.length > 3 ? (
+                          <div className="mb-4">
+                            <Select
+                              data={modifier.modifiers.map((e) => ({
+                                title: e.title,
+                                value: e,
+                              }))}
+                              onClick={(e) => {
+                                let newData = { ...data };
+                                let isModifierIndex =
+                                  newData.cart.data.modifiers.findIndex(
+                                    (item) =>
+                                      item?.categoryId === e.value.categoryId ||
+                                      item?.categoryId === 0
+                                  );
+                                if (isModifierIndex != -1) {
+                                  newData.cart.data.modifiers[isModifierIndex] =
+                                    e.value;
+                                } else {
+                                  newData.cart.data.modifiers.push(e.value);
+                                }
+                                setData(newData);
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          modifier?.modifiers?.length > 0 && (
+                            <div className="d-xxl-flex mb-4">
+                              <ul className="inputGroup d-flex w-100">
+                                {modifier.modifiers.map((e, index) => (
+                                  <li className="d-flex text-center w-100">
+                                    <label>
+                                      <input
+                                        type="radio"
+                                        name={e.categoryId ?? 0}
+                                        defaultChecked={index === 0}
+                                        onChange={() => {
+                                          let newData = { ...data };
+                                          let isModifierIndex =
+                                            newData.cart.data.modifiers.findIndex(
+                                              (item) =>
+                                                item?.categoryId ===
+                                                  e.categoryId ||
+                                                item?.categoryId === 0
+                                            );
+                                          if (isModifierIndex != -1) {
+                                            newData.cart.data.modifiers[
+                                              isModifierIndex
+                                            ] = e;
+                                          } else {
+                                            newData.cart.data.modifiers.push(e);
+                                          }
+                                          setData(newData);
+                                        }}
+                                      />
+                                      <div className="text">{e.title}</div>
+                                    </label>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )
+                        )}
+                      </>
+                    ))}
 
                   <div className="productPage-price">
                     <div className="me-2 me-xl-3">
-                      <div className="fs-12">{customPrice(price)}</div>
-                      {discount > 0 && (
+                      <div className="fs-12">{customPrice(prices.price)}</div>
+                      {prices.discount > 0 && (
                         <div className="gray fs-09 text-decoration-line-through">
-                          {customPrice(discount)}
+                          {customPrice(prices.discount)}
                         </div>
                       )}
                     </div>
-                    {price > 0 ? (
+                    {prices.price > 0 ? (
                       <ButtonCart
                         full
-                        product={product}
+                        product={product.item}
                         data={data}
                         className="btn-primary ms-2 ms-xl-3"
                       >
@@ -232,7 +380,7 @@ const Product = () => {
                         </button>
                         <Callback
                           show={showFeedback}
-                          product={product}
+                          product={product.item}
                           setShow={setShowFeedback}
                         />
                       </>
@@ -311,11 +459,11 @@ const Product = () => {
               </li>
             </ul>
           ) : (
-            <div className="p-2 p-sm-4 lh-15">{product.description}</div>
+            <div className="p-2 p-sm-4 lh-15">{product.item.description}</div>
           )}
         </section>
 
-        {product?.recommends?.length > 0 && (
+        {product.item?.recommends?.length > 0 && (
           <section className="mb-6">
             <h2>Вам пригодится</h2>
             <div className="position-relative">
@@ -343,7 +491,7 @@ const Product = () => {
                   },
                 }}
               >
-                {product.recommends.map((e) => (
+                {product.item.recommends.map((e) => (
                   <SwiperSlide>
                     <ProductCard data={e} />
                   </SwiperSlide>

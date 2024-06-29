@@ -1,15 +1,17 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import AccountMenu from "../pages/account/AccountMenu";
-import { Link } from "react-router-dom";
-import NavBreadcrumbs from "../components/utils/NavBreadcrumbs";
-import { RxDotFilled } from "react-icons/rx";
-import Gear from "../components/svgs/Gear";
+import Row from "react-bootstrap/Row";
 import { useSelector } from "react-redux";
+import { Link, Outlet } from "react-router-dom";
+import NavBreadcrumbs from "../components/utils/NavBreadcrumbs";
+import AccountMenu from "../pages/account/AccountMenu";
 
 const AccountLayout = ({ isMobile }) => {
   const user = useSelector((state) => state.auth.user);
+  const profilePointVisible = useSelector(
+    (state) => state.settings.options.profilePointVisible
+  );
 
   return (
     <main className="account mb-2 mb-sm-3 mb-md-4 mb-xl-5">
@@ -22,55 +24,62 @@ const AccountLayout = ({ isMobile }) => {
             <NavBreadcrumbs
               breadcrumbs={[{ title: "Аккаунт", link: "/account" }]}
             />
-            <div className="account-top">
-              <div className="box w-100 h-100 d-flex align-items-center">
-                <div className="flex-1">
-                  <div>
-                    <span>
-                      {user.firstName
-                        ? user.firstName.slice(0, 1).toUpperCase()
-                        : "A"}
-                    </span>
-                    <RxDotFilled className="primary" />
-                    {user?.phone && (
-                      <a href={"tel:" + user.phone}>{user.phone}</a>
-                    )}
-                  </div>
-                  {user?.email && (
-                    <p className="dark-gray">
-                      <a href={"mailer:" + user.email}>{user.email}</a>
-                    </p>
-                  )}
+            <div className="d-flex mb-4">
+              <div className="box me-4 w-100 h-100 d-flex align-items-center">
+                <div className="icon d-none d-sm-none d-md-none d-xxl-flex">
+                  <span>
+                    {user.firstName
+                      ? user.firstName.slice(0, 1).toUpperCase()
+                      : "A"}
+                  </span>
                 </div>
-                <Link to="/account/settings" className="btn-gray">
-                  <Gear className="fs-15" />
-                </Link>
+                <div>
+                  <h6>{user?.firstName ?? "Имя"}</h6>
+                  {user?.phone ||
+                    (user?.email && (
+                      <>
+                        {user?.phone && (
+                          <p className="mb-3">
+                            <a href={"tel:" + user.phone}>{user.phone}</a>
+                          </p>
+                        )}
+                        {user?.email && (
+                          <p className="mb-3 fs-09">
+                            <a href={"mailer:" + user.email}>{user.email}</a>
+                          </p>
+                        )}
+                      </>
+                    ))}
+                  <p className="mt-2">
+                    <Link to="/account/settings" className="main-color">
+                      Изменить
+                    </Link>
+                  </p>
+                </div>
               </div>
-              <div className="box">
-                <Link
-                  to="/account/favorites"
-                  className="w-100 h-100 d-flex align-items-center justify-content-between"
-                >
-                  <span>Избранное</span>
-                  <img src="/images/favs.png" alt="favs" />
-                </Link>
-              </div>
-              <div className="box w-100 h-100 d-flex flex-column justify-content-between text-center">
-                <p className="fs-09 fw-6">Вы можете потратить</p>
-                <p className="secondary">
-                  <span className="fs-18">{user.point}</span>&nbsp;
-                  <span className="fw-6 fs-11">бонуса</span>
-                </p>
-              </div>
-              {/* <div>
-                <img
-                  src="/images/kits.jpg"
-                  alt="kits"
-                  className="img-fluid rounded-3"
-                />
-              </div> */}
-            </div>
 
+              {profilePointVisible && (
+                <div>
+                  <div className="box w-100 h-100 d-flex flex-column justify-content-between text-center">
+                    <p className="fs-09 fw-6">Вы можете потратить</p>
+                    <p className="main-color">
+                      <span className="fw-6 fs-13">{user.point}</span>&nbsp;
+                      <span className="fw-6 fs-13">Б</span>
+                    </p>
+                  </div>
+                </div>
+              )}
+              {/* <Col lg={7}>
+                <div className="h-100 row row-cols-2 gx-3 gx-xl-4">
+                  <div>
+                    <div className="gradient-block"></div>
+                  </div>
+                  <div>
+                    <div className="gradient-block"></div>
+                  </div>
+                </div>
+              </Col> */}
+            </div>
             <div className="row gx-3 gx-xl-4">
               <div className="col-4 col-lg-3">
                 <AccountMenu />

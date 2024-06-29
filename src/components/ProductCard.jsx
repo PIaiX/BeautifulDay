@@ -1,55 +1,82 @@
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useSelector } from "react-redux";
-import { customPrice, getImageURL } from "../helpers/all";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { customPrice, customWeight, getImageURL } from "../helpers/all";
 import ButtonCart from "./ButtonCart";
-import BtnFav from "./utils/BtnFav";
-import { HiOutlineShoppingBag } from "react-icons/hi2";
+// import BtnFav from "./utils/BtnFav";
 
-const ProductCard = memo(({ data, onFeedback }) => {
-  const isAuth = useSelector((state) => state.auth.isAuth);
+const ProductCard = memo(({ data }) => {
+  const themeProductImage = useSelector(
+    (state) => state.settings?.options?.themeProductImage
+  );
 
-  var price = data.price ?? 0;
-  if (Array.isArray(data.modifiers) && data?.modifiers?.length > 0) {
-    var price = Math.min(...data.modifiers.map((item) => item.price));
-  }
+  const modifiers =
+    Array.isArray(data.modifiers) && data?.modifiers?.length > 0
+      ? [...data.modifiers].sort((a, b) => a?.price - b?.price)
+      : [];
+
+  const price =
+    Array.isArray(modifiers) && modifiers?.length > 0 && modifiers[0]?.price
+      ? data?.options?.modifierPriceSum
+        ? modifiers[0].price + data.price
+        : modifiers[0].price
+      : data.price;
+
+  // const discount =
+  //   modifiers?.length > 0
+  //     ? data.options.modifierPriceSum
+  //       ? modifiers.reduce((sum, item) => sum + item.discount, 0) +
+  //         data.discount
+  //       : modifiers.reduce((sum, item) => sum + item.discount, 0)
+  //     : data.discount;
 
   return (
-    <div className="product" key={data.id}>
-      <div className="product-img">
-        <Link to={"/product/" + data.id}>
+    <div className="product" key={data?.id}>
+      <div
+        className={
+          themeProductImage == 1 ? "product-img rectangle" : "product-img"
+        }
+      >
+        <Link to={"/product/" + data?.id} state={data}>
           <LazyLoadImage
-            src={getImageURL({ path: data.medias })}
+            wrapperClassName="d-flex"
+            src={getImageURL({ path: data?.medias })}
             alt={data.title}
             loading="lazy"
+            effect="blur"
           />
         </Link>
-        {isAuth && <BtnFav product={data} />}
       </div>
 
-      <h6 className="text-center text-md-start product-item-title">
-        {data.title}
-      </h6>
-      {/* <p className="d-none d-md-block text-muted fs-09">{data.description}</p> */}
+      <h6 className="title text-center text-md-start">{data.title}</h6>
+      <p className="d-none d-md-block desc text-muted fs-09">{data.description}</p>
+      <hr className="d-none d-md-block" />
 
-      <div className="d-flex justify-content-between align-items-center">
-        <div className="fs-12">
-          {data?.modifiers?.length > 0
-            ? "от " + customPrice(price)
-            : customPrice(price)}
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div className="d-flex justify-content-between align-items-center mb-2 mb-md-0">
+          <div>
+            <div className="fs-12 fw-5">
+              {modifiers?.length > 0 && Array.isArray(modifiers)
+                ? "от " + customPrice(price > 0 ? price : data.price)
+                : customPrice(data.price)}
+            </div>
+            {/* <div className="gray fs-09 text-decoration-line-through">
+              {data?.modifiers?.length > 0
+                ? "от " + customPrice(price)
+                : customPrice(data.price)}
+            </div> */}
+          </div>
         </div>
-        {price > 0 ? (
-          <ButtonCart product={data} />
-        ) : (
-          <button
-            onClick={() => onFeedback && onFeedback(data)}
-            type="button"
-            className="btn-light"
-          >
-            <HiOutlineShoppingBag className="fs-15" />
-          </button>
+        {data?.energy?.weight > 0 && (
+          <div className="text-muted d-none d-md-block">
+            {customWeight({
+              value: data.energy.weight,
+              type: data.energy?.weightType,
+            })}
+          </div>
         )}
+        <ButtonCart product={data} />
       </div>
     </div>
   );
