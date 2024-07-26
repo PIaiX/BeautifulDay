@@ -12,6 +12,7 @@ import Empty from "../components/Empty";
 import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
 import Meta from "../components/Meta";
 import Loader from "../components/utils/Loader";
+import Select from "../components/utils/Select";
 import NavTop from "../components/utils/NavTop";
 import { customPrice, getImageURL } from "../helpers/all";
 import { getProduct } from "../services/product";
@@ -210,184 +211,184 @@ const Product = () => {
           ]}
         />
 
-        <form className="productPage mb-4 mb-md-5">
-          <Row className="gx-4 gx-xl-5">
-            <Col xs={12} lg={9}>
-              <Row md={2} className="h-100">
-                <Col>
-                  <div className="productPage-photo">
-                    <Swiper
-                      className="thumbSlider"
-                      modules={[Thumbs, FreeMode]}
-                      watchSlidesProgress
-                      onSwiper={setThumbsSwiper}
-                      direction="vertical"
-                      loop={true}
-                      spaceBetween={20}
-                      slidesPerView={"auto"}
-                      freeMode={true}
-                    >
-                      {product.medias?.length > 0 &&
-                        product.medias.map((e) => (
-                          <SwiperSlide>
-                            <img
-                              src={getImageURL({
-                                path: e.media,
-                                size: "full",
-                              })}
-                              alt={product.item.title}
-                              className="productPage-img"
-                            />
-                          </SwiperSlide>
-                        ))}
-                    </Swiper>
-                    <Swiper
-                      className="mainSlider"
-                      modules={[Thumbs]}
-                      loop={true}
-                      spaceBetween={20}
-                      thumbs={{
-                        swiper:
-                          thumbsSwiper && !thumbsSwiper.destroyed
-                            ? thumbsSwiper
-                            : null,
-                      }}
-                    >
-                      {product.item.medias?.length > 0 &&
-                        product.item.medias.map((e) => (
-                          <SwiperSlide>
-                            <img
-                              src={getImageURL({
-                                path: e.media,
-                                size: "full",
-                              })}
-                              alt={product.item.title}
-                              className="productPage-img"
-                            />
-                          </SwiperSlide>
-                        ))}
-                    </Swiper>
-                    {/* <BtnFav /> */}
-                  </div>
-                  {/* <img
+        <form className="productPage mb-5">
+          <Row className="gx-4 gx-xxl-5">
+            <Col xs={12} md={5} lg={6}>
+              <div className="productPage-photo">
+                <Swiper
+                  className="thumbSlider"
+                  modules={[Thumbs, FreeMode]}
+                  watchSlidesProgress
+                  onSwiper={setThumbsSwiper}
+                  direction="vertical"
+                  loop={true}
+                  spaceBetween={20}
+                  slidesPerView={"auto"}
+                  freeMode={true}
+                >
+                  {product.item?.medias?.length > 0 &&
+                    product.item.medias.map((e) => (
+                      <SwiperSlide>
+                        <img
+                          src={getImageURL({
+                            path: e.media,
+                            size: "full",
+                          })}
+                          alt={product.item.title}
+                          className="productPage-img"
+                        />
+                      </SwiperSlide>
+                    ))}
+                </Swiper>
+                <Swiper
+                  className="mainSlider"
+                  modules={[Thumbs]}
+                  loop={true}
+                  spaceBetween={20}
+                  thumbs={{
+                    swiper:
+                      thumbsSwiper && !thumbsSwiper.destroyed
+                        ? thumbsSwiper
+                        : null,
+                  }}
+                >
+                  {product.item.medias?.length > 0 &&
+                    product.item.medias.map((e) => (
+                      <SwiperSlide>
+                        <img
+                          src={getImageURL({
+                            path: e.media,
+                            size: "full",
+                          })}
+                          alt={product.item.title}
+                          className="productPage-img"
+                        />
+                      </SwiperSlide>
+                    ))}
+                </Swiper>
+                {/* <BtnFav /> */}
+              </div>
+              {/* <img
                     src={getImageURL({ path: product.medias, size: "full" })}
                     alt={product.title}
                     className="productPage-img"
                   /> */}
-                </Col>
-                <Col className="d-flex flex-column justify-content-between">
-                  <div>
-                    <h1>{product.item.title}</h1>
-                    {product.item.code && <p>Артикул: {product.item.code}</p>}
-                  </div>
+            </Col>
+            <Col
+              xs={12}
+              md={7}
+              lg={6}
+              className="d-flex flex-column justify-content-between"
+            >
+              <div>
+                <h1>{product.item.title}</h1>
+                {product.item.code && <p>Артикул: {product.item.code}</p>}
+              </div>
 
-                  {product?.item?.modifiers?.length > 0 &&
-                    product.item.modifiers.map((modifier) => (
-                      <>
-                        {modifier.modifiers?.length > 3 ? (
-                          <div className="mb-4">
-                            <Select
-                              data={modifier.modifiers.map((e) => ({
-                                title: e.title,
-                                value: e,
-                              }))}
-                              onClick={(e) => {
-                                let newData = { ...data };
-                                let isModifierIndex =
-                                  newData.cart.data.modifiers.findIndex(
-                                    (item) =>
-                                      item?.categoryId === e.value.categoryId ||
-                                      item?.categoryId === 0
-                                  );
-                                if (isModifierIndex != -1) {
-                                  newData.cart.data.modifiers[isModifierIndex] =
-                                    e.value;
-                                } else {
-                                  newData.cart.data.modifiers.push(e.value);
-                                }
-                                setData(newData);
-                              }}
-                            />
-                          </div>
-                        ) : (
-                          modifier?.modifiers?.length > 0 && (
-                            <div className="d-xxl-flex mb-4">
-                              <ul className="inputGroup d-flex w-100">
-                                {modifier.modifiers.map((e, index) => (
-                                  <li className="d-flex text-center w-100">
-                                    <label>
-                                      <input
-                                        type="radio"
-                                        name={e.categoryId ?? 0}
-                                        defaultChecked={index === 0}
-                                        onChange={() => {
-                                          let newData = { ...data };
-                                          let isModifierIndex =
-                                            newData.cart.data.modifiers.findIndex(
-                                              (item) =>
-                                                item?.categoryId ===
-                                                  e.categoryId ||
-                                                item?.categoryId === 0
-                                            );
-                                          if (isModifierIndex != -1) {
-                                            newData.cart.data.modifiers[
-                                              isModifierIndex
-                                            ] = e;
-                                          } else {
-                                            newData.cart.data.modifiers.push(e);
-                                          }
-                                          setData(newData);
-                                        }}
-                                      />
-                                      <div className="text">{e.title}</div>
-                                    </label>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )
-                        )}
-                      </>
-                    ))}
-
-                  <div className="productPage-price">
-                    <div className="me-2 me-xl-3">
-                      <div className="fs-12">{customPrice(prices.price)}</div>
-                      {prices.discount > 0 && (
-                        <div className="gray fs-09 text-decoration-line-through">
-                          {customPrice(prices.discount)}
-                        </div>
-                      )}
-                    </div>
-                    {prices.price > 0 ? (
-                      <ButtonCart
-                        full
-                        product={product.item}
-                        data={data}
-                        className="btn-primary ms-2 ms-xl-3"
-                      >
-                        Заказать
-                      </ButtonCart>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => setShowFeedback(true)}
-                          type="button"
-                          className="btn-secondary"
-                        >
-                          <HiOutlineShoppingBag className="fs-15" />
-                          <span className="ms-2">Заказать</span>
-                        </button>
-                        <Callback
-                          show={showFeedback}
-                          product={product.item}
-                          setShow={setShowFeedback}
+              {product?.item?.modifiers?.length > 0 &&
+                product.item.modifiers.map((modifier) => (
+                  <>
+                    {modifier.modifiers?.length > 3 ? (
+                      <div className="mb-4">
+                        <Select
+                          data={modifier.modifiers.map((e) => ({
+                            title: e.title,
+                            value: e,
+                          }))}
+                          onClick={(e) => {
+                            let newData = { ...data };
+                            let isModifierIndex =
+                              newData.cart.data.modifiers.findIndex(
+                                (item) =>
+                                  item?.categoryId === e.value.categoryId ||
+                                  item?.categoryId === 0
+                              );
+                            if (isModifierIndex != -1) {
+                              newData.cart.data.modifiers[isModifierIndex] =
+                                e.value;
+                            } else {
+                              newData.cart.data.modifiers.push(e.value);
+                            }
+                            setData(newData);
+                          }}
                         />
-                      </>
+                      </div>
+                    ) : (
+                      modifier?.modifiers?.length > 0 && (
+                        <div className="d-xxl-flex mb-4">
+                          <ul className="inputGroup d-flex w-100">
+                            {modifier.modifiers.map((e, index) => (
+                              <li className="d-flex text-center w-100">
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={e.categoryId ?? 0}
+                                    defaultChecked={index === 0}
+                                    onChange={() => {
+                                      let newData = { ...data };
+                                      let isModifierIndex =
+                                        newData.cart.data.modifiers.findIndex(
+                                          (item) =>
+                                            item?.categoryId === e.categoryId ||
+                                            item?.categoryId === 0
+                                        );
+                                      if (isModifierIndex != -1) {
+                                        newData.cart.data.modifiers[
+                                          isModifierIndex
+                                        ] = e;
+                                      } else {
+                                        newData.cart.data.modifiers.push(e);
+                                      }
+                                      setData(newData);
+                                    }}
+                                  />
+                                  <div className="text">{e.title}</div>
+                                </label>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )
                     )}
-                  </div>
-                </Col>
-              </Row>
+                  </>
+                ))}
+
+              <div className="productPage-price">
+                <div className="me-2 me-xl-3">
+                  <div className="fs-12">{customPrice(prices.price)}</div>
+                  {prices.discount > 0 && (
+                    <div className="gray fs-09 text-decoration-line-through">
+                      {customPrice(prices.discount)}
+                    </div>
+                  )}
+                </div>
+                {prices.price > 0 ? (
+                  <ButtonCart
+                    full
+                    product={product.item}
+                    data={data}
+                    className="btn-primary ms-2 ms-xl-3"
+                  >
+                    Заказать
+                  </ButtonCart>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setShowFeedback(true)}
+                      type="button"
+                      className="btn-secondary"
+                    >
+                      <HiOutlineShoppingBag className="fs-15" />
+                      <span className="ms-2">Заказать</span>
+                    </button>
+                    <Callback
+                      show={showFeedback}
+                      product={product.item}
+                      setShow={setShowFeedback}
+                    />
+                  </>
+                )}
+              </div>
             </Col>
             {/* <Col
               xs={12}

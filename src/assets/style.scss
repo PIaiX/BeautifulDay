@@ -915,7 +915,7 @@ select {
 }
 .select {
   position: relative;
-  width: 180px;
+  min-width: auto;
   &-button {
     width: 100%;
     position: relative;
@@ -957,13 +957,16 @@ select {
     }
   }
   &-options {
+    @include scrollCustomized();
     @include list();
-    min-width: 200px;
-    background-color: $white;
+    min-width: 160px;
+    width: 100%;
     @include shadow();
     border-radius: $radius * 0.5;
     border: none;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 400px;
     padding: 0px;
     @include safariFix();
     @media (max-width: $bp-lg) {
@@ -975,18 +978,18 @@ select {
       padding: 0px !important;
       margin: 0px !important;
       &:not(:first-child) {
-        border-top: 1px solid $light-gray;
+        border-top: 1px solid var(--bg-btn);
       }
     }
     label {
       position: relative;
       width: 100%;
       cursor: pointer;
-      background-color: $white;
+      background-color: var(--bg-second);
       transition: background-color $transition;
       padding: 0.5em 1em;
       &.active {
-        background-color: rgba($color: $primary, $alpha: 0.1);
+        background-color: var(--main-color);
       }
       input {
         position: relative;
@@ -1010,6 +1013,11 @@ select {
       position: relative;
       z-index: 2;
     }
+  }
+  &-label {
+    font-size: 14px;
+    position: relative;
+    z-index: 2;
   }
 }
 
@@ -5496,6 +5504,6 @@ button:focus:not(:focus-visible) {
   display: block;
   @include clamp(2, 1.8em, true);
 }
-.desc{
+.desc {
   @include clamp(2, 1.3em, true);
 }
