@@ -164,12 +164,12 @@ const Contact = () => {
                                     mainAffiliate.id === e.id
                                       ? {
                                           iconLayout: "default#image",
-                                          iconImageHref: "imgs/marker.png",
+                                          iconImageHref: "images/marker.png",
                                           iconImageSize: [38, 54],
                                         }
                                       : {
                                           iconLayout: "default#image",
-                                          iconImageHref: "imgs/marker-gray.png",
+                                          iconImageHref: "images/marker-gray.png",
                                           iconImageSize: [38, 54],
                                         }
                                   }

@@ -16,10 +16,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import CheckoutProduct from "../components/CheckoutProduct";
 import Empty from "../components/Empty";
-import EmptyAddresses from "../components/empty/addresses";
-import EmptyAuth from "../components/empty/auth";
-import EmptyCart from "../components/empty/cart";
-import EmptyWork from "../components/empty/work";
+import { ReactComponent as EmptyAddresses } from "../components/empty/address.svg";
+import { ReactComponent as EmptyAuth } from "../components/empty/auth.svg";
+import { ReactComponent as EmptyCart } from "../components/empty/cart.svg";
+import { ReactComponent as EmptyWork } from "../components/empty/work.svg";
+
 import Meta from "../components/Meta";
 import CountInput from "../components/utils/CountInput";
 import Input from "../components/utils/Input";
@@ -319,7 +320,7 @@ const Checkout = () => {
         if (!data.address) {
           return NotificationManager.error(t("Добавьте адрес доставки"));
         }
-console.log(zone)
+        console.log(zone);
         if (!zone?.data || !zone?.data?.status) {
           NotificationManager.error(
             t("По данному адресу доставка не производится")

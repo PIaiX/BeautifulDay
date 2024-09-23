@@ -4,7 +4,7 @@ import AccountTitleReturn from "../../components/AccountTitleReturn";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Empty from "../../components/Empty";
-import EmptyAddresses from "../../components/empty/addresses";
+import { ReactComponent as EmptyAddresses } from "../../components/empty/address.svg";
 import { useTranslation } from "react-i18next";
 
 const Addresses = () => {

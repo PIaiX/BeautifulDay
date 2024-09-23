@@ -1,19 +1,18 @@
 import moment from "moment";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { useTranslation } from "react-i18next";
 import { HiOutlineArrowLeftCircle } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import Empty from "../../components/Empty";
-import EmptyOrders from "../../components/empty/orders";
+import { ReactComponent as EmptyOrders } from "../../components/empty/order.svg";
 import OrderItem from "../../components/OrderItem";
 import Status from "../../components/Status";
 import Loader from "../../components/utils/Loader";
-import socket from "../../config/socket";
 import { customPrice, deliveryData, paymentData } from "../../helpers/all";
 import { getOrder } from "../../services/order";
-import { useTranslation } from "react-i18next";
 
 const Order = () => {
   const { orderId } = useParams();

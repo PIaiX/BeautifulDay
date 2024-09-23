@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import Empty from "../../components/Empty";
-import EmptyOrders from "../../components/empty/orders";
+import { ReactComponent as EmptyOrders } from "../../components/empty/order.svg";
 import Meta from "../../components/Meta";
 import Status from "../../components/Status";
 import Loader from "../../components/utils/Loader";

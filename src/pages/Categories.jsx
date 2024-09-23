@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import CategoryCard from "../components/CategoryCard";
 import { getCategoriesList } from "../services/category";
 import Loader from "../components/utils/Loader";
-import EmptyCatalog from "../components/empty/catalog";
+import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
 import { Link } from "react-router-dom";
 import Empty from "../components/Empty";
 import Meta from "../components/Meta";

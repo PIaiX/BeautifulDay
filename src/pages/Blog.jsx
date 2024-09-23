@@ -6,7 +6,7 @@ import Row from "react-bootstrap/Row";
 // swiper
 import { Link, useParams } from "react-router-dom";
 import Empty from "../components/Empty";
-import EmptyCatalog from "../components/empty/catalog";
+import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
 import Loader from "../components/utils/Loader";
 import { getImageURL } from "../helpers/all";
 import { getBlog } from "../services/blog";

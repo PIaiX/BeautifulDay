@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Empty from "../components/Empty";
 import Meta from "../components/Meta";
 import Offer from "../components/Offer";
-import EmptySale from "../components/empty/sale";
+import { ReactComponent as EmptySale } from "../components/empty/sale.svg";
 import Loader from "../components/utils/Loader";
 import { useTranslation } from "react-i18next";
 import { getSales } from "../services/sales";
