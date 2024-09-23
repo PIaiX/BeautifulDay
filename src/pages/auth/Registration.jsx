@@ -2,7 +2,7 @@ import React, {
   useState,
   useRef,
   useCallback,
-  useLayoutEffect,
+  useEffect,
   useMemo,
 } from "react";
 import Container from "react-bootstrap/Container";
@@ -14,13 +14,18 @@ import { authRegister, login } from "../../services/auth";
 import Meta from "../../components/Meta";
 import { Button } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
-import { isMobile } from "react-device-detect";
+
 import { getImageURL } from "../../helpers/all";
+import { useTranslation } from "react-i18next";
+import socket from "../../config/socket";
+import { setAuth, setToken, setUser } from "../../store/reducers/authSlice";
 
 const Registration = () => {
+  const { t } = useTranslation();
   const isAuth = useSelector((state) => state.auth.isAuth);
   const user = useSelector((state) => state.auth.user);
   const options = useSelector((state) => state.settings.options);
+  const loadingLogin = useSelector((state) => state.auth.loadingLogin);
   const bgImage = options.auth
     ? getImageURL({
         path: options.auth,
@@ -29,7 +34,7 @@ const Registration = () => {
       })
     : false;
   const navigate = useNavigate();
-
+  const [loadingReg, setLoadingReg] = useState(false);
   const [loginView, setLoginView] = useState(true);
   const block1 = useRef();
   const block2 = useRef();
@@ -43,7 +48,7 @@ const Registration = () => {
     fill: "forwards",
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isAuth) {
       if (user?.id && user?.status === 0) {
         return navigate("/activate");
@@ -63,25 +68,77 @@ const Registration = () => {
     register: registerReg,
     formState: { errors: errorsReg, isValid: isValidReg },
     handleSubmit: handleSubmitReg,
-  } = useForm({ mode: "all", reValidateMode: "onChange" });
+  } = useForm({
+    mode: "all",
+    reValidateMode: "onChange",
+
+    defaultValues: { accept: true },
+  });
 
   const dispatch = useDispatch();
 
   const onSubmit = useCallback((data) => {
+    if (data?.phone && data.phone?.length > 0) {
+      let phone = data.phone.replace(/[^\d]/g, "").trim();
+      if (!phone) {
+        return NotificationManager.error("Укажите номер телефона");
+      }
+      if (phone?.length < 11) {
+        return NotificationManager.error("Введите корректный номер телефона");
+      }
+      if (parseInt(phone[0]) === 7 && parseInt(phone[1]) === 8) {
+        return NotificationManager.error(
+          "Неверный формат номера телефона. Должно быть +79, +77."
+        );
+      }
+    }
     dispatch(login(data));
   }, []);
 
   const onSubmitReg = useCallback(
     (data) => {
+      if (data?.phone && data.phone?.length > 0) {
+        let phone = data.phone.replace(/[^\d]/g, "").trim();
+        if (!phone) {
+          return NotificationManager.error("Укажите номер телефона");
+        }
+        if (phone?.length < 11) {
+          return NotificationManager.error("Введите корректный номер телефона");
+        }
+        if (parseInt(phone[0]) === 7 && parseInt(phone[1]) === 8) {
+          return NotificationManager.error(
+            "Неверный формат номера телефона. Должно быть +79, +77."
+          );
+        }
+      }
+      if (data?.comment?.length > 0) {
+        return NotificationManager.error(
+          "Регистрация временно недоступна, попробуйте немного позже"
+        );
+      }
+      setLoadingReg(true);
+
       authRegister(data)
         .then((res) => {
           NotificationManager.success(
-            "Завершите регистрацию, подтвердив почту"
+            "Завершите регистрацию " +
+              (options.authType == "email"
+                ? "подтвердив почту"
+                : "подтвердив номер телефона")
           );
-          if (res?.id) {
-            dispatch(login(data));
+          if (res?.user?.id) {
+            dispatch(setUser(res.user));
+            dispatch(setToken(res.token));
+            dispatch(setAuth(true));
+
+            socket.io.opts.query = {
+              brandId: res.user.brandId ?? false,
+              userId: res.user.id ?? false,
+            };
+            socket.connect();
+
+            return navigate("/activate");
           }
-          navigate("/activate");
         })
         .catch((error) =>
           NotificationManager.error(
@@ -89,7 +146,8 @@ const Registration = () => {
               ? error.response.data.error
               : "Неизвестная ошибка"
           )
-        );
+        )
+        .finally(() => setLoadingReg(false));
     },
     [options]
   );
@@ -156,21 +214,18 @@ const Registration = () => {
 
   const regForm = useMemo(() => (
     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-      <h4 className="main-color text-center fw-4">С возвращением!</h4>
-      {/* <p className="text-center fs-11 mb-5">
-        Вкусные роллы и пицца скучали по тебе
-      </p> */}
+      <h4 class="fw-6 h4 mb-4">{t("Войдите в профиль")}</h4>
       <div className="mb-3">
         {!options.authType || options.authType === "email" ? (
           <Input
             type="email"
-            label="Email"
             name="email"
-            placeholder="Введите email"
+            inputMode="email"
+            placeholder={t("Введите email")}
             errors={errors}
             register={register}
             validation={{
-              required: "Введите email",
+              required: t("Введите email"),
               maxLength: {
                 value: 250,
                 message: "Максимально 250 символов",
@@ -184,15 +239,16 @@ const Registration = () => {
         ) : (
           <Input
             type="custom"
-            label="Номер телефона"
             name="phone"
+            inputMode="tel"
+            pattern="[0-9+()-]*"
             placeholder="+7(900)000-00-00"
             mask="+7(999)999-99-99"
             errors={errors}
             register={register}
             maxLength={16}
             validation={{
-              required: "Введите номер телефона",
+              required: t("Введите номер телефона"),
               maxLength: {
                 value: 16,
                 message: "Максимально 16 символов",
@@ -201,16 +257,15 @@ const Registration = () => {
           />
         )}
       </div>
-      <div className="mb-3">
+      <div className="mb-4">
         <Input
-          label="Пароль"
           type="password"
           name="password"
           errors={errors}
-          placeholder="Введите пароль"
+          placeholder={t("Введите пароль")}
           register={register}
           validation={{
-            required: "Введите пароль",
+            required: t("Введите пароль"),
             minLength: {
               value: 6,
               message: "Минимальный пароль должен состоять из 6 символов",
@@ -221,34 +276,34 @@ const Registration = () => {
       <Button
         type="submit"
         variant="primary"
-        disabled={!isValid}
-        className="w-100 rounded-3"
+        disabled={loadingLogin || !isValid}
+        className={"w-100 rounded-3 " + (loadingLogin ? "loading" : "")}
       >
-        Войти
+        {t("Войти")}
       </Button>
       <div className="mt-4 text-center text-muted fs-09">
-        <Link to="/recovery">Забыли пароль?</Link>
+        <Link to="/recovery">{t("Забыли пароль?")}</Link>
       </div>
     </form>
   ));
 
   const loginForm = useMemo(() => (
     <form className="login-form" onSubmit={handleSubmitReg(onSubmitReg)}>
-      <h4 className="main-color text-center fw-4">Привет, друг!</h4>
-      <p className="text-center fs-11 mb-5">
-        Введи данные, чтобы зарегистрироваться
+      <h4 className="fw-6 mb-1">{t("Регистрация")}</h4>
+      <p className="fs-10 mb-4 text-muted">
+        {t("Заполните данные, чтобы создать профиль")}
       </p>
       <div className="mb-3">
         {!options.authType || options.authType === "email" ? (
           <Input
             type="email"
-            label="Email"
             name="email"
-            placeholder="Введите email"
+            inputMode="email"
+            placeholder={t("Введите email")}
             errors={errorsReg}
             register={registerReg}
             validation={{
-              required: "Введите email",
+              required: t("Введите email"),
               maxLength: {
                 value: 250,
                 message: "Максимально 250 символов",
@@ -262,15 +317,16 @@ const Registration = () => {
         ) : (
           <Input
             type="custom"
-            label="Номер телефона"
             name="phone"
+            inputMode="tel"
+            pattern="[0-9+()-]*"
             placeholder="+7(900)000-00-00"
             mask="+7(999)999-99-99"
             errors={errorsReg}
             register={registerReg}
             maxLength={16}
             validation={{
-              required: "Введите номер телефона",
+              required: t("Введите номер телефона"),
               maxLength: {
                 value: 16,
                 message: "Максимально 16 символов",
@@ -282,13 +338,12 @@ const Registration = () => {
       <div className="mb-3">
         <Input
           type="password"
-          label="Пароль"
-          placeholder="Придумайте пароль"
+          placeholder={t("Придумайте пароль")}
           name="password"
           errors={errorsReg}
           register={registerReg}
           validation={{
-            required: "Введите пароль",
+            required: t("Введите пароль"),
             minLength: {
               value: 6,
               message: "Минимальное кол-во символов 6",
@@ -303,13 +358,12 @@ const Registration = () => {
       <div className="mb-3">
         <Input
           type="password"
-          label="Подтверждение пароля"
-          placeholder="Повторите пароль"
+          placeholder={t("Повторите пароль")}
           name="passwordConfirm"
           errors={errorsReg}
           register={registerReg}
           validation={{
-            required: "Введите повторный пароль",
+            required: t("Введите повторный пароль"),
             minLength: {
               value: 6,
               message: "Минимальное кол-во символов 6",
@@ -321,84 +375,77 @@ const Registration = () => {
           }}
         />
       </div>
-      <label className="d-flex pale-blue mb-3">
+      <input type="text" className="d-none" {...registerReg("comment")} />
+      <label className="d-flex pale-blue mb-4">
         <input
           type="checkbox"
           className="checkbox me-2"
           {...registerReg("accept", {
-            required: "Примите условия пользовательского соглашения",
+            required: t("Примите условия пользовательского соглашения"),
           })}
         />
         <span className="fs-09">
-          Принять условия Пользовательского соглашения
+          {t("Принять условия Пользовательского соглашения")}
         </span>
       </label>
       <Button
         type="submit"
         variant="primary"
-        disabled={!isValidReg}
-        className="w-100 rounded-3"
+        disabled={loadingReg || !isValidReg}
+        className={"w-100 rounded-3 " + (loadingReg ? "loading" : "")}
       >
-        Зарегистрироваться
+        {t("Зарегистрироваться")}
       </Button>
     </form>
   ));
 
   return (
     <main className="py-lg-0">
-      <Meta title={loginView ? "Вход" : "Регистрация"} />
+      <Meta title={t(loginView ? "Вход" : "Регистрация")} />
       <Container>
-        {isMobile ? (
-          <section className="d-lg-none login-mobile">
+        <section className="align-items-center login justify-content-center justify-content-lg-between d-flex">
+          <div ref={block2} className="login-forms">
             {loginView ? regForm : loginForm}
-            {loginView ? (
-              <button
-                type="button"
-                onClick={() => setLoginView(false)}
-                className="main-color fs-13 mx-auto mt-4 text-decoration-underline"
-              >
-                Зарегистрироваться
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setLoginView(true)}
-                className="main-color fs-13 mx-auto mt-4 text-decoration-underline"
-              >
-                Войти
-              </button>
-            )}
-          </section>
-        ) : (
-          <section className="d-none d-lg-flex align-items-center login">
-            <div ref={block2} className="login-forms">
-              {loginView ? regForm : loginForm}
-            </div>
-            <div
-              ref={block1}
-              className="login-toggler"
-              style={{ backgroundImage: bgImage ? `url(${bgImage})` : null }}
+            <button
+              type="button"
+              onClick={() => setLoginView(!loginView)}
+              className="btn btn-white d-block w-100 rounded-3 d-lg-none fw-6 mx-auto mt-4"
             >
-              <div className="text">
-                <div ref={text1} className="text-1">
-                  <h4>Это ваш первый заказ?</h4>
-                  <p>Пройдите регистрацию</p>
-                </div>
-                <div ref={text2} className="text-2">
-                  <h4>Уже есть аккаунт?</h4>
-                  <p>Войди в личный кабинет</p>
-                </div>
+              {loginView ? (
+                <span>{t("Создать профиль")}</span>
+              ) : (
+                <span>{t("Войти в профиль")}</span>
+              )}
+            </button>
+          </div>
+          <div
+            ref={block1}
+            className="login-toggler d-none d-lg-block"
+            style={{ backgroundImage: bgImage ? `url(${bgImage})` : null }}
+          >
+            <div className="text">
+              <div ref={text1} className="text-1">
+                <h4 className="fw-6 mb-1">{t("Это ваш первый заказ?")}</h4>
+                <p>{t("Пройдите регистрацию")}</p>
               </div>
-              <button
-                type="button"
-                onClick={handleClick}
-                className="btn-40 rounded-3 mx-auto mt-4"
-              >
-                {loginView ? <span>Регистрация</span> : <span>Войти</span>}
-              </button>
+              <div ref={text2} className="text-2">
+                <h4 className="fw-6 mb-1">{t("Уже есть аккаунт?")}</h4>
+                <p>{t("Войдите в личный кабинет")}</p>
+              </div>
             </div>
-          </section>
-        )}
+            <button
+              type="button"
+              onClick={handleClick}
+              className="btn btn-primary rounded-3 fw-6 mx-auto mt-4"
+            >
+              {loginView ? (
+                <span>{t("Создать профиль")}</span>
+              ) : (
+                <span>{t("Войти в профиль")}</span>
+              )}
+            </button>
+          </div>
+        </section>
       </Container>
     </main>
   );

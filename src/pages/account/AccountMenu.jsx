@@ -5,70 +5,35 @@ import {
   HiOutlineMapPin,
   HiOutlineArrowRightOnRectangle,
   HiOutlineHeart,
-  // HiOutlineStar,
-  // HiOutlineCreditCard,
-  // HiOutlineBellAlert,
-  // HiOutlineBolt,
-  // HiOutlineLifebuoy,
 } from "react-icons/hi2";
 import { useDispatch } from "react-redux";
 import { logout } from "../../services/auth";
-import CartIcon from "../../components/svgs/CartIcon";
-import AddressPin from "../../components/svgs/AddressPin";
-import Star from "../../components/svgs/Star";
-import Support from "../../components/svgs/Support";
-import Bell from "../../components/svgs/Bell";
-import Promo from "../../components/svgs/Promo";
-import CardIcon from "../../components/svgs/CardIcon";
+import { useTranslation } from "react-i18next";
 
-const AccountMenu = (props) => {
+const AccountMenu = () => {
   const dispatch = useDispatch();
   const navigaion = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <nav className="account-nav">
       <ul>
         <li>
           <NavLink to="orders">
-            <CartIcon />
-            <div>Заказы</div>
+            <HiOutlineShoppingBag />
+            <div>{t("Заказы")}</div>
           </NavLink>
         </li>
         <li>
           <NavLink to="addresses">
-            <AddressPin />
-            <div>Адреса</div>
+            <HiOutlineMapPin />
+            <div>{t("Адреса")}</div>
           </NavLink>
         </li>
         {/* <li>
-          <NavLink to="bonus">
-            <Star/>
-            <div>Бонусы</div>
-          </NavLink>
-        </li> */}
-        {/* <li>
-          <NavLink to="payment">
-            <CardIcon/>
-            <div>Способы оплаты</div>
-          </NavLink>
-        </li> */}
-        {/* <li>
-          <NavLink to="support">
-            <Support/>
-            <div>Тех.&nbsp;подержка</div>
-          </NavLink>
-        </li> */}
-        {/* <li>
-          <NavLink to="notifications">
-            <Bell/>
-            <div>Уведомления</div>
-            <span className='badge'>12</span>
-          </NavLink>
-        </li> */}
-        {/* <li>
-          <NavLink to="offers">
-            <Promo/>
-            <div>Акции</div>
+          <NavLink to="favorites">
+            <HiOutlineHeart />
+            <div>{t('Избранное')}</div>
           </NavLink>
         </li> */}
         <li>
@@ -79,9 +44,39 @@ const AccountMenu = (props) => {
             }}
           >
             <HiOutlineArrowRightOnRectangle />
-            <div>Выйти</div>
+            <div>{t("Выйти")}</div>
           </a>
         </li>
+        {/* <li>
+          <NavLink to="bonus">
+            <HiOutlineStar/>
+            <div>Бонусная программа</div>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="payment">
+            <HiOutlineCreditCard/>
+            <div>Способы оплаты</div>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="support">
+            <HiOutlineLifebuoy/>
+            <div>Тех. подержка</div>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="notifications">
+            <HiOutlineBellAlert/>
+            <div>Уведомления</div>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="offers">
+            <HiOutlineBolt/>
+            <div>Акции и промокоды</div>
+          </NavLink>
+        </li> */}
       </ul>
     </nav>
   );

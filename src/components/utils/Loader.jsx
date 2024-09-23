@@ -1,52 +1,28 @@
-import React, { memo } from "react";
+import React, { useState, useEffect } from "react";
 
-const Loader = memo(
-  ({ className, full = false, size = 35, color, speed = "1s" }) => {
-    const Icon = () => {
-      return (
-        <main className="d-flex align-items-center justify-content-center">
-          <svg
-            className={className}
-            xmlns="http://www.w3.org/2000/svg"
-            width={size}
-            height={size}
-            viewBox="0 0 38 38"
-            stroke={color ? color : "#222"}
-          >
-            <g fill="none" fillRule="evenodd">
-              <g transform="translate(1 1)" strokeWidth="2">
-                <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
-                <path d="M36 18c0-9.94-8.06-18-18-18">
-                  <animateTransform
-                    attributeName="transform"
-                    type="rotate"
-                    from="0 18 18"
-                    to="360 18 18"
-                    dur={speed}
-                    repeatCount="indefinite"
-                  />
-                </path>
-              </g>
-            </g>
-          </svg>
-        </main>
-      );
-    };
-    if (full) {
-      return (
-        <main className="d-flex align-items-center justify-content-center">
-          <div className="loader">
-            <Icon />
-          </div>
-        </main>
-      );
-    }
-    return (
-      <main className="d-flex align-items-center justify-content-center">
-        <Icon />
-      </main>
-    );
-  }
-);
+function Loader() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Эмулируем загрузку данных (замените это на ваш реальный код)
+    const delay = 2000; // Задержка в миллисекундах
+    setTimeout(() => {
+      setIsLoading(false);
+    }, delay);
+  }, []);
+
+  return (
+    <main className="d-flex align-items-center justify-content-center">
+      <div className={`loading-indicator ${isLoading ? "active" : ""}`}>
+        <div className="position-relative">
+          <div className="spinner"></div>
+          {/* <div className="delivery-loader">
+            <img src="/imgs/delivery-loading.png" width="35" />
+          </div> */}
+        </div>
+      </div>
+    </main>
+  );
+}
 
 export default Loader;

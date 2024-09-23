@@ -1,31 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { $authApi } from "./index";
+import { $authApi, $api } from "./index";
 import { apiRoutes } from "../config/api";
 import { resetCart, updateCartSync } from "../store/reducers/cartSlice";
 
-const getCart = async () => {
-  const response = await $api.get(apiRoutes.CART)
+const getCart = async (data) => {
+  const response = await $api.post(apiRoutes.CART, data)
   return response?.data
 }
-
 
 const updateCart = createAsyncThunk(
   "cart/update",
   async (payloads, thunkAPI) => {
-    const isAuth = thunkAPI.getState()?.auth?.isAuth;
-
     thunkAPI.dispatch(updateCartSync(payloads));
-
-    if (isAuth) {
-      try {
-        const response = await $authApi.put(apiRoutes.CART, {
-          product: payloads,
-        });
-        return response?.data;
-      } catch (error) {
-        return thunkAPI.rejectWithValue(error);
-      }
-    }
   }
 );
 

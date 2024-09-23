@@ -1,4 +1,4 @@
-const DOMAIN = 'meat.yooapp.online'; //window.location.hostname
+const DOMAIN = 'remontpro.yooapp.online'; //window.location.hostname
 const SITE_URL = "https://yooapp.ru";
 const BASE_URL = "https://api.yooapp.ru";
 const ADMIN_URL = "https://admin.yooapp.ru";
@@ -64,9 +64,9 @@ const apiRoutes = {
   SERVICES: SERVICE_CATALOG + '/services',
 
   // category
-  CATEGORY_ALL: SERVICE_CATALOG + '/categories',
-  CATEGORY_ONE: SERVICE_CATALOG + '/category',
-  CATEGORY_LIST: SERVICE_CATALOG + '/categoryList',
+  CATEGORY_ALL: SERVICE_CATALOG + "/categories",
+  CATEGORY_ONE: SERVICE_CATALOG + "/category",
+  CATEGORIES_LIST: SERVICE_CATALOG + "/categoryList",
 
   // Portfolio
   PORTFOLIO: SERVICE_CATALOG + '/portfolio',

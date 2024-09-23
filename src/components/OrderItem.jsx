@@ -1,37 +1,60 @@
-import React, { memo, useState } from "react";
-import Collapse from "react-bootstrap/Collapse";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
-import { IoCaretDownOutline } from "react-icons/io5";
-import { customPrice, customWeight, getImageURL } from "../helpers/all";
-import { HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi2";
+import React, { memo } from "react";
+import { customPrice, customWeight } from "../helpers/all";
 
 const OrderItem = memo(({ data }) => {
-  const [open, setOpen] = useState(false);
-  const price = data?.data?.modifiers?.price
-    ? data.data.modifiers.price
-    : data.price;
-
-
   return (
-    <div className="order-item">
-      <img src={getImageURL({ path: data.medias })} alt={data.title} />
+    <div className="order-item d-flex justify-content-between">
       <div className="text">
-        <h6>
-          {data.title}
-          {/* <span className="tag">Подарок</span> */}
-        </h6>
+        <h6>{data.title}</h6>
+        {data?.energy?.weight > 0 && (
+          <p className="text-muted fs-09">
+            {customWeight({
+              value: data.energy.weight,
+              type: data.energy?.weightType,
+            })}
+          </p>
+        )}
         {data?.description && (
-          <p className="fs-08 dark-gray">{data.description}</p>
+          <p className="fs-09 mb-2 text-muted">{data.description}</p>
+        )}
+        {data?.cart?.data?.modifiers?.length > 0 &&
+          data.cart.data.modifiers.map((e) => (
+            <p className="fs-09 fw-6">{e.title}</p>
+          ))}
+        {data?.cart?.data?.wishes?.length > 0 &&
+          data.cart.data.wishes.map((e) => (
+            <p className="fs-09 fw-6">{e.title}</p>
+          ))}
+
+        {data?.cart?.data?.additions?.length > 0 && (
+          <>
+            <ul className="cart-item-ingredients">
+              {data.cart.data.additions.map((e) => (
+                <li>
+                  {e.title}{" "}
+                  <span className="fw-7">+{customPrice(e.price)}</span>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </div>
-
-      <div className="quantity">
-        <div className="input w-50p py-1 px-2 rounded-4 text-center">
-          x{data.count}
+      <div className="d-flex">
+        <div className="quantity me-2">
+          <div className="checkoutProduct-count">x{data?.count ?? 1}</div>
+        </div>
+        <div className="price">
+          {data?.type == "gift"
+            ? "Бесплатно"
+            : customPrice(
+                data?.modifiers?.price
+                  ? data.options.modifierPriceSum
+                    ? (data.modifiers.price + data.price) * data.count
+                    : data.modifiers.price * data.count
+                  : data.price * data.count
+              )}
         </div>
       </div>
-      <div className="price">{customPrice(price)}</div>
     </div>
   );
 });

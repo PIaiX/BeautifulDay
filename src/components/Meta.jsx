@@ -1,5 +1,6 @@
 import { ClientJS } from "clientjs";
 import { Helmet } from "react-helmet";
+import { useSelector } from "react-redux";
 
 const Meta = ({
   title = null,
@@ -8,52 +9,41 @@ const Meta = ({
   type = "website",
 }) => {
   const client = new ClientJS();
+  const options = useSelector((state) => state.settings.options);
 
   return (
     <Helmet
       htmlAttributes={{ lang: client.getLanguage() }}
-      defaultTitle={process.env.REACT_APP_SITE_NAME}
       encodeSpecialCharacters={true}
-      title={title ?? process.env.REACT_APP_SITE_NAME}
-      meta={[
-        {
-          property: "title",
-          content: title ?? process.env.REACT_APP_SITE_NAME,
-        },
-        description?.length > 0 && {
-          name: "description",
-          content: description.slice(0, 160),
-        },
-        {
-          property: "og:title",
-          content: title ?? process.env.REACT_APP_SITE_NAME,
-        },
-        description?.length > 0 && {
-          property: "og:description",
-          content: description.slice(0, 160),
-        },
-        {
-          property: "og:type",
-          content: type,
-        },
-        {
-          name: "twitter:card",
-          content: "summary",
-        },
-        {
-          name: "twitter:title",
-          content: title ?? process.env.REACT_APP_SITE_NAME,
-        },
-        description?.length > 0 && {
-          name: "twitter:description",
-          content: description.slice(0, 160),
-        },
-        image?.length > 0 && {
-          name: "og:image",
-          content: image,
-        },
-      ]}
-    />
+    >
+      <title>{title ?? process.env.REACT_APP_SITE_NAME}</title>
+      {options.yandexVerifyId && (
+        <meta name="yandex-verification" content={options.yandexVerifyId} />
+      )}
+      <meta name="og:type" content={type} />
+      <meta name="twitter:card" content="summary" />
+      <meta
+        name="twitter:title"
+        content={title ?? process.env.REACT_APP_SITE_NAME}
+      />
+      <meta
+        name="og:title"
+        content={title ?? process.env.REACT_APP_SITE_NAME}
+      />
+      <meta
+        name="description"
+        content={description ? description.slice(0, 160) : null}
+      />
+      <meta
+        name="og:description"
+        content={description ? description.slice(0, 160) : null}
+      />
+      <meta
+        name="twitter:description"
+        content={description ? description.slice(0, 160) : null}
+      />
+      <meta name="og:image" content={image ?? null} />
+    </Helmet>
   );
 };
 

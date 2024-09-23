@@ -4,9 +4,14 @@ import { useSelector } from "react-redux";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { customPrice, customWeight, getImageURL } from "../helpers/all";
 import ButtonCart from "./ButtonCart";
+// import Tags from "./Tags";
+import { useTranslation } from "react-i18next";
+import { OverlayTrigger, Popover } from "react-bootstrap";
+// import { HiOutlineInformationCircle } from "react-icons/hi2";
 // import BtnFav from "./utils/BtnFav";
 
 const ProductCard = memo(({ data }) => {
+  const { t } = useTranslation();
   const themeProductImage = useSelector(
     (state) => state.settings?.options?.themeProductImage
   );
@@ -39,6 +44,11 @@ const ProductCard = memo(({ data }) => {
         }
       >
         <Link to={"/product/" + data?.id} state={data}>
+          {/* {data?.tags?.length > 0 && (
+            <div className="p-2 position-absolute">
+              <Tags data={data.tags} mini />
+            </div>
+          )} */}
           <LazyLoadImage
             wrapperClassName="d-flex"
             src={getImageURL({ path: data?.medias })}
@@ -48,24 +58,69 @@ const ProductCard = memo(({ data }) => {
           />
         </Link>
       </div>
-
-      <h6 className="title text-center text-md-start">{data.title}</h6>
-      <p className="d-none d-md-block desc text-muted fs-09">{data.description}</p>
+      <Link to={"/product/" + data?.id} state={data}>
+        <h6
+          className={
+            "title text-center text-md-start " +
+            (data?.options?.subtitle ? "fs-09" : "")
+          }
+        >
+          {data.title}
+          {data?.options?.subtitle ? (
+            <div className="subtitle fw-5">{data?.options.subtitle}</div>
+          ) : null}
+        </h6>
+        <p className="d-none d-md-block fs-09">{data.description}</p>
+      </Link>
       <hr className="d-none d-md-block" />
-
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
-        <div className="d-flex justify-content-between align-items-center mb-2 mb-md-0">
+      {data?.options?.сompound && (
+        <div className="d-flex d-lg-none justify-content-center align-items-center">
+          <OverlayTrigger
+            trigger={["hover"]}
+            className="ms-2"
+            key="top"
+            placement="top"
+            overlay={
+              <Popover id="popover-positioned-top">
+                <Popover.Header className="fs-09 fw-6">
+                  {t("Состав")}
+                </Popover.Header>
+                <Popover.Body>{data.options.сompound}</Popover.Body>
+              </Popover>
+            }
+          >
+            <a className="fw-5">Состав</a>
+          </OverlayTrigger>
+        </div>
+      )}
+      <div className="d-flex justify-content-between align-items-center">
+        {data?.options?.сompound && (
+          <div className="d-none d-lg-flex justify-content-between align-items-center">
+            <OverlayTrigger
+              trigger={["hover"]}
+              className="ms-2"
+              key="top"
+              placement="top"
+              overlay={
+                <Popover id="popover-positioned-top">
+                  <Popover.Header className="fs-09 fw-6">
+                    {t("Состав")}
+                  </Popover.Header>
+                  <Popover.Body>{data.options.сompound}</Popover.Body>
+                </Popover>
+              }
+            >
+              <a className="fw-5">Состав</a>
+            </OverlayTrigger>
+          </div>
+        )}
+        <div className="d-flex justify-content-between align-items-center">
           <div>
-            <div className="fs-12 fw-5">
+            <div className="price fw-5">
               {modifiers?.length > 0 && Array.isArray(modifiers)
                 ? "от " + customPrice(price > 0 ? price : data.price)
                 : customPrice(data.price)}
             </div>
-            {/* <div className="gray fs-09 text-decoration-line-through">
-              {data?.modifiers?.length > 0
-                ? "от " + customPrice(price)
-                : customPrice(data.price)}
-            </div> */}
           </div>
         </div>
         {data?.energy?.weight > 0 && (

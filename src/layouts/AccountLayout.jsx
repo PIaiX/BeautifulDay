@@ -25,7 +25,7 @@ const AccountLayout = ({ isMobile }) => {
               breadcrumbs={[{ title: "Аккаунт", link: "/account" }]}
             />
             <div className="d-flex mb-4">
-              <div className="box me-4 w-100 h-100 d-flex align-items-center">
+              <div className="box w-100 h-100 d-flex align-items-center">
                 <div className="icon d-none d-sm-none d-md-none d-xxl-flex">
                   <span>
                     {user.firstName

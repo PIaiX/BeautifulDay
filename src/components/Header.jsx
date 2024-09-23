@@ -1,23 +1,30 @@
 import axios from "axios";
+import moment from "moment";
 import React, { memo, useEffect, useState, useTransition } from "react";
 import { Col, Modal, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { useTranslation } from "react-i18next";
 import {
-  HiOutlineArrowLeftCircle,
-  HiOutlineDevicePhoneMobile,
-  HiOutlineHeart,
+  HiOutlineMagnifyingGlass,
   HiOutlineShoppingBag,
   HiOutlineUserCircle,
 } from "react-icons/hi2";
-import { IoLogoWhatsapp } from "react-icons/io";
-import { IoCall, IoCloseOutline } from "react-icons/io5";
+import { IoCloseOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import AppStore from "../assets/images/appstore-black.svg";
+import GooglePlay from "../assets/images/googleplay-black.svg";
 import { DADATA_TOKEN, DADATA_URL_GEO } from "../config/api";
 import { getCount, getImageURL } from "../helpers/all";
-import { useGetBannersQuery } from "../services/home";
-import { setUser } from "../store/reducers/authSlice";
+import { isWork } from "../hooks/all";
+import {
+  mainAffiliateEdit,
+  updateAffiliate,
+  updateCity,
+  updateGps,
+} from "../store/reducers/affiliateSlice";
+import { resetCart } from "../store/reducers/cartSlice";
 import { editDeliveryCheckout } from "../store/reducers/checkoutSlice";
 import DeliveryBar from "./DeliveryBar";
 import ScrollToTop from "./ScrollToTop";
@@ -25,49 +32,53 @@ import MenuDelivery from "./svgs/MenuDelivery";
 import MenuDocs from "./svgs/MenuDocs";
 import MenuIcon from "./svgs/MenuIcon";
 import MenuPhone from "./svgs/MenuPhone";
-import YooApp from "./svgs/YooApp";
 import Input from "./utils/Input";
 import Select from "./utils/Select";
 
 const Header = memo(() => {
+  const { t } = useTranslation();
+
   const isAuth = useSelector((state) => state.auth.isAuth);
   const user = useSelector((state) => state.auth.user);
   const cart = useSelector((state) => state.cart.items);
+  // const favorite = useSelector((state) => state.favorite.items);
+  const city = useSelector((state) => state.affiliate.city);
+  const gps = useSelector((state) => state.affiliate.gps);
   const affiliate = useSelector((state) => state.affiliate.items);
+  const cities = useSelector((state) => state.affiliate.cities);
+  const selectedAffiliate = useSelector((state) => state.affiliate.active);
   const options = useSelector((state) => state.settings.options);
   const delivery = useSelector((state) => state.checkout.delivery);
-  const banners = useGetBannersQuery();
+
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
-  const [isContacts, setIsContacts] = useState(false);
   const [showCity, setShowCity] = useState(false);
+  const [showBrand, setShowBrand] = useState(false);
   const count = getCount(cart);
   const [list, setList] = useState([]);
-
-  const defaultCityOptions = user?.options ?? null;
-  const mainAffiliate =
-    affiliate?.length > 0
-      ? defaultCityOptions?.city && defaultCityOptions?.citySave
-        ? affiliate.find(
-            (e) =>
-              e.options.city.toLowerCase() ===
-              defaultCityOptions.city.toLowerCase()
-          )
-        : affiliate.find((e) => e.main)
-      : false;
 
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState();
   const [isPending, startTransition] = useTransition();
 
+  const deliveryArray = [
+    ...(options?.delivery?.status
+      ? [{ title: t("Доставка"), value: "delivery" }]
+      : []),
+    ...(options?.pickup?.status
+      ? [{ title: t("Самовывоз"), value: "pickup" }]
+      : []),
+    ...(options?.hall?.status ? [{ title: t("В зале"), value: "hall" }] : []),
+  ];
+
   const handleChange = (value) => {
     setSearchInput(value);
     startTransition(() => {
       let searchList = [];
-      Object.values(list).forEach((e) => {
-        e.forEach(
+      list.forEach((e) => {
+        e.cities.forEach(
           (e2) =>
-            e2.options.city.toLowerCase().includes(value.toLowerCase()) &&
+            e2.title.toLowerCase().includes(value.toLowerCase()) &&
             searchList.push(e2)
         );
       });
@@ -76,41 +87,35 @@ const Header = memo(() => {
   };
 
   useEffect(() => {
-    if (affiliate?.length > 0) {
-      var data = [];
-
-      affiliate.forEach((e) => {
-        let country = e.options.country.toLowerCase();
-        if (!data[country]) {
-          data[country] = [e];
-        } else {
-          let isCity = data[country].find(
-            (item) =>
-              item.options.city.toLowerCase() === e.options.city.toLowerCase()
-          );
-          if (!isCity) {
-            data[country].push(e);
-          }
+    // Сортируем города по алфавиту
+    if (cities && cities?.length > 0) {
+      let citiesData = [...cities];
+      // Группируем города по странам
+      const groupedCities = citiesData.reduce((acc, city) => {
+        const country = city.country;
+        if (!acc[country]) {
+          acc[country] = [];
         }
-      });
+        acc[country].push(city);
+        return acc;
+      }, {});
 
-      data.sort(function (a, b) {
-        if (a.options.city.toLowerCase() < b.options.city.toLowerCase()) {
-          return -1;
-        }
-        if (a.options.city.toLowerCase() > b.options.city.toLowerCase()) {
-          return 1;
-        }
-        return 0;
-      });
+      // Сортируем страны по алфавиту
+      const sortedCountries = Object.entries(groupedCities)
+        .sort(([countryA, citiesA], [countryB, citiesB]) =>
+          countryA.localeCompare(countryB)
+        )
+        .map(([country, cities]) => ({ country, cities }));
 
-      setList(data);
+      // Сортируем города внутри каждой страны
+      const resultArray = sortedCountries.map(({ country, cities }) => ({
+        country,
+        cities: cities.sort((a, b) => a.title.localeCompare(b.title)),
+      }));
+      setList(resultArray);
     }
-    if (
-      affiliate?.length > 1 &&
-      !defaultCityOptions?.city &&
-      "geolocation" in navigator
-    ) {
+
+    if (cities && cities?.length > 1 && !gps && "geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         if (
           position?.coords?.latitude &&
@@ -135,29 +140,25 @@ const Header = memo(() => {
           if (
             geo?.data?.suggestions &&
             geo?.data?.suggestions[0]?.data?.city &&
-            affiliate?.length > 0
+            cities &&
+            cities?.length > 0
           ) {
-            let city = affiliate.find(
+            let city = cities.find(
               (e) =>
-                e.options.city.toLowerCase() ===
+                e.title.toLowerCase() ===
                 geo.data.suggestions[0].data.city.toLowerCase()
             );
+
             if (city) {
-              dispatch(
-                setUser({
-                  ...user,
-                  options: {
-                    ...user.options,
-                    city: city.options.city,
-                  },
-                })
-              );
+              dispatch(updateCity(city));
+            }else{
+              setShowCity(true)
             }
           }
         }
       });
     }
-  }, []);
+  }, [cities]);
 
   return (
     <>
@@ -168,7 +169,13 @@ const Header = memo(() => {
               <Link to="/" className="me-3 me-lg-5">
                 <img
                   src={
-                    options?.logo
+                    options?.multiBrand
+                      ? getImageURL({
+                          path: selectedAffiliate.media,
+                          type: "affiliate",
+                          size: "full",
+                        })
+                      : options?.logo
                       ? getImageURL({
                           path: options.logo,
                           type: "all/web/logo",
@@ -179,68 +186,62 @@ const Header = memo(() => {
                   alt={options?.title ?? "YOOAPP"}
                   className="logo"
                 />
+                {/* <span className="ms-3 logo-name">
+                {options?.title ?? "YOOAPP"}
+              </span> */}
               </Link>
               <ul className="text-menu">
                 <li>
-                  {affiliate.length > 0 && (
+                  {!options?.multiBrand && cities && cities?.length > 0 && (
                     <a
-                      onClick={() => affiliate?.length > 1 && setShowCity(true)}
+                      onClick={() => cities?.length > 1 && setShowCity(true)}
                       className="fw-6"
                     >
-                      {affiliate?.length > 1
-                        ? defaultCityOptions?.city ??
-                          mainAffiliate?.options?.city ??
-                          "Выберите город"
-                        : mainAffiliate?.options?.city ?? ""}
+                      {t(
+                        cities.length > 1
+                          ? city?.title ?? "Выберите город"
+                          : selectedAffiliate?.options?.city ?? "Выберите город"
+                      )}
                     </a>
                   )}
-                  {!defaultCityOptions?.citySave &&
-                    defaultCityOptions?.city && (
-                      <div className="no-city">
-                        <p className="mb-3">
-                          Ваш город <b>{defaultCityOptions.city}</b> город?
-                        </p>
-                        <div className="d-flex align-items-center justify-content-center">
-                          <Link
-                            className="btn btn-sm btn-primary me-2"
-                            onClick={() => {
-                              dispatch(
-                                setUser({
-                                  ...user,
-                                  options: {
-                                    ...user.options,
-                                    citySave: true,
-                                  },
-                                })
-                              );
-                            }}
-                          >
-                            Да
-                          </Link>
-                          <Link
-                            className="btn btn-sm btn-light"
-                            onClick={() => setShowCity(true)}
-                          >
-                            Нет
-                          </Link>
-                        </div>
+                  {options?.multiBrand && affiliate?.length > 0 && (
+                    <a onClick={() => setShowBrand(true)} className="fw-6">
+                      {t(
+                        selectedAffiliate?.title ??
+                          selectedAffiliate?.full ??
+                          "Выберите бренд"
+                      )}
+                    </a>
+                  )}
+                  {!gps && city?.title && (
+                    <div className="no-city">
+                      <p className="mb-3">
+                        {t("Ваш город")} <b>{city.title}</b> {t("город")}?
+                      </p>
+                      <div className="d-flex align-items-center justify-content-center">
+                        <Link
+                          className="btn btn-sm btn-primary me-2"
+                          onClick={() => {
+                            dispatch(updateGps(true));
+                          }}
+                        >
+                          {t("Да")}
+                        </Link>
+                        <Link
+                          className="btn btn-sm btn-light"
+                          onClick={() => setShowCity(true)}
+                        >
+                          {t("Нет")}
+                        </Link>
                       </div>
-                    )}
+                    </div>
+                  )}
                 </li>
-                {options?.deliveryView && (
-                  <li>
+                {deliveryArray?.length > 0 && (
+                  <li className="d-none d-sm-inline-flex">
                     <Select
                       className="fw-5"
-                      data={[
-                        {
-                          value: "delivery",
-                          title: "Доставка",
-                        },
-                        {
-                          value: "pickup",
-                          title: "Самовывоз",
-                        },
-                      ]}
+                      data={deliveryArray}
                       value={delivery}
                       onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
                     />
@@ -251,15 +252,15 @@ const Header = memo(() => {
             <ul className="text-menu d-none d-lg-flex">
               {options?.menu?.length > 0 ? (
                 options.menu.map(
-                  (e) =>
+                  (e, index) =>
                     e?.status && (
-                      <li>
+                      <li key={index}>
                         <Link
                           to={e?.link ?? e.page}
                           // className={e.type == "dark" ? "btn-primary" : ""}
                           className="fw-6"
                         >
-                          {e.title}
+                          {t(e.title)}
                         </Link>
                       </li>
                     )
@@ -268,30 +269,54 @@ const Header = memo(() => {
                 <>
                   <li>
                     <Link to="/contact" className="fw-6">
-                      Контакты
+                      {t("Контакты")}
                     </Link>
                   </li>
                   <li>
                     <Link to="/promo" className="fw-6">
-                      Акции
+                      {t("Акции")}
                     </Link>
                   </li>
                 </>
               )}
             </ul>
-            {mainAffiliate &&
-              mainAffiliate?.options?.phone &&
-              mainAffiliate?.options?.phone[0] && (
-                <a
-                  href={"tel:" + mainAffiliate.options.phone[0]}
-                  className="phone"
-                >
-                  <HiOutlineDevicePhoneMobile className="fs-12" />
-                  <span className="ms-1">{mainAffiliate.options.phone[0]}</span>
-                </a>
+            {selectedAffiliate &&
+              selectedAffiliate?.phone &&
+              selectedAffiliate?.phone[0] && (
+                <div>
+                  <a
+                    href={"tel:" + selectedAffiliate.phone[0]}
+                    className="phone"
+                  >
+                    <span className="fw-6">{selectedAffiliate.phone[0]}</span>
+                  </a>
+                  {selectedAffiliate?.options?.work?.length > 0 &&
+                  selectedAffiliate.options.work[moment().weekday()]?.start &&
+                  selectedAffiliate.options.work[moment().weekday()]?.end ? (
+                    <>
+                      <div className="d-none d-lg-flex text-muted fs-08">
+                        {`${t("с")} ${
+                          selectedAffiliate.options.work[moment().weekday()]
+                            .start
+                        } ${t("до")} ${
+                          selectedAffiliate.options.work[moment().weekday()].end
+                        }`}
+                        {selectedAffiliate.options.work[5].status &&
+                        selectedAffiliate.options.work[5].status
+                          ? t(", без выходных")
+                          : null}
+                      </div>
+                    </>
+                  ) : null}
+                </div>
               )}
 
             <ul className="icons-menu">
+              <li className="d-none d-lg-block">
+                <Link to="/search">
+                  <HiOutlineMagnifyingGlass size={25} />
+                </Link>
+              </li>
               <li className="d-none d-lg-block">
                 <Link
                   to={
@@ -370,117 +395,125 @@ const Header = memo(() => {
       >
         <Offcanvas.Body>
           <Container className="h-100">
-            {isContacts ? (
-              <div className="h-100 d-flex flex-column justify-content-between">
-                <div>
-                  <div className="d-flex mb-4">
-                    <button
-                      type="button"
-                      onClick={() => setIsContacts(false)}
-                      className="main-color-60 fs-12 d-flex align-items-center"
-                    >
-                      <HiOutlineArrowLeftCircle className="fs-14" />
-                      <span className="ms-1">Назад</span>
-                    </button>
-                    <h5 className="flex-1 text-center fs-12 fw-6 mb-0 me-5">
-                      Контакты
-                    </h5>
-                  </div>
-                  <h5 className="fs-12 fw-6 mb-4">
-                    ООО “Вкусные решения”, г. Казань
-                  </h5>
-                  <div className="box fs-12">
-                    <ul className="list-unstyled">
-                      <li className="mb-4">
-                        <h6 className="mb-2">Авиастроительный</h6>
-                        <address className="mb-2">
-                          <span className="main-color">•</span> ул. Белинского,
-                          1
-                        </address>
-                        <p className="main-color mt-2">Доставка и самовывоз</p>
-                        <p>08:00 — 00:00</p>
-                        <p className="main-color mt-2">Ресторан</p>
-                        <p>08:00 — 00:00</p>
+            {/* {banners?.length > 0 && (
+              <img
+                src={getImageURL({
+                  path: banners[0].medias,
+                  type: "banner",
+                  size: "full",
+                })}
+                className="menu-offer"
+              />
+            )} */}
+            <Select
+              className="mb-3"
+              data={deliveryArray}
+              value={delivery}
+              onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
+            />
+            <nav>
+              <ul>
+                <li>
+                  <Link to="/contact" onClick={() => setShowMenu(false)}>
+                    <MenuPhone />
+                    <span>{t("Контакты")}</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" onClick={() => setShowMenu(false)}>
+                    <MenuDelivery />
+                    <span>{t("Оплата и доставка")}</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/policy" onClick={() => setShowMenu(false)}>
+                    <MenuDocs />
+                    <span>{t("Политика конфиденциальности")}</span>
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+            {options?.app?.name && (
+              <div>
+                <p className="mt-4 justify-content-center d-flex">
+                  {t("Заказывайте через приложение")}
+                </p>
+                <ul className="list-unstyled d-flex justify-content-center mt-2">
+                  {/iPhone|iPad/i.test(navigator.userAgent) ? (
+                    <li>
+                      <a
+                        href={
+                          "https://apps.apple.com/ru/app/" +
+                          (options.app?.nameIos?.length > 0
+                            ? options.app.nameIos
+                            : options.app.name) +
+                          (options.app?.accountApple
+                            ? options.app.accountApple
+                            : "/id6462661474")
+                        }
+                      >
+                        <img src={AppStore} alt="App Store" height="50" />
+                      </a>
+                    </li>
+                  ) : /Android/i.test(navigator.userAgent) ? (
+                    <li className="list-unstyled d-flex justify-content-center">
+                      <a
+                        href={
+                          "https://play.google.com/store/apps/details?id=" +
+                          (options.app?.nameAndroid?.length > 0
+                            ? options.app.nameAndroid
+                            : options.app.name)
+                        }
+                      >
+                        <img src={GooglePlay} alt="Google Play" height="50" />
+                      </a>
+                    </li>
+                  ) : (
+                    <div className="list-unstyled d-flex justify-content-center">
+                      <li>
+                        <a
+                          href={
+                            "https://apps.apple.com/ru/app/" +
+                            (options.app?.nameIos?.length > 0
+                              ? options.app.nameIos
+                              : options.app.name) +
+                            (options.app?.accountApple
+                              ? options.app.accountApple
+                              : "/id6462661474")
+                          }
+                        >
+                          <img src={AppStore} alt="App Store" height="35" />
+                        </a>
                       </li>
-                    </ul>
-                    <button type="button" className="btn-green rounded w-100">
-                      Посмотреть на карте
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <button
-                    type="button"
-                    className="fs-12 btn-6 w-100 rounded justify-content-start mt-3"
-                  >
-                    <IoCall className="fs-15 me-2" />
-                    <span>Позвонить</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="fs-12 btn-secondary w-100 rounded justify-content-start mt-2"
-                  >
-                    <IoLogoWhatsapp className="fs-15 me-2" />
-                    <span>Написать в WhatsApp</span>
-                  </button>
-                </div>
+                      <li className="ms-2">
+                        <a
+                          href={
+                            "https://play.google.com/store/apps/details?id=" +
+                            (options.app?.nameAndroid?.length > 0
+                              ? options.app.nameAndroid
+                              : options.app.name)
+                          }
+                        >
+                          <img src={GooglePlay} alt="Google Play" height="35" />
+                        </a>
+                      </li>
+                    </div>
+                  )}
+                </ul>
               </div>
-            ) : (
-              <>
-                {banners?.data?.items?.length > 0 && (
-                  <img
-                    src={getImageURL({
-                      path: banners.data.items[0].medias,
-                      type: "banner",
-                      size: "full",
-                    })}
-                    alt="Большие пиццы"
-                    className="menu-offer"
-                  />
-                )}
-                {options?.deliveryView && (
-                  <Select
-                    className="my-3"
-                    data={[
-                      {
-                        value: "delivery",
-                        title: "Доставка",
-                      },
-                      {
-                        value: "pickup",
-                        title: "Самовывоз",
-                      },
-                    ]}
-                    value={delivery}
-                    onClick={(e) => dispatch(editDeliveryCheckout(e.value))}
-                  />
-                )}
-                <nav>
-                  <ul>
-                    <li>
-                      <Link to="/contact" onClick={() => setShowMenu(false)}>
-                        <MenuPhone />
-                        <span>Контакты</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/policy" onClick={() => setShowMenu(false)}>
-                        <MenuDocs />
-                        <span>Политика конфиденциальности</span>
-                      </Link>
-                    </li>
-                  </ul>
-                </nav>
-                <a href="https://yooapp.ru/" target="_blank">
-                  <p className="gray text-center mt-4 mt-md-5">
-                    Разработано на платформе
-                  </p>
-                  <p className="text-center mt-2">
-                    <YooApp />
-                  </p>
+            )}
+
+            {!options?.branding && (
+              <div className="justify-content-center mt-4 d-flex">
+                <a href="https://yooapp.ru" target="_blank">
+                  <div>
+                    <span className="text-muted  me-1">
+                      {t("Разработано на платформе")}
+                    </span>
+                    <b>yooapp</b>
+                  </div>
                 </a>
-              </>
+              </div>
             )}
           </Container>
         </Offcanvas.Body>
@@ -518,83 +551,193 @@ const Header = memo(() => {
             <Input
               name="search"
               type="search"
-              placeholder="Поиск..."
+              placeholder={t("Поиск...")}
               className="mb-3"
               onChange={handleChange}
               value={searchInput}
             />
           </div>
           <div className="search-box">
-            {searchInput.length > 0 && search && search?.length > 0 ? (
+            {searchInput?.length > 0 && search && search?.length > 0
+              ? search.length > 0 && (
+                  <div className="cities">
+                    {Object.entries(
+                      search
+                        .sort((a, b) => a.title.localeCompare(b.title))
+                        .reduce((acc, city) => {
+                          const firstLetter = city.title[0].toUpperCase();
+                          if (!acc[firstLetter]) {
+                            acc[firstLetter] = [];
+                          }
+                          acc[firstLetter].push(city);
+                          return acc;
+                        }, {})
+                    ).map(([letter, cities]) => (
+                      <div key={letter} className="cities-box">
+                        <b className="d-block cities-box-letter text-main">
+                          {letter}
+                        </b>
+                        <Row>
+                          {cities.map((e, index) => (
+                            <Col md={12} key={index} className="pb-2 ps-3">
+                              <a
+                                onClick={() => {
+                                  dispatch(updateAffiliate(e.affiliates));
+                                  dispatch(updateCity(e));
+                                  dispatch(updateGps(true));
+
+                                  setShowCity(false);
+                                }}
+                                className={
+                                  "py-2 fw-6" +
+                                  (e.title === city?.title ? " active" : "")
+                                }
+                              >
+                                {e.title}
+                              </a>
+                            </Col>
+                          ))}
+                        </Row>
+                      </div>
+                    ))}
+                  </div>
+                )
+              : list?.length > 0 &&
+                list.map((item) => (
+                  <>
+                    {item?.country && (
+                      <h6 className="fw-7 p-2">{item.country}</h6>
+                    )}
+                    {item?.cities?.length > 0 && (
+                      <div className="cities">
+                        {Object.entries(
+                          item.cities
+                            .sort((a, b) => a.title.localeCompare(b.title))
+                            .reduce((acc, city) => {
+                              const firstLetter = city.title[0].toUpperCase();
+                              if (!acc[firstLetter]) {
+                                acc[firstLetter] = [];
+                              }
+                              acc[firstLetter].push(city);
+                              return acc;
+                            }, {})
+                        ).map(([letter, cities]) => (
+                          <div key={letter} className="cities-box">
+                            <b className="d-block cities-box-letter text-main">
+                              {letter}
+                            </b>
+                            <Row>
+                              {cities.map((e, index) => (
+                                <Col md={12} key={index} className="pb-2 ps-3">
+                                  <a
+                                    onClick={() => {
+                                      dispatch(updateAffiliate(e.affiliates));
+                                      dispatch(updateCity(e));
+                                      dispatch(updateGps(true));
+
+                                      setShowCity(false);
+                                    }}
+                                    className={
+                                      "py-2 fw-6" +
+                                      (e.title === city?.title ? " active" : "")
+                                    }
+                                  >
+                                    {e.title}
+                                  </a>
+                                </Col>
+                              ))}
+                            </Row>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ))}
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        size="lg"
+        centered
+        className="brand"
+        show={showBrand}
+        onHide={() => setShowBrand(false)}
+      >
+        <Modal.Body className="p-4">
+          <button
+            type="button"
+            className="btn-close close"
+            aria-label="Close"
+            onClick={() => setShowCity(false)}
+          ></button>
+          <h5 className="fw-7 mb-4">{t("Выберите заведение")}</h5>
+          <div className="search-box">
+            {affiliate?.length > 0 && (
               <Row>
-                {search.map((e, index) => (
-                  <Col md={4} key={index} className="pb-3">
+                {affiliate.map((e, index) => (
+                  <Col md={6} key={index} className="pb-3">
                     <a
                       onClick={() => {
-                        dispatch(
-                          setUser({
-                            ...user,
-                            options: {
-                              ...user.options,
-                              citySave: true,
-                              city: e.options.city,
-                            },
-                          })
-                        );
-                        setShowCity(false);
+                        dispatch(mainAffiliateEdit(e));
+                        dispatch(resetCart());
+                        setShowBrand(false);
                       }}
                       className={
-                        "p-2 fw-6" +
-                        (e.options.city === defaultCityOptions?.city
-                          ? " active"
-                          : "")
+                        "brand-item" +
+                        (e.id === selectedAffiliate?.id ? " active" : "")
                       }
                     >
-                      {e.options.city}
+                      <Row className="align-items-center">
+                        {e.media && (
+                          <Col xs="auto">
+                            <img
+                              src={getImageURL({
+                                path: e.media,
+                                type: "affiliate",
+                                size: "full",
+                              })}
+                              alt={options?.title ?? "YOOAPP"}
+                              className="logo"
+                            />
+                          </Col>
+                        )}
+                        <Col>
+                          <div className="fw-7 mb-1">
+                            {e?.title ? e.title : e.full}
+                          </div>
+                          <div>
+                            {e.status === 0 ? (
+                              <span className="text-danger">
+                                {t("Сейчас закрыто")}
+                              </span>
+                            ) : e?.options?.work &&
+                              e?.options?.work[moment().weekday()].start &&
+                              e?.options?.work[moment().weekday()].end ? (
+                              isWork(
+                                e?.options?.work[moment().weekday()].start,
+                                e?.options?.work[moment().weekday()].end
+                              ) ? (
+                                <span className="text-muted">
+                                  {t("Работает c")}{" "}
+                                  {e?.options?.work[moment().weekday()].start}{" "}
+                                  {t("до")}{" "}
+                                  {e?.options?.work[moment().weekday()].end}
+                                </span>
+                              ) : (
+                                <span className="text-danger">
+                                  {t("Сейчас закрыто")}
+                                </span>
+                              )
+                            ) : e?.desc ? (
+                              <span className="text-muted">{e.desc}</span>
+                            ) : null}
+                          </div>
+                        </Col>
+                      </Row>
                     </a>
                   </Col>
                 ))}
               </Row>
-            ) : (
-              Object.keys(list)?.length > 0 &&
-              Object.keys(list).map((title) => (
-                <>
-                  <h6 className="fw-7 p-2">
-                    {title[0].toUpperCase() + title.slice(1)}
-                  </h6>
-                  {list[title]?.length > 0 && (
-                    <Row>
-                      {list[title].map((e, index) => (
-                        <Col md={4} key={index} className="pb-3">
-                          <a
-                            onClick={() => {
-                              dispatch(
-                                setUser({
-                                  ...user,
-                                  options: {
-                                    ...user.options,
-                                    citySave: true,
-                                    city: e.options.city,
-                                  },
-                                })
-                              );
-                              setShowCity(false);
-                            }}
-                            className={
-                              "p-2 fw-6" +
-                              (e.options.city === defaultCityOptions?.city
-                                ? " active"
-                                : "")
-                            }
-                          >
-                            {e.options.city}
-                          </a>
-                        </Col>
-                      ))}
-                    </Row>
-                  )}
-                </>
-              ))
             )}
           </div>
         </Modal.Body>

@@ -50,7 +50,7 @@ const useTotalCart = () => {
             stateCart.forEach((product) => {
                 if (!product || !product?.cart?.count) return
 
-                person += product?.options?.person > 0 ? Number(product.options.person) : 0
+                person += product?.options?.person > 0 ? Number(product.options.person) * (product?.cart?.count ?? 0) : 0
                 point +=
                     product?.type === 'gift' && product?.cart?.count > 0 && product?.price > 0
                         ? Number(product.price) * Number(product.cart.count)
@@ -70,10 +70,8 @@ const useTotalCart = () => {
 
                 price += productPrice
 
-                if (product?.priceSale > 0 && product?.cart?.count > 0 && product?.price > 0) {
-                    const saleDiscount = product.priceSale * product.cart.count - product.price * product.cart.count
-                    discount += saleDiscount
-                    price += saleDiscount
+                if (product?.discount > 0 && product?.cart?.count > 0 && product?.price > 0) {
+                    discount += product.discount
                 }
 
                 if (product?.cart?.data?.additions?.length > 0) {
@@ -83,11 +81,8 @@ const useTotalCart = () => {
                             e?.price > 0 && product?.cart?.count > 0 ? e.price * count * product.cart.count : 0
                         price += additionPrice
 
-                        if (e?.priceSale > 0 && product?.cart?.count > 0) {
-                            const additionDiscount =
-                                e.priceSale * count * product.cart.count - e.price * count * product.cart.count
-                            discount += additionDiscount
-                            price += additionDiscount
+                        if (e?.discount > 0 && product?.cart?.count > 0) {
+                            discount += e.discount
                         }
                     })
                 }

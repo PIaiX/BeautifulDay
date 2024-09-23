@@ -1,153 +1,107 @@
-import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
-import { RxDotFilled } from "react-icons/rx";
-import Gear from '../../components/svgs/Gear';
-import CartIcon from '../../components/svgs/CartIcon';
-import AddressPin from '../../components/svgs/AddressPin';
-import Support from '../../components/svgs/Support';
+import React from "react";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import {
   HiOutlineCog8Tooth,
   HiOutlineShoppingBag,
   HiOutlineMapPin,
-  HiOutlineStar,
-  HiOutlineCreditCard,
-  HiOutlineBellAlert,
-  HiOutlineBolt,
-  HiOutlineLifebuoy,
+  HiOutlineArrowRightOnRectangle,
 } from "react-icons/hi2";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logout } from "../../services/auth";
+import { useTranslation } from "react-i18next";
 
 const AccountMenu = () => {
   const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const navigaion = useNavigate();
+  const { t } = useTranslation();
+
   return (
-    <div className='account-menu'>
-      <div className="box p-3 w-100 h-100 d-flex align-items-center mb-2 mb-sm-3">
-        <div className='flex-1'>
-          <div>
-            <span>Элли</span> 
-            <RxDotFilled className='primary'/>
-            <a href="tel:+79198563658">+7 919 856-36-58</a>
-          </div>
-          <p className="dark-gray mt-2"><a href="mailto:GreatOZ@mail.com">GreatOZ@mail.com</a></p>
+    <div className="account-menu">
+      <div className="box p-3 p-sm-3 d-flex align-items-center mb-2 mb-sm-2">
+        <div className="icon">
+          <span>
+            {user.firstName ? user.firstName.slice(0, 1).toUpperCase() : "A"}
+          </span>
         </div>
-        <Link to='/account/settings' className='btn-gray'>
-          <Gear className="fs-15"/>
+        <div className="flex-1">
+          <h6>{t(user.firstName)}</h6>
+          {/* <p>
+            <a href="tel:+79198563658">+7 919 856-36-58</a>
+          </p> */}
+        </div>
+        <Link to="settings" className="btn-settings">
+          <HiOutlineCog8Tooth />
         </Link>
       </div>
-
-      {/* <ul className="list-unstyled row row-cols-3 gx-2 gx-sm-3 gx-md-4 mb-3">
+      <ul className="list-unstyled row row-cols-3 gx-2 gx-sm-2 gx-md-2 mb-2">
         <li>
-          <div className="box main-color text-center p-2 p-sm-3 h-100">
-            <div className='fs-18 mb-sm-1'>1002</div>
-            <div className='fw-6'>Бонуса</div>
+          <div className="box main-color text-center p-2 p-sm-2 h-100">
+            <span className="fs-18">{user.point}</span>&nbsp;
+            <span className="fw-6 fs-18">Б</span>
           </div>
         </li>
         <li>
-          <NavLink to="orders" className="box-blue d-flex flex-column align-items-center justify-content-center p-2 p-sm-3 h-100">
-            <HiOutlineShoppingBag className='main-color fs-18 mb-1 mb-sm-2'/>
-            <div className='main-color fw-6'>Заказы</div>
+          <NavLink
+            to="orders"
+            className="box-blue d-flex flex-column align-items-center justify-content-center p-2 p-sm-2 h-100"
+          >
+            <HiOutlineShoppingBag className="main-color fs-18 mb-1 mb-sm-2" />
+            <div className="main-color fw-6">{t("Заказы")}</div>
           </NavLink>
         </li>
         <li>
-          <NavLink to="addresses" className="box-blue d-flex flex-column align-items-center justify-content-center p-2 p-sm-3 h-100">
-            <HiOutlineMapPin className='main-color fs-18 mb-1 mb-sm-2'/>
-            <div className='main-color fw-6'>Адреса</div>
-          </NavLink>
-        </li>
-      </ul> */}
-      <ul className='list-unstyled row row-cols-3 gx-2 gx-sm-3 gx-md-4 mb-3'>
-        <li>
-          <div className="box secondary text-center p-2 p-sm-3 h-100">
-            <div className='fs-18 mb-sm-1'>1002</div>
-            <div className='fw-5'>Бонуса</div>
-          </div>
-        </li>
-        <li>
-          <NavLink to="orders" className="box-blue d-flex flex-column align-items-center justify-content-center p-2 p-sm-3 h-100">
-            <CartIcon className='secondary fs-18 mb-1 mb-sm-2'/>
-            <div className='secondary fw-5'>Заказы</div>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="addresses" className="box-blue d-flex flex-column align-items-center justify-content-center p-2 p-sm-3 h-100">
-            <AddressPin className='secondary fs-18 mb-1 mb-sm-2'/>
-            <div className='secondary fw-5'>Адреса</div>
+          <NavLink
+            to="addresses"
+            className="box-blue d-flex flex-column align-items-center justify-content-center p-2 p-sm-2 h-100"
+          >
+            <HiOutlineMapPin className="main-color fs-18 mb-1 mb-sm-2" />
+            <div className="main-color fw-6">{t("Адреса")}</div>
           </NavLink>
         </li>
       </ul>
-      <nav className='mb-3'>
-        <ul>
-          <li>
-            <NavLink to="favorites">
-              <div>Избранное </div>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="notifications">
-              <div>Уведомления</div>
-              <span className='badge'>2</span>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="offers">
-              <div>Акции и промокоды</div>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="bonus">
-              <div>Бонусная программа</div>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="payment">
-              <div>Способы оплаты</div>
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
-      <Link to="support" className='btn-secondary fs-12 w-100 rounded-3'>
-        <Support className='fs-15 me-2'/>
-        <div>Тех. подержка</div>
-      </Link>
-
+      <a
+        className="box-blue d-flex flex-column align-items-center justify-content-center p-2 p-sm-2 h-100 mb-2"
+        onClick={() => {
+          dispatch(logout());
+          navigaion("/login");
+        }}
+      >
+        <HiOutlineArrowRightOnRectangle className="main-color fs-18 mb-1 mb-sm-2" />
+        <div className="main-color fw-6">{t("Выйти")}</div>
+      </a>
+      {/* <div className="gradient-block mb-3"></div> */}
       {/* <nav className="mb-3">
         <ul>
           <li>
-            <NavLink to="favorites">
-              <div>Избранное </div>
-            </NavLink>
-          </li>
-          <li>
             <NavLink to="notifications">
-              <HiOutlineBellAlert/>
+              <HiOutlineBellAlert />
               <div>Уведомления</div>
-              <span className='badge'>2</span>
             </NavLink>
           </li>
           <li>
             <NavLink to="offers">
-              <HiOutlineBolt/>
-              <div>Акции и промокоды</div>
+              <HiOutlineBolt />
+              <div>Акции и промокоды</div>
             </NavLink>
           </li>
           <li>
             <NavLink to="bonus">
-              <HiOutlineStar/>
+              <HiOutlineStar />
               <div>Бонусная программа</div>
             </NavLink>
           </li>
           <li>
             <NavLink to="payment">
-              <HiOutlineCreditCard/>
+              <HiOutlineCreditCard />
               <div>Способы оплаты</div>
             </NavLink>
           </li>
         </ul>
-
       </nav> */}
       {/* <Link to="support" className="btn-orange fs-12 w-100 rounded-3">
         <HiOutlineLifebuoy className="fs-15 me-2" />
-
         <div>Тех. подержка</div>
       </Link> */}
     </div>

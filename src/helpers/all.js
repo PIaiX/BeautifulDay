@@ -1,3 +1,4 @@
+import moment from "moment";
 import { FILE_URL } from "../config/api";
 
 const customPrice = (value, currency = true) => {
@@ -83,8 +84,8 @@ const customWeight = ({ value, type = "г" }) => {
 
 const statusData = {
   processing: {
-    image: (props) => (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" {...props}>
+    icon: (
+      <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
           fill="currentColor"
           d="M35.091 13H18.135a.406.406 0 0 0-.406.406v1.57h-1.57a.406.406 0 0 0-.407.407v17.929h-2.408a.407.407 0 0 0-.351.203c-.046.079-.09.143-.131.205-.255.38-.36.633-.36 1.624 0 .712.404 1.609 1.054 2.342.752.847 1.676 1.314 2.602 1.314h13.05c.865 0 1.67-.257 2.346-.697a4.316 4.316 0 0 0 3.943-4.295V13.406a.406.406 0 0 0-.406-.406ZM16.158 38.188c-.932 0-1.649-.652-1.993-1.041-.508-.573-.85-1.297-.85-1.803 0-.842.07-.945.221-1.17l.033-.05h12.192a3.65 3.65 0 0 0 1.151 4.063H16.159Zm10.207-2.844c0-.5.132-.992.38-1.422a.406.406 0 0 0-.35-.61h-9.83V15.789h16.143v18.898c0 1.93-1.57 3.5-3.5 3.5a2.846 2.846 0 0 1-2.843-2.843Zm8.32-1.336c0 1.36-.782 2.549-1.929 3.127.482-.696.765-1.54.765-2.448V15.383a.406.406 0 0 0-.406-.406H18.54v-1.165h16.144v20.196Z"
@@ -187,6 +188,7 @@ const statusData = {
 const deliveryData = {
   delivery: "Доставка",
   pickup: "Самовывоз",
+  hall: "В зале",
 };
 
 const paymentData = {
@@ -215,30 +217,62 @@ const declination = (value, data, view = true) => {
 const setCssColor = (name, value) => {
   document.documentElement.style.setProperty(name, value);
 };
+const setClassName = (name, value) => {
+  // Проверяем, есть ли уже класс
+  if (document.documentElement.classList.contains(name)) {
+    // Если есть, удаляем его
+    document.documentElement.classList.remove(name);
+  }
+
+  // Добавляем новый класс с нужным значением
+  document.documentElement.classList.add(`${name}-${value}`);
+};
 
 const localeData = [
   {
     title: "Русский",
     image: require("../assets/images/country/russia.png"),
-    lang: ["ru_RU", "ru-RU", "ru"],
+    lang: "ru",
   },
   {
     title: "Казахский",
     image: require("../assets/images/country/kazakhstan.png"),
-    lang: ["kk_KZ", "kk-KZ", "kz", "kk"],
+    lang: "kk",
   },
   {
     title: "Английский",
     image: require("../assets/images/country/united-states.png"),
-    lang: ["en_US", "en-US", "en"],
+    lang: "en",
   },
 ];
 
 const getLang = (value) => {
-  let lang = localeData.find((e) => e.lang.includes(value ?? "ru"));
+  let lang = localeData.find((e) => e.lang === value)
   return lang?.title;
 };
+const generateSeoText = ({ text, name, site }) => {
+  const regexName = /\{\{name\}\}/;
+  const regexSite = /\{\{site\}\}/;
+  var replacedName = text.replace(/<[^>]+>/g, "").slice(0, 160);
+  if (name) {
+    replacedName = replacedName.replace(regexName, name);
+  }
+  if (site) {
+    replacedName = replacedName.replace(regexSite, site);
+  }
+  return replacedName;
+};
+const isUpdateTime = (dateTime) => {
+  if (!dateTime) {
+    return true;
+  }
+  const targetDateTime = moment(dateTime);
+  const now = moment();
 
+  const timeDifference = now.diff(targetDateTime, "minutes");
+
+  return timeDifference >= 1;
+};
 const childrenArray = (data, idProp, parentProp) => {
   const tree = Object.fromEntries(data.map(n => [n[idProp], { ...n, children: [] }]));
 
@@ -247,20 +281,44 @@ const childrenArray = (data, idProp, parentProp) => {
     .filter(n => !(tree[n[parentProp]] && tree[n[parentProp]].children.push(n)));
 }
 
+const languageCode = (value) => {
+  const normalizedLanguageCode = value.toLowerCase().replace(/_/g, "-");
+
+  const mappedLanguageCode = {
+    "ru": "ru",
+    "ru-ru": "ru",
+    "ru-RU": "ru",
+    "ru_RU": "ru",
+    "kk": "kk",
+    "kk-kz": "kk",
+    "kk-KZ": "kk",
+    "kk_KZ": "kk",
+    "en": "en",
+    "en-us": "en",
+    "en-US": "en",
+    "en_US": "en",
+  };
+
+  return mappedLanguageCode[normalizedLanguageCode] || "ru";
+};
 
 export {
+  isUpdateTime,
+  generateSeoText,
   setCssColor,
+  setClassName,
   customPrice,
   getImageURL,
   convertColor,
   customWeight,
   getLang,
-  childrenArray,
+  languageCode,
   localeData,
   statusData,
   deliveryData,
   paymentData,
   getCount,
   declination,
+  childrenArray,
   tagsData,
 };

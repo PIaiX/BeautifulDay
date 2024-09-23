@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from "react";
+import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Offer from "../components/Offer";
-import ArticlePreview from "../components/ArticlePreview";
-import { getBlogs } from "../services/blog";
-import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
-import { Link } from "react-router-dom";
+
+// swiper
+import { Link, useParams } from "react-router-dom";
 import Empty from "../components/Empty";
+import EmptyCatalog from "../components/empty/catalog";
 import Loader from "../components/utils/Loader";
+import { getImageURL } from "../helpers/all";
+import { getBlog } from "../services/blog";
+import Meta from "../components/Meta";
+import { useSelector } from "react-redux";
 
 const Blog = () => {
-  const [blogs, setBlogs] = useState({ loading: true, items: [] });
+  const { blogId } = useParams();
+  const [blog, setBlog] = useState({ loading: true });
+  const options = useSelector((state) => state.settings.options);
+  const selectedAffiliate = useSelector((state) => state.affiliate.active);
 
   useEffect(() => {
-    getBlogs({ size: 5 })
-      .then((res) => setBlogs({ loading: false, ...res }))
-      .catch(() => setBlogs({ loading: false, items: [] }));
+    getBlog(blogId)
+      .then((res) => setBlog({ loading: false, ...res }))
+      .catch(() => setBlog({ loading: false, data: false }));
   }, []);
 
-  if (blogs?.loading) {
+  if (blog?.loading) {
     return <Loader full />;
   }
 
-  if (!blogs?.items || blogs?.items?.length === 0) {
+  if (!blog?.id) {
     return (
       <Empty
         text="Новостей нет"
@@ -37,62 +43,167 @@ const Blog = () => {
       />
     );
   }
-
   return (
-    <main className="inner">
+    <main>
+      <Meta
+        title={
+          options?.seo?.blog?.title && blog?.title
+            ? generateSeoText({
+                text: options.seo.blog.title,
+                name: blog.title,
+                site: options?.title,
+              })
+            : selectedAffiliate?.title && blog?.title
+            ? selectedAffiliate?.title + " - " + blog.title
+            : options?.title && blog?.title
+            ? options.title + " - " + blog.title
+            : blog?.title ?? t("Новость")
+        }
+        description={
+          options?.seo?.blog?.description
+            ? generateSeoText({
+                text: options.seo.blog.description,
+                name: blog.content,
+                site: options?.title,
+              })
+            : blog?.content ??
+              t(
+                "Узнайте свежие новости о нашей службе доставки, новых ресторанах, акциях и специальных предложениях."
+              )
+        }
+        image={
+          blog?.media
+            ? getImageURL({
+                path: blog.media,
+                size: "full",
+                type: "blog",
+              })
+            : false
+        }
+      />
       <Container>
-        <section className="sec-6 pt-4 pt-lg-0 mb-5">
-          <h1 className="inner mb-4">Новости и статьи</h1>
-          <Row className="gx-4 gx-lg-5">
-            {/* flex-lg-row-reverse <Col lg={4}>
-              <h5 className="fs-12">Новости по категориям</h5>
-              <ul className="fs-09 list-unstyled d-flex flex-wrap mb-4 mb-md-5">
-                <li className="me-2 mb-2">
-                  <button type="button" className="btn-secondary">
-                    Тег 1
-                  </button>
-                </li>
-                <li className="me-2 mb-2">
-                  <button type="button" className="btn-secondary">
-                    категория новостей
-                  </button>
-                </li>
-                <li className="me-2 mb-2">
-                  <button type="button" className="btn-secondary">
-                    новости
-                  </button>
-                </li>
-                <li className="me-2 mb-2">
-                  <button type="button" className="btn-secondary">
-                    категория №2
-                  </button>
-                </li>
-                <li className="me-2 mb-2">
-                  <button type="button" className="btn-secondary">
-                    Тег 2
-                  </button>
-                </li>
-              </ul>
-              <div className="d-none d-lg-block">
-                <Offer
-                  blackText={false}
-                  img={"images/offers/offer1.jpg"}
-                  title={"Весна пришла"}
-                  subtitle={"А с ней новые вкусы роллов!"}
-                />
-              </div>
-            </Col> */}
-            <Col lg={8}>
-              <ul className="list-unstyled">
-                {blogs.items.map((e) => (
-                  <li className="mb-4 mb-md-5">
-                    <ArticlePreview {...e} />
-                  </li>
-                ))}
-              </ul>
+        <section className="article-page pt-4 pt-lg-0 mb-6">
+          <div className="position-relative">
+            <div
+              className="blog-post-background"
+              style={{
+                backgroundImage: `url(${getImageURL({
+                  path: blog.media,
+                  size: "full",
+                  type: "blog",
+                })})`,
+              }}
+            ></div>
+            <img
+              className="mb-4 mb-sm-5 d-block m-auto"
+              src={getImageURL({
+                path: blog.media,
+                size: "full",
+                type: "blog",
+              })}
+              alt={blog.title}
+            />
+          </div>
+
+          <Row className="justify-content-center">
+            <Col lg={9} xxl={8}>
+              <h1 className="mb-3 mb-sm-4 text-center">{blog.title}</h1>
+              <div dangerouslySetInnerHTML={{ __html: blog.content }} />
             </Col>
+            {/* <Col lg={3} className="d-none d-lg-block">
+              <h5 className="fs-11">Вам может быть интересно</h5>
+              <ul className="news-list">
+                <li>
+                  <h6>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    etiam fermentum viverra euismod
+                  </h6>
+                  <time className="secondary">22 Июня, 2022</time>
+                </li>
+                <li>
+                  <h6>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    etiam fermentum viverra euismod
+                  </h6>
+                  <time className="secondary">22 Июня, 2022</time>
+                </li>
+                <li>
+                  <h6>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    etiam fermentum viverra euismod
+                  </h6>
+                  <time className="secondary">22 Июня, 2022</time>
+                </li>
+                <li>
+                  <h6>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    etiam fermentum viverra euismod
+                  </h6>
+                  <time className="secondary">22 Июня, 2022</time>
+                </li>
+              </ul>
+            </Col> */}
           </Row>
         </section>
+
+        {/* <section className="sec-5 mb-5">
+          <Container>
+            <h2>Обратите внимание</h2>
+            <div className="position-relative">
+              <Swiper
+                className="product-slider position-static"
+                modules={[Navigation, FreeMode]}
+                spaceBetween={20}
+                slidesPerView={"auto"}
+                speed={750}
+                navigation
+                freeMode={true}
+                breakpoints={{
+                  576: {
+                    slidesPerView: 2,
+                    spaceBetween: 10,
+                    freeMode: false,
+                  },
+                  768: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                  },
+                  992: {
+                    slidesPerView: 3,
+                    spaceBetween: 20,
+                  },
+                }}
+              >
+                <SwiperSlide>
+                  <ProductCardMini />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ProductCardMini />
+                </SwiperSlide>
+                <SwiperButtonPrev />
+                <SwiperButtonNext />
+              </Swiper>
+            </div>
+          </Container>
+        </section> */}
       </Container>
     </main>
   );

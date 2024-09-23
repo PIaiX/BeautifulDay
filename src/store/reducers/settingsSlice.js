@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import moment from "moment";
 
 const initialState = {
   isConnected: true,
@@ -9,6 +10,7 @@ const initialState = {
     title: "YooApp",
     authType: "email",
     qrType: "phone",
+    multiBrand: false,
     supportVisible: false,
     colorBtn: "#009640",
     payments: {
@@ -22,12 +24,14 @@ const initialState = {
     colorMainBg: "#4caf50",
     giftVisible: false,
     promoVisible: true,
+    themeProductImage: 0,
     themeProduct: 0,
     themeAddition: 0,
     profilePointVisible: true,
     productEnergyVisible: true,
   },
   filter: [],
+  updateTime: false,
 };
 
 const settingsSlice = createSlice({
@@ -38,8 +42,12 @@ const settingsSlice = createSlice({
       state.isConnected = action.payload;
     },
     updateOptions: (state, action) => {
-      state = { ...initialState, ...action.payload };
-      return state
+      return {
+        ...state,
+        updateTime: moment().toISOString(),
+        options: { ...(action.payload?.options ?? initialState.options) },
+        token: action.payload?.token,
+      };
     },
     updateIp: (state, action) => {
       state.ip = action.payload;
@@ -49,9 +57,8 @@ const settingsSlice = createSlice({
         let categoryIndex =
           state?.filter?.length > 0
             ? state.filter.findIndex(
-              (e) =>
-                e.categoryId === action.payload.categoryId
-            )
+                (e) => e.categoryId === action.payload.categoryId
+              )
             : -1;
 
         if (categoryIndex != -1) {

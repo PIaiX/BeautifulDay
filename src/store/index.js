@@ -13,26 +13,26 @@ import {
 import authSlice from "./reducers/authSlice";
 import cartSlice from "./reducers/cartSlice";
 import checkoutSlice from "./reducers/checkoutSlice";
-import favoriteSlice from "./reducers/favoriteSlice";
+// import favoriteSlice from "./reducers/favoriteSlice";
 import settingsSlice from "./reducers/settingsSlice";
 import affiliateSlice from "./reducers/affiliateSlice";
 import addressSlice from "./reducers/addressSlice";
 import notificationSlice from "./reducers/notificationSlice";
 import statusSlice from "./reducers/statusSlice";
-import { homeApi } from "../services/home";
 import { encryptTransform } from "redux-persist-transform-encrypt";
+import catalogSlice from "./reducers/catalogSlice";
 
 const rootReducer = combineReducers({
   settings: settingsSlice,
+  catalog: catalogSlice,
   notification: notificationSlice,
   auth: authSlice,
   cart: cartSlice,
-  favorite: favoriteSlice,
+  // favorite: favoriteSlice,
   checkout: checkoutSlice,
   address: addressSlice,
   affiliate: affiliateSlice,
   status: statusSlice,
-  [homeApi.reducerPath]: homeApi.reducer,
 });
 
 const encryptor = encryptTransform({ secretKey: "yooVooVoo1010!" });
@@ -53,7 +53,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(homeApi.middleware),
+    }),
 });
 
 const persistor = persistStore(store);

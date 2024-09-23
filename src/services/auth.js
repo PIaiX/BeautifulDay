@@ -8,13 +8,13 @@ import { resetCart } from "../store/reducers/cartSlice";
 import { resetCheckout } from "../store/reducers/checkoutSlice";
 import { NotificationManager } from "react-notifications";
 
-const login = createAsyncThunk("auth/login", async (payloads, thunkAPI) => {
+const login = createAsyncThunk("auth/login", async (data, thunkAPI) => {
   thunkAPI.dispatch(setLoadingLogin(true))
   try {
-    const response = await $api.post(apiRoutes.AUTH_LOGIN, payloads);
+    const response = await $api.post(apiRoutes.AUTH_LOGIN, data);
 
     if (response?.data?.user && response?.data?.token) {
-  
+
       thunkAPI.dispatch(setUser(response.data.user))
       thunkAPI.dispatch(setToken(response.data.token))
 
@@ -25,7 +25,7 @@ const login = createAsyncThunk("auth/login", async (payloads, thunkAPI) => {
       socket.io.opts.query = { brandId: response.data.user.brandId ?? false, userId: response.data.user.id ?? false }
       socket.connect()
 
-      thunkAPI.dispatch(getFavorites())
+      // thunkAPI.dispatch(getFavorites())
     }
     thunkAPI.dispatch(setLoadingLogin(false))
     return response?.data;

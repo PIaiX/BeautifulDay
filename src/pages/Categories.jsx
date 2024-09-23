@@ -3,17 +3,23 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import CategoryCard from "../components/CategoryCard";
-import { getCategoryList } from "../services/category";
+import { getCategoriesList } from "../services/category";
 import Loader from "../components/utils/Loader";
-import { ReactComponent as EmptyCatalog } from "../components/empty/catalog.svg";
+import EmptyCatalog from "../components/empty/catalog";
 import { Link } from "react-router-dom";
 import Empty from "../components/Empty";
+import Meta from "../components/Meta";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const Categories = () => {
   const [categories, setCategories] = useState({ loading: true, items: [] });
+  const selectedAffiliate = useSelector((state) => state.affiliate.active);
+  const options = useSelector((state) => state.settings.options);
+  const { t } = useTranslation();
 
   useEffect(() => {
-    getCategoryList({ size: 50 })
+    getCategoriesList({ size: 50, parent: false })
       .then((res) => setCategories({ loading: false, items: res }))
       .catch(() => setBlogs({ loading: false, items: [] }));
   }, []);
@@ -24,24 +30,62 @@ const Categories = () => {
 
   if (categories?.items?.length === 0) {
     return (
-      <Empty
-        text="Каталога нет"
-        desc="Каталог уже скоро появится"
-        image={() => <EmptyCatalog />}
-        button={
-          <Link className="btn-primary" to="/">
-            Перейти на главную
-          </Link>
-        }
-      />
+      <>
+        <Meta
+          title={
+            options?.seo?.categories?.title
+              ? options.seo.categories.title
+              : selectedAffiliate?.title
+              ? selectedAffiliate?.title + " - Каталог"
+              : options?.title
+              ? options.title + " - Каталог"
+              : t("Каталог")
+          }
+          description={
+            options?.seo?.categories?.description
+              ? options.seo.categories.description
+              : t(
+                  "Ищите вкусную и свежую еду? Выберите подходящую категорию и найдите любимые блюда."
+                )
+          }
+        />
+        <Empty
+          text={t("Каталога нет")}
+          desc={t("Каталог уже скоро появится")}
+          image={() => <EmptyCatalog />}
+          button={
+            <Link className="btn-primary" to="/">
+              {t("Перейти на главную")}
+            </Link>
+          }
+        />
+      </>
     );
   }
 
   return (
     <main>
+      <Meta
+        title={
+          options?.seo?.categories?.title
+            ? options.seo.categories.title
+            : selectedAffiliate?.title
+            ? selectedAffiliate?.title + " - Каталог"
+            : options?.title
+            ? options.title + " - Каталог"
+            : t("Каталог")
+        }
+        description={
+          options?.seo?.categories?.description
+            ? options.seo.categories.description
+            : t(
+                "Ищите вкусную и свежую еду? Выберите подходящую категорию и найдите любимые блюда."
+              )
+        }
+      />
       <section className="page-catalog mb-6">
         <Container>
-          <h1 className="text-center mb-4">Каталог</h1>
+          <h1 className="text-center mb-4">{t("Каталог")}</h1>
           <Row
             xs={2}
             md={3}

@@ -30,7 +30,7 @@ import Product from "../pages/Product";
 import Project from "../pages/Project";
 import Service from "../pages/Service";
 import Promo from "../pages/Promo";
-import SearchResults from "../pages/SearchResults";
+import Search from "../pages/Search";
 import AccountRouter from "./AccountRouter";
 import AuthRoute from "./AuthRoute";
 import Projects from "../pages/Projects";
@@ -59,7 +59,7 @@ const router = createBrowserRouter(
       <Route path="mobile" element={<MobileContacts />} />
       <Route path="policy" element={<Policy />} />
 
-      <Route path="search" element={<SearchResults />} />
+      <Route path="search" element={<Search />} />
 
       <Route path="*" element={<NotFound />} />
       <Route

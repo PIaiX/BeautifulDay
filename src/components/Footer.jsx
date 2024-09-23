@@ -1,103 +1,92 @@
 import React, { memo } from "react";
 import Container from "react-bootstrap/Container";
-import * as Icons from "react-icons/io5";
+import { useTranslation } from "react-i18next";
+import {
+  IoCallOutline,
+  IoCartOutline,
+  IoFlameOutline,
+  IoHomeOutline,
+  IoPersonOutline,
+} from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import { getImageURL } from "../helpers/all";
-import useIsMobile from "../hooks/isMobile";
-import CartIcon from "./svgs/CartIcon";
-import CatalogIcon from "./svgs/CatalogIcon";
+import AppStore from "../assets/images/appstore.svg";
+import GooglePlay from "../assets/images/googleplay.svg";
+import { getCount, getImageURL } from "../helpers/all";
 import FlameIcon from "./svgs/FlameIcon";
 
-const Icon = ({ name }) => {
-  const IoIcon = Icons[name];
-
-  if (!IoIcon) return <p>Icon not found!</p>;
-
-  return <IoIcon />;
+const iconComponents = {
+  "/contact": IoCallOutline,
+  "/promo": IoFlameOutline,
 };
 
 const Footer = memo(() => {
-  const isMobileLG = useIsMobile("991px");
+  const { t } = useTranslation();
+
   const isAuth = useSelector((state) => state.auth.isAuth);
+  const cart = useSelector((state) => state.cart.items);
   const options = useSelector((state) => state.settings.options);
+  const count = getCount(cart);
+  const selectedAffiliate = useSelector((state) => state.affiliate.active);
 
   return (
     <footer>
       <Container className="h-100">
-        {isMobileLG ? (
-          <nav className="h-100 mobile">
-            <ul>
-              <li>
-                <NavLink to="/">
-                  <Icon name="IoHomeOutline" />
-                  <div className="text">
-                    <span>Главная</span>
-                  </div>
-                </NavLink>
-              </li>
-              {options?.menu?.length > 0 ? (
-                options.menu.map(
-                  (e) =>
-                    e?.status &&
-                    e?.mobile && (
-                      <li>
-                        <NavLink to={e?.link ?? e.page}>
-                          {e.icon && <Icon name={e.icon} />}
-                          {e.title && (
-                            <div className="text">
-                              <span>{e.title}</span>
-                            </div>
-                          )}
-                        </NavLink>
-                      </li>
-                    )
-                )
-              ) : (
-                <>
-                  <li>
-                    <NavLink to="/categories">
-                      <CatalogIcon />
-                      <div className="text">
-                        <span>Каталог</span>
-                      </div>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/promo">
-                      <FlameIcon />
-                      <div className="text">
-                        <span>Акции</span>
-                      </div>
-                    </NavLink>
-                  </li>
-                  {options?.cart && (
+        <nav className="h-100 mobile d-lg-none">
+          <ul>
+            <li>
+              <NavLink to="/">
+                <IoHomeOutline />
+              </NavLink>
+            </li>
+            {options?.menu?.length > 0 ? (
+              options.menu.map(
+                (e) =>
+                  e?.mobile && (
                     <li>
-                      <NavLink to="/cart">
-                        <CartIcon />
-                        <div className="text">
-                          <span>Корзина</span>
-                        </div>
+                      <NavLink to={e?.page ? e.page : ""}>
+                        {e?.page
+                          ? iconComponents[e.page]
+                          : iconComponents[e.icon]}
                       </NavLink>
                     </li>
-                  )}
-                </>
-              )}
+                  )
+              )
+            ) : (
               <li>
-                <NavLink to={isAuth ? "/account" : "/login"}>
-                  <Icon name="IoPersonOutline" />
-                  <div className="text fs-09">
-                    <span>Аккаунт</span>
-                  </div>
+                <NavLink to="/promo">
+                  <FlameIcon />
                 </NavLink>
               </li>
-            </ul>
-          </nav>
-        ) : (
-          <div className="desktop">
+            )}
+            <li>
+              <NavLink to="/cart" className="position-relative">
+                <IoCartOutline />
+                {count > 0 && (
+                  <span className="position-absolute translate-middle badge rounded-pill">
+                    {count}
+                  </span>
+                )}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to={isAuth ? "/account" : "/login"}>
+                <IoPersonOutline />
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+        <div className="desktop d-none d-lg-flex">
+          <div className="pe-3">
             <img
               src={
-                options?.logo
+                options?.logodark
+                  ? getImageURL({
+                      path: options.logodark,
+                      type: "all/web/logo",
+                      size: "full",
+                    })
+                  : options?.logo
                   ? getImageURL({
                       path: options.logo,
                       type: "all/web/logo",
@@ -108,51 +97,88 @@ const Footer = memo(() => {
               alt={options?.title ?? "YOOAPP"}
               className="logo"
             />
-
-            <nav className="ms-5 me-auto">
-              <ul className="list-unstyled d-flex">
-                <li>
-                  <Link className="me-4" to="/">
-                    Главная
-                  </Link>
-                </li>
-                {options?.menu?.length > 0 ? (
-                  options.menu.map(
-                    (e) =>
-                      e?.status && (
-                        <li>
-                          <Link className="me-4" to={e.page}>
-                            {e.title}
-                          </Link>
-                        </li>
-                      )
-                  )
-                ) : (
-                  <>
-                    <li>
-                      <Link to="/categories" className="me-4">
-                        Каталог
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/promo">Акции</Link>
-                    </li>
-                  </>
+          </div>
+          <nav>
+            <ul className="list-unstyled d-flex align-items-center">
+              <li className="me-4">
+                <Link to="/contact">{t("Контакты")}</Link>
+              </li>
+              <li className="me-4">
+                <Link to="/policy">{t("Политика конфиденциальности")}</Link>
+              </li>
+              {selectedAffiliate &&
+                selectedAffiliate?.phone &&
+                selectedAffiliate?.phone[0] && (
+                  <li className="me-4">
+                    <div className="d-flex flex-column">
+                      <a
+                        href={"tel:" + selectedAffiliate.phone[0]}
+                        className={
+                          "phone" +
+                          (selectedAffiliate.phone[1] ? " mb-2 fs-09" : "")
+                        }
+                      >
+                        {selectedAffiliate.phone[0]}
+                      </a>
+                      {selectedAffiliate.phone[1] && (
+                        <a
+                          href={"tel:" + selectedAffiliate.phone[1]}
+                          className="phone fs-09"
+                        >
+                          {selectedAffiliate.phone[1]}
+                        </a>
+                      )}
+                    </div>
+                  </li>
                 )}
+            </ul>
+          </nav>
+          {options?.app?.name && (
+            <div>
+              <p className="text-white fs-09">
+                {t("Заказывайте через приложение")}
+              </p>
+              <ul className="list-unstyled d-flex mt-2">
+                <li>
+                  <a
+                    href={
+                      "https://apps.apple.com/ru/app/" +
+                      (options.app?.nameIos?.length > 0
+                        ? options.app.nameIos
+                        : options.app.name) +
+                      (options.app?.accountApple
+                        ? options.app.accountApple
+                        : "/id6462661474")
+                    }
+                  >
+                    <img src={AppStore} alt="App Store" height="35" />
+                  </a>
+                </li>
+                <li className="ms-2">
+                  <a
+                    href={
+                      "https://play.google.com/store/apps/details?id=" +
+                      (options.app?.nameAndroid?.length > 0
+                        ? options.app.nameAndroid
+                        : options.app.name)
+                    }
+                  >
+                    <img src={GooglePlay} alt="Google Play" height="35" />
+                  </a>
+                </li>
               </ul>
-              <Link to="/policy" className="d-inline-block mt-4 me-4">
-                Политика конфиденциальности
-              </Link>
-              <Link to="/contact" className="d-inline-block mt-4">
-                Контакты
-              </Link>
-            </nav>
-
+            </div>
+          )}
+        </div>
+        {!options?.branding && (
+          <div className="justify-content-center mt-2 d-none d-lg-flex">
             <a href="https://yooapp.ru" target="_blank">
               <div>
-                Разработано на платформе <b>YooApp</b>
+                <span className="text-muted fs-08 me-1">
+                  {t("Разработано на платформе")}
+                </span>
+                <b className="fs-08">yooapp</b>
               </div>
-              {/* <img src={LogoTextWhite} alt="yooapp" className="d-block mt-2" /> */}
             </a>
           </div>
         )}
